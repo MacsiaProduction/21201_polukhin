@@ -8,7 +8,7 @@
 #include <ctype.h>
 #include <string>
 
-#define MAXLEN_BIGINT 64
+#define MAXLEN_BIGINT 2048
 
 class BigInt {
 public:
