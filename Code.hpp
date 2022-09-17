@@ -42,9 +42,7 @@ public:
             bin[i] = in.bin[i];
         }
     };
-    ~BigInt() {
-        //default destructor
-    };
+    ~BigInt() = default;
     BigInt& operator=(const BigInt& in){
         sign = in.sign;
         for(int i = 0; i < bin.size(); i++) {
