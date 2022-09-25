@@ -4,5 +4,5 @@ project(BigInt)
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 # Link runTests with what we want to test and the GTest and pthread library
-add_executable(BigInt_test Tests.cc)
+add_executable(BigInt_test Tests.cpp)
 target_link_libraries(BigInt_test ${GTEST_LIBRARIES} pthread)

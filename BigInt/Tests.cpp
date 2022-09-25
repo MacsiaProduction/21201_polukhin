@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "../BigInt.hpp"
+#include "BigInt.hpp"
 #include <gtest/gtest.h>
 
 TEST(TESTS, eq) {
