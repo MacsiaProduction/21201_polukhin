@@ -74,7 +74,7 @@ public:
   // Вставка в контейнер. Возвращаемое значение - успешность вставки.
   bool insert(const Key& k, const Value& v) {
     const int pos = find_pos_of_key(k);
-    if(!empty() && arr[pos].second == v) return 0;
+    if(!empty() && (pos != size()) && arr[pos].second == v) return 0;
     std::pair <Key, Value> tmp = std::make_pair(k, v);
     arr.insert(pos, tmp);
     return 1;

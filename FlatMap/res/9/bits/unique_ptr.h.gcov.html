@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-09-25 15:02:33</td>
+            <td class="headerValue">2022-09-25 16:21:54</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -205,14 +205,14 @@
 <a name="143"><span class="lineNum">     143 </span>            :                      &quot;unique_ptr's deleter type must be a function object type&quot;</a>
 <a name="144"><span class="lineNum">     144 </span>            :                      &quot; or an lvalue reference type&quot; );</a>
 <a name="145"><span class="lineNum">     145 </span>            : </a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">      20096 :       __uniq_ptr_impl() = default;</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">      75107 :       __uniq_ptr_impl() = default;</span></a>
 <a name="147"><span class="lineNum">     147 </span>            :       __uniq_ptr_impl(pointer __p) : _M_t() { _M_ptr() = __p; }</a>
 <a name="148"><span class="lineNum">     148 </span>            : </a>
 <a name="149"><span class="lineNum">     149 </span>            :       template&lt;typename _Del&gt;</a>
 <a name="150"><span class="lineNum">     150 </span>            :       __uniq_ptr_impl(pointer __p, _Del&amp;&amp; __d)</a>
 <a name="151"><span class="lineNum">     151 </span>            :         : _M_t(__p, std::forward&lt;_Del&gt;(__d)) { }</a>
 <a name="152"><span class="lineNum">     152 </span>            : </a>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">      30106 :       pointer&amp;   _M_ptr() { return std::get&lt;0&gt;(_M_t); }</span></a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">     125119 :       pointer&amp;   _M_ptr() { return std::get&lt;0&gt;(_M_t); }</span></a>
 <a name="154"><span class="lineNum">     154 </span><span class="lineNoCov">          0 :       pointer    _M_ptr() const { return std::get&lt;0&gt;(_M_t); }</span></a>
 <a name="155"><span class="lineNum">     155 </span><span class="lineNoCov">          0 :       _Dp&amp;       _M_deleter() { return std::get&lt;1&gt;(_M_t); }</span></a>
 <a name="156"><span class="lineNum">     156 </span>            :       const _Dp&amp; _M_deleter() const { return std::get&lt;1&gt;(_M_t); }</a>
@@ -258,9 +258,9 @@
 <a name="196"><span class="lineNum">     196 </span>            : </a>
 <a name="197"><span class="lineNum">     197 </span>            :       /// Default constructor, creates a unique_ptr that owns nothing.</a>
 <a name="198"><span class="lineNum">     198 </span>            :       template&lt;typename _Del = _Dp, typename = _DeleterConstraint&lt;_Del&gt;&gt;</a>
-<a name="199"><span class="lineNum">     199 </span><span class="lineCov">      20096 :         constexpr unique_ptr() noexcept</span></a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">      20096 :         : _M_t()</span></a>
-<a name="201"><span class="lineNum">     201 </span><span class="lineCov">      20096 :         { }</span></a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">      75107 :         constexpr unique_ptr() noexcept</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">      75107 :         : _M_t()</span></a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">      75107 :         { }</span></a>
 <a name="202"><span class="lineNum">     202 </span>            : </a>
 <a name="203"><span class="lineNum">     203 </span>            :       /** Takes ownership of a pointer.</a>
 <a name="204"><span class="lineNum">     204 </span>            :        *</a>
@@ -345,15 +345,15 @@
 <a name="283"><span class="lineNum">     283 </span>            : #endif</a>
 <a name="284"><span class="lineNum">     284 </span>            : </a>
 <a name="285"><span class="lineNum">     285 </span>            :       /// Destructor, invokes the deleter if the stored pointer is not null.</a>
-<a name="286"><span class="lineNum">     286 </span><span class="lineCov">      30106 :       ~unique_ptr() noexcept</span></a>
+<a name="286"><span class="lineNum">     286 </span><span class="lineCov">     125119 :       ~unique_ptr() noexcept</span></a>
 <a name="287"><span class="lineNum">     287 </span>            :       {</a>
 <a name="288"><span class="lineNum">     288 </span>            :         static_assert(__is_invocable&lt;deleter_type&amp;, pointer&gt;::value,</a>
 <a name="289"><span class="lineNum">     289 </span>            :                       &quot;unique_ptr's deleter must be invocable with a pointer&quot;);</a>
-<a name="290"><span class="lineNum">     290 </span><span class="lineCov">      30106 :         auto&amp; __ptr = _M_t._M_ptr();</span></a>
-<a name="291"><span class="lineNum">     291 </span><span class="lineCov">      30106 :         if (__ptr != nullptr)</span></a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">     125119 :         auto&amp; __ptr = _M_t._M_ptr();</span></a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">     125119 :         if (__ptr != nullptr)</span></a>
 <a name="292"><span class="lineNum">     292 </span><span class="lineNoCov">          0 :           get_deleter()(std::move(__ptr));</span></a>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">      30106 :         __ptr = pointer();</span></a>
-<a name="294"><span class="lineNum">     294 </span><span class="lineCov">      30106 :       }</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">     125119 :         __ptr = pointer();</span></a>
+<a name="294"><span class="lineNum">     294 </span><span class="lineCov">     125119 :       }</span></a>
 <a name="295"><span class="lineNum">     295 </span>            : </a>
 <a name="296"><span class="lineNum">     296 </span>            :       // Assignment.</a>
 <a name="297"><span class="lineNum">     297 </span>            : </a>

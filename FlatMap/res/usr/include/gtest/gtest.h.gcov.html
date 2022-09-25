@@ -37,12 +37,12 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-09-25 15:02:33</td>
+            <td class="headerValue">2022-09-25 16:21:54</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">7</td>
-            <td class="headerCovTableEntry">16</td>
-            <td class="headerCovTableEntryLo">43.8 %</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntryLo">47.1 %</td>
           </tr>
           <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -352,13 +352,13 @@
 <a name="290"><span class="lineNum">     290 </span>            :   // the argument is implicitly convertible to AssertionResult. In that case</a>
 <a name="291"><span class="lineNum">     291 </span>            :   // we want AssertionResult's copy constructor to be used.</a>
 <a name="292"><span class="lineNum">     292 </span>            :   template &lt;typename T&gt;</a>
-<a name="293"><span class="lineNum">     293 </span><span class="lineCov">      20096 :   explicit AssertionResult(</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">      75107 :   explicit AssertionResult(</span></a>
 <a name="294"><span class="lineNum">     294 </span>            :       const T&amp; success,</a>
 <a name="295"><span class="lineNum">     295 </span>            :       typename std::enable_if&lt;</a>
 <a name="296"><span class="lineNum">     296 </span>            :           !std::is_convertible&lt;T, AssertionResult&gt;::value&gt;::type*</a>
 <a name="297"><span class="lineNum">     297 </span>            :       /*enabler*/</a>
 <a name="298"><span class="lineNum">     298 </span>            :       = nullptr)</a>
-<a name="299"><span class="lineNum">     299 </span><span class="lineCov">      20096 :       : success_(success) {}</span></a>
+<a name="299"><span class="lineNum">     299 </span><span class="lineCov">      75107 :       : success_(success) {}</span></a>
 <a name="300"><span class="lineNum">     300 </span>            : </a>
 <a name="301"><span class="lineNum">     301 </span>            : #if defined(_MSC_VER) &amp;&amp; _MSC_VER &lt; 1910</a>
 <a name="302"><span class="lineNum">     302 </span>            :   GTEST_DISABLE_MSC_WARNINGS_POP_()</a>
@@ -371,7 +371,7 @@
 <a name="309"><span class="lineNum">     309 </span>            :   }</a>
 <a name="310"><span class="lineNum">     310 </span>            : </a>
 <a name="311"><span class="lineNum">     311 </span>            :   // Returns true if and only if the assertion succeeded.</a>
-<a name="312"><span class="lineNum">     312 </span><span class="lineCov">      30106 :   operator bool() const { return success_; }  // NOLINT</span></a>
+<a name="312"><span class="lineNum">     312 </span><span class="lineCov">     125119 :   operator bool() const { return success_; }  // NOLINT</span></a>
 <a name="313"><span class="lineNum">     313 </span>            : </a>
 <a name="314"><span class="lineNum">     314 </span>            :   // Returns the assertion's negation. Used with EXPECT/ASSERT_FALSE.</a>
 <a name="315"><span class="lineNum">     315 </span>            :   AssertionResult operator!() const;</a>
@@ -1582,12 +1582,12 @@
 <a name="1520"><span class="lineNum">    1520 </span>            : </a>
 <a name="1521"><span class="lineNum">    1521 </span>            : // The helper function for {ASSERT|EXPECT}_EQ.</a>
 <a name="1522"><span class="lineNum">    1522 </span>            : template &lt;typename T1, typename T2&gt;</a>
-<a name="1523"><span class="lineNum">    1523 </span><span class="lineCov">      10010 : AssertionResult CmpHelperEQ(const char* lhs_expression,</span></a>
+<a name="1523"><span class="lineNum">    1523 </span><span class="lineCov">      50012 : AssertionResult CmpHelperEQ(const char* lhs_expression,</span></a>
 <a name="1524"><span class="lineNum">    1524 </span>            :                             const char* rhs_expression,</a>
 <a name="1525"><span class="lineNum">    1525 </span>            :                             const T1&amp; lhs,</a>
 <a name="1526"><span class="lineNum">    1526 </span>            :                             const T2&amp; rhs) {</a>
-<a name="1527"><span class="lineNum">    1527 </span><span class="lineCov">      10010 :   if (lhs == rhs) {</span></a>
-<a name="1528"><span class="lineNum">    1528 </span><span class="lineCov">      10010 :     return AssertionSuccess();</span></a>
+<a name="1527"><span class="lineNum">    1527 </span><span class="lineCov">      50012 :   if (lhs == rhs) {</span></a>
+<a name="1528"><span class="lineNum">    1528 </span><span class="lineCov">      50012 :     return AssertionSuccess();</span></a>
 <a name="1529"><span class="lineNum">    1529 </span>            :   }</a>
 <a name="1530"><span class="lineNum">    1530 </span>            : </a>
 <a name="1531"><span class="lineNum">    1531 </span><span class="lineNoCov">          0 :   return CmpHelperEQFailure(lhs_expression, rhs_expression, lhs, rhs);</span></a>
@@ -1610,10 +1610,10 @@
 <a name="1548"><span class="lineNum">    1548 </span>            :       // and the other is the null pointer constant.</a>
 <a name="1549"><span class="lineNum">    1549 </span>            :       typename std::enable_if&lt;!std::is_integral&lt;T1&gt;::value ||</a>
 <a name="1550"><span class="lineNum">    1550 </span>            :                               !std::is_pointer&lt;T2&gt;::value&gt;::type* = nullptr&gt;</a>
-<a name="1551"><span class="lineNum">    1551 </span><span class="lineCov">      10010 :   static AssertionResult Compare(const char* lhs_expression,</span></a>
+<a name="1551"><span class="lineNum">    1551 </span><span class="lineCov">      50012 :   static AssertionResult Compare(const char* lhs_expression,</span></a>
 <a name="1552"><span class="lineNum">    1552 </span>            :                                  const char* rhs_expression, const T1&amp; lhs,</a>
 <a name="1553"><span class="lineNum">    1553 </span>            :                                  const T2&amp; rhs) {</a>
-<a name="1554"><span class="lineNum">    1554 </span><span class="lineCov">      10010 :     return CmpHelperEQ(lhs_expression, rhs_expression, lhs, rhs);</span></a>
+<a name="1554"><span class="lineNum">    1554 </span><span class="lineCov">      50012 :     return CmpHelperEQ(lhs_expression, rhs_expression, lhs, rhs);</span></a>
 <a name="1555"><span class="lineNum">    1555 </span>            :   }</a>
 <a name="1556"><span class="lineNum">    1556 </span>            : </a>
 <a name="1557"><span class="lineNum">    1557 </span>            :   // With this overloaded version, we allow anonymous enums to be used</a>

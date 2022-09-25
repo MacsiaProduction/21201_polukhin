@@ -99,8 +99,10 @@ TEST(adressing, first) {
 
 TEST(move, first) {
     FlatMap <key, int> a;
+    ASSERT_EQ(a.size(), 0);
     for(int i = -100; i<=100; i++) {
-        ASSERT_TRUE(a.insert(key(i), i)); std::cout<<i<<std::endl;
+        int kek = a.insert(key(i), i);
+        ASSERT_TRUE(kek);
     }
     for(int i = -100; i<=100; i++) {
         ASSERT_TRUE(a.contains(key(i)));
