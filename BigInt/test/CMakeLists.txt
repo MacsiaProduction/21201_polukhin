@@ -1,18 +1,8 @@
-cmake_minimum_required(VERSION 3.8)
-set(This Tests)
-
-set(Sources
-    Tests.cpp
-)
-add_executable(${This} ${Sources})
-
-target_link_libraries(${This} PUBLIC
-    gtest
-    gtest_main
-    BigInt
-)
-
-add_test(
-    NAME ${This}
-    COMMAND ${This}
-) 
+cmake_minimum_required(VERSION 2.6)
+project(BigInt)
+# Locate GTest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+# Link runTests with what we want to test and the GTest and pthread library
+add_executable(BigInt_test Tests.cc)
+target_link_libraries(BigInt_test ${GTEST_LIBRARIES} pthread)
