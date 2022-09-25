@@ -36,7 +36,6 @@ int main() {
     cout<<a;
     cout<<b;
     cout<<a[key(1)]<<endl;
-    a.print_keys();
     cout<<a;
     b.clear();
     cout<<b;
@@ -45,6 +44,5 @@ int main() {
     cout<<a;
     a.erase(3);
     cout<<a;
-    a.print_keys();
     return 0;
 }

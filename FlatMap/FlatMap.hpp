@@ -117,13 +117,4 @@ public:
   friend bool operator!=(const FlatMap& a, const FlatMap& b) {
     return !(a==b);
   };
-  //DEBUG FUNCTION!!! only for standart VALUE types
-  friend std::ostream& operator<<(std::ostream& o, FlatMap<Key,Value>& a) {
-    std::string ans = "";
-    for(int i = 0; i<a.arr.size(); i++) {
-      ans.append(std::to_string(a.arr[i].second));
-      ans+=' ';
-    }
-    return o<<ans<<std::endl;
-  }
 };
