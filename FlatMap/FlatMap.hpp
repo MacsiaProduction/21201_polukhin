@@ -1,7 +1,7 @@
 #ifndef FlatMap_HPP
 #define FlatMap_HPP
 #endif
-#include "mine_vector.hpp"
+#include "../res/mine_vector.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>
