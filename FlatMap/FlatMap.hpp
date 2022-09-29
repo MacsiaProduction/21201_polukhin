@@ -2,18 +2,14 @@
 #define FlatMap_HPP
 #endif
 #include "../res/mine_vector.hpp"
-#include <iostream>
-#include <vector>
-#include <algorithm>
 #include <utility>
-#include <string>
 
-template <class Key, class Value> 
-class FlatMap // ассоциативный контейнер, позволяющий хранить пары ключ-значение
-{
+template <class Key, class Value>
+//Associative container that allows you to store key-value pairs
+class FlatMap {
 private:
   mine_vector < std::pair<Key, Value> > arr;
-  // returns potential pos of key in arr
+  //Returns potential pos of key in arr
   unsigned int find_pos_of_key(const Key& key) const{
     if (empty()) return 0;
     int start = 0, end = arr.size();
@@ -27,24 +23,24 @@ private:
 public:
   FlatMap() = default;
   ~FlatMap() = default;
-  //copy
+  //Copy constructor
   FlatMap(const FlatMap& b) {
     arr.resize(b.arr.size());
     for(int i = 0; i < b.arr.size(); i++){
       arr[i] = b.arr[i];
     }
   };
-  //move
+  //Move constructor
   FlatMap(FlatMap&& b) {
     arr = std::move(b.arr);
   };
-  // Обменивает значения двух флетмап.
+  //Swap two FlatMaps containers
   void swap(FlatMap& b) {
     FlatMap tmp = std::move(*this);
     *this = std::move(b);   
     b = std::move(tmp); 
   };    
-  //copy
+  //Copy operator
   FlatMap& operator=(const FlatMap& b) {
     arr.clear();
     arr.resize(b.arr.size());
@@ -53,16 +49,16 @@ public:
     }
     return *this;
   };
-  //move
+  //Move operator
   FlatMap& operator=(FlatMap&& b) {
     arr = std::move(b.arr);
     return *this;
   };
-  // Очищает контейнер.
+  //Clears the container
   void clear() {
     arr.clear();
   };
-  // Удаляет элемент по заданному ключу.
+  //Removes a key-value pair with the given key
   bool erase(const Key& k) {
     if(empty()) return 0;
     int pos = find_pos_of_key(k);
@@ -71,7 +67,7 @@ public:
         return 1;   
     } else return 0;
   };
-  // Вставка в контейнер. Возвращаемое значение - успешность вставки.
+  //Insertion into container. The return value is the success of the insertion.
   bool insert(const Key& k, const Value& v) {
     const int pos = find_pos_of_key(k);
     if(!empty() && (pos != size()) && arr[pos].second == v) return 0;
@@ -79,15 +75,13 @@ public:
     arr.insert(pos, tmp);
     return 1;
   };
-  // Проверка наличия значения по заданному ключу.
+  //Checking if a value exists for a given key.
   bool contains(const Key& k) const {
     if(empty()) return 0;
     int pos = find_pos_of_key(k);
     return arr[pos].first == k;  
   };
-  // Возвращает значение по ключу. Небезопасный метод.
-  // В случае отсутствия ключа в контейнере, следует вставить в контейнер
-  // значение, созданное конструктором по умолчанию и вернуть ссылку на него. 
+  //Returns value by key. Unsafe method.
   Value& operator[](const Key& k) {
     int pos = find_pos_of_key(k);
     if (arr[pos].first != k) {
@@ -96,24 +90,29 @@ public:
     }
     return arr[pos].second;
   };
-  // Возвращает значение по ключу. Бросает исключение при неудаче.
+  //Returns value by key. Returns exception on failure
   Value& at(const Key& k) {
     int pos = find_pos_of_key(k);
     if (arr[pos].first != k) throw std::invalid_argument("Key wasn't found"); 
     return arr[pos].second;
   };
+  //Returns const value by key. Returns exception on failure
   const Value& at(const Key& k) const {
     return at(k);
   }
+  //Returns number of pairs in container
   size_t size() const {
     return arr.size();
   };
+  //Returns if the container is empty
   bool empty() const {
     return arr.empty();
   };
+  //Returns if the containers content the same elements
   friend bool operator==(const FlatMap& a, const FlatMap& b) {
     return a.arr == b.arr;
   };
+  //Returns if the containers do NOT content the same elements
   friend bool operator!=(const FlatMap& a, const FlatMap& b) {
     return !(a==b);
   };
