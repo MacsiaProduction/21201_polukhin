@@ -1,5 +1,6 @@
+
 #include "FlatMap.hpp"
-#include <iostream>
+
 using namespace std;
 class key{
     public:
@@ -18,10 +19,6 @@ class key{
 };
 using namespace std;
 int main() {
-    FlatMap <key, int> a;
-    a.insert(key(10), 20);
-    a.insert(key(11), 21);
-    a.insert(key(13), 23);
-    a.insert(key(12), 22);
+    mine_vector<int> a = 0;
     return 0;
 }

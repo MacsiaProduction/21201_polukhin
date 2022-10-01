@@ -1,51 +1,53 @@
 #ifndef mine_vector_HPP
 #define mine_vector_HPP
-#endif
+
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <utility>
 template <class K>
 class mine_vector {
-  private:
-	K* arr;
-	int len;
   public:
-	mine_vector() {
-		arr = new K[1];
-		len = 0;
+	mine_vector(size_t size = 0) {
+		arr = new K[size];
+		real_len = len = size;
 	}
 	mine_vector(const mine_vector<K>& b) {
-		mine_vector();
-		resize(b.len);
-		for(int i = 0; i<len; i++) {
-			arr[i] = b.arr[i];
-		}
+		arr = new K[b.len];
+		real_len = len = b.len;
+		std::copy(b.arr, b.arr+b.len, arr);
+	}
+	~mine_vector() {	
+		delete[] arr;
+	}
+	mine_vector& operator=(const mine_vector& old) {
+		resize(old.len);
+		std::copy(old.arr, old.arr+old.len, arr);
+		return *this;
 	}
 	mine_vector& operator=(mine_vector&& old) {
 		resize(old.len);
-		for(int i = 0; i<len; i++) {
-			arr[i] = std::move(old[i]);
+		for(size_t i = 0; i<old.len; i++) {
+			arr[i] = std::move(old.arr[i]);
 		}
 		return *this;
 	}
-	K& operator[](int index) const{
+	K& operator[](size_t index) const{
 		return arr[index];
 	}
 	bool empty() const{
 		return (len == 0);
 	}
-	int size() const{
+	size_t size() const{
 		return len;
 	}
-	void resize(unsigned int new_size) {
-		if (len == new_size) return;
-		K* tmp = new K[new_size+1];
-		for(int i = 0; i < std::min(int(new_size), len); i++) {
-			tmp[i] = std::move(arr[i]);
+	void resize(size_t new_size) {
+		if (real_len<new_size || real_len>=4*new_size) {
+			K* tmp = new K[new_size*2];
+			for(size_t i = 0; i < std::min(new_size, len); i++) {
+				tmp[i] = std::move(arr[i]);
+			} 	
+			delete[] arr;
+			arr = tmp;
+			real_len = 2*new_size;
 		}
-		delete[] arr;
-		arr = tmp;
 		len = new_size;
 	}
 	void push_back(K to_add) {
@@ -54,24 +56,29 @@ class mine_vector {
 	void clear() {
 		resize(0);
 	};
-	void erase(int index) {
-		for(int i = index; i<len-1; i++){
-			arr[i]=std::move(arr[i+1]);
+	void erase(size_t index) {
+		for(size_t i = index; i<len-1; i++){
+			arr[i] = std::move(arr[i+1]);
 		}
 		resize(len-1);
 	};
-	void insert(int index, K value) {
+	void insert(size_t index, K value) {
 		resize(len+1);
-		for(int i = len-1; i>index; i--) {
+		for(size_t i = len-1; i>index; i--) {
 			arr[i] = std::move(arr[i-1]);
 		}
 		arr[index] = value;
 	};
   	friend bool operator==(const mine_vector& a, const mine_vector& b) {
 		if (a.len != b.len) return 0;
-		for(int i = 0; i<a.len; i++) {
-			if (a[i]!=b[i]) return 0;
+		for(size_t i = 0; i<a.len; i++) {
+			if (a[i]!=b[i]) return false;
 		}
-		return 1;
+		return true;
 	}
+  private:
+	K* arr;
+	size_t len;
+	size_t real_len;
 };
+#endif
