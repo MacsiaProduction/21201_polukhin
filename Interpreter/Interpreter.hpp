@@ -21,22 +21,21 @@ public:
         }
     }
 protected:
-    int  categorize(std::string name) {
+    int categorize(std::string name) {
         if (name == "i") return number;
         for (int i = 0; i < name.length(); i++) {
             if(!isdigit(name[i])) break;
             if(isdigit(name[i]) & (i == name.length()-1)) return number;
         }
-        if (default_functions.in_list(name)) return def_func;
         if (name == ".\"") return string;
         if (name == "if") return conditional;
         if (name == "do") return loop;
         if (name == ":") return add_mine;
         if (name == "variable") return add_var;
+        if (default_functions.in_list(name)) return def_func;
         if (mine_functions.in_list(name)) return use_mine;
         if (variables.in_list(name)) return use_var;
-        LOG(ERROR)<<"input didn't fit in any of categories, input is "<<name;
-        exit(0);
+        return error;
     };
     void process_word(std::string tmp, std::stringstream& in) {
         switch(categorize(tmp)) {
@@ -68,12 +67,13 @@ protected:
                     use_mine_function(tmp);
                     break;
                 default:
-                    LOG(ERROR)<<"wrong input,"<<tmp<<" isn't command";
+                    LOG(ERROR)<<"wrong input, \'"<<tmp<<"\' wasn't recognized";
+                    exit(0);
                     break;
             }
     };
     void add_number(std::string str) {
-        LOG(INFO)<<"adding number = "<<str<<" to stack";
+        LOG(INFO)<<"pushing number = \'"<<str<<"\' to stack";
         if (str == "i") {
             if (!loop_flag) LOG(ERROR)<<"using i outside the loop";
             else stack.push(loop_i);
@@ -81,16 +81,16 @@ protected:
         else stack.push(stoi(str));
     }
     void use_function(std::string name) {
-        LOG(INFO)<<"called default_function "<<name;
+        LOG(INFO)<<"called default_function '"<<name<<"'";
         default_functions.call_by_name(name, stack);
     };
     void print_string(std::stringstream& in) {
         std::string tmp;
         in>>tmp;
-        LOG(INFO)<<"called string =\""<<tmp;
-        if (tmp[tmp.length()-1] != '"') LOG(ERROR)<<"string didn't ended with\"";
+        LOG(INFO)<<"called print string = \""<<tmp;
+        if (tmp[tmp.length()-1] != '"') LOG(WARN)<<"string didn't end with \"";
         else tmp.pop_back();
-        std::cout<<tmp;
+        std::cout<<tmp<<" ";
     };
     void conditional_operator(std::stringstream& in) {
         const bool condition = stack.top();
@@ -106,8 +106,11 @@ protected:
             }
             else if (tmp == "then") {
                 in>>tmp;
-                if (tmp==";") break;
-                else LOG(ERROR)<<"didn't found ; after conditional operator";
+                if (tmp !=";") {
+                    LOG(WARN)<<"didn't found ; after conditional operator";
+                    process_word(tmp, in);
+                }
+                break;
             } else {
                 switch (b) {
                 case then_b:
@@ -129,7 +132,10 @@ protected:
         while (in>>tmp) {
             if (tmp == "loop") {
                 in>>tmp; //;
-                if (tmp != ";") LOG(ERROR)<<"didn't found ; after loop";
+                if (tmp != ";") {
+                    LOG(WARN)<<"didn't found ; after loop";
+                    process_word(tmp, in);
+                }
                 break;
             }
             body_flow<<tmp<<" ";
@@ -172,7 +178,7 @@ protected:
 private:
     int loop_i;
     bool loop_flag = false;
-    enum category {number = 1, def_func, string, conditional,\
+    enum category {error = 0, number, def_func, string, conditional,\
     loop, use_mine, use_var, add_var, add_mine};
     std::stack<long long> stack;
     default_functions_factory default_functions;
