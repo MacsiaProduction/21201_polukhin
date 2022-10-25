@@ -1,7 +1,6 @@
 #include <stack>
 #include <string>
 #include <iostream>
-
 //default function interface
 struct default_function {
     public:
@@ -82,8 +81,8 @@ struct drop : default_function {
 
 struct print : default_function {
     void work(std::stack<long long>& stack) override {
-        std::cout<<int(stack.top())<<" ";
-        stack.pop();   
+        long long tmp = stack.top(); stack.pop();
+        std::cout<<int(tmp)<<" ";
     }
     std::string get_name() override {
         return ".";
@@ -185,9 +184,7 @@ struct equal : default_function {
 
 struct reference : default_function {
     void work(std::stack<long long>& stack) override {
-        long long tmp = stack.top();
-        long long* pointer = reinterpret_cast<long long*>(tmp);
-        stack.top() = (*pointer);
+        stack.top()= *reinterpret_cast<long long*>(stack.top());
     }
     std::string get_name() override {
         return "@";
@@ -196,10 +193,9 @@ struct reference : default_function {
 
 struct dereference : default_function {
     void work(std::stack<long long>& stack) override {
-        long long* tmp = reinterpret_cast<long long*>(stack.top());
-        stack.pop();    
-        (*tmp) = stack.top();
-        stack.pop();
+        long long tmp1 = stack.top(); stack.pop();
+        long long tmp2 = stack.top(); stack.pop();
+        *(reinterpret_cast<long long*>(tmp1)) = tmp2;
     }
     std::string get_name() override {
         return "!";

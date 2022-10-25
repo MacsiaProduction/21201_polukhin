@@ -14,10 +14,10 @@ public:
             delete item.second;
         }
     }
-    bool in_list(std::string name) {
+    bool in_list(std::string& name) {
         return (default_functions.find(name) != default_functions.end());
     };
-    void call_by_name(std::string name, std::stack<long long> stack) {
+    void call_by_name(std::string& name, std::stack<long long>& stack) {
         default_functions.at(name)->work(stack);
     }
 protected:
