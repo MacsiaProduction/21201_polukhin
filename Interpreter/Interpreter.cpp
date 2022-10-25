@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-#include <sstream>
 #include <fstream>
 #include "Interpreter.hpp"
 int main() {

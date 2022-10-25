@@ -1,5 +1,4 @@
 #include <sstream>
-#include <string>
 #include "default_functions_factory.hpp"
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"

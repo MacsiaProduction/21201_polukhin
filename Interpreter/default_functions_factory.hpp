@@ -1,7 +1,6 @@
 #include <iostream>
 #include <map>
 #include <stack>
-#include <functional>
 #include "default_functions.hpp"
 
 class default_functions_factory{
