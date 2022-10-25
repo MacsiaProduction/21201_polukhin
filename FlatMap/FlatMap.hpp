@@ -54,7 +54,7 @@ public:
     arr.insert(pos, tmp);
     return 1;
   };
-  //Checking if a value exists for a given key.
+  //Checks if a value exists for a given key.
   bool contains(const Key& k) const {
     if(empty()) return 0;
     size_t pos = find_pos_of_key(k);
@@ -68,14 +68,13 @@ public:
     }
     return arr[pos].second;
   };
-  //Returns value by key. Returns exception on failure
+  //Returns value reference by key. Returns exception on failure
   Value& at(const Key& k) {
     size_t pos = find_pos_of_key(k);
     if (arr[pos].first != k) throw std::invalid_argument("Key wasn't found"); 
     return arr[pos].second;
   };
-
-  //Returns const value by key. Returns exception on failure
+  //Returns const value reference by key. Returns exception on failure
   const Value& at(const Key& k) const {
     size_t pos = find_pos_of_key(k);
     if (pos == size() || arr[pos].first != k) throw std::invalid_argument("Key wasn't found"); 
@@ -97,17 +96,18 @@ public:
   friend bool operator!=(const FlatMap& a, const FlatMap& b) {
     return !(a==b);
   };
-
 private:
   mine_vector < std::pair<Key, Value> > arr;
   //Returns potential pos of key in arr
   size_t find_pos_of_key(const Key& key) const{
     if (empty()) return 0;
     size_t start = 0, end = size();
-    for(size_t m = start/2 + end/2; end-start > 1; m = start/2 + end/2 + (((start%2)*(end%2)==1)?1:0)) {
-        if ((arr[m].first < key)||(arr[m].first == key)) {
-            start = m;
-        } else end = m;
+    for(size_t m = start/2 + end/2; end-start > 1;\
+    m = start/2 + end/2 + (((start%2)*(end%2)==1)?1:0))
+    {
+      if ((arr[m].first < key)||(arr[m].first == key)) {
+        start = m;
+      } else end = m;
     }
     return (arr[start].first<key)?start+1:start; 
   }
