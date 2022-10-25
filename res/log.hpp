@@ -1,3 +1,5 @@
+#ifndef LOG_HPP
+#define LOG_HPP
 #include <iostream>
 
 enum typelog {
@@ -44,3 +46,4 @@ private:
         return label;
     }
 };
+#endif
