@@ -1,9 +1,14 @@
+#ifndef Interpreter_HPP
+#define Interpreter_HPP
+
 #include <sstream>
+
 #include "default_functions_factory.hpp"
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
 typelog log_level = INFO;
+
 class Interpreter{
 public:
     void process_text(std::ifstream& in) {
@@ -129,14 +134,7 @@ protected:
         std::stringstream body_flow;
         std::string tmp;
         while (in>>tmp) {
-            if (tmp == "loop") {
-                in>>tmp; //;
-                if (tmp != ";") {
-                    LOG(WARN)<<"didn't found ; after loop";
-                    process_word(tmp, in);
-                }
-                break;
-            }
+            if (tmp == "loop") break;
             body_flow<<tmp<<" ";
         }
         LOG(INFO)<<"loop's body is \""<<body_flow.str()<<"\"";
@@ -147,6 +145,11 @@ protected:
             process_text(body_flow_copy);
         }
         loop_flag = false;
+        in>>tmp; //;
+        if (tmp != ";") {
+            LOG(WARN)<<"didn't found ; after loop";
+            process_word(tmp, in);
+        }
     };
     void add_mine_function(std::stringstream& in) {
         std::string name;
@@ -184,3 +187,4 @@ private:
     mine_functions_list mine_functions;
     variables_list variables;
 };
+#endif
