@@ -1,50 +1,27 @@
+#ifndef default_functions_factory_HPP
+#define default_functions_factory_HPP
 #include <iostream>
 #include <map>
 #include <stack>
-#include "default_functions.hpp"
-
+#include <memory>
+#include "default_function_interface.hpp"
 class default_functions_factory{
 public:
-    default_functions_factory() {
-        init_factory();
-    }
-    ~default_functions_factory() {
-        for(auto& item : default_functions) {
-            delete item.second;
-        }
-    }
+    static default_functions_factory* get_factory_instance() {
+        static default_functions_factory instance;
+        return &instance;
+    }   
     bool in_list(std::string& name) {
         return (default_functions.find(name) != default_functions.end());
     };
-    void call_by_name(std::string& name, std::stack<long long>& stack) {
-        default_functions.at(name)->work(stack);
+    void call_by_name(std::string& name, std::stack<long long>& stack, std::stringstream& in, std::stringstream& out) {
+        default_functions.at(name)->work(stack, in, out);
     }
-protected:
-    //adds all default functions
-    void init_factory() {
-        add_default_function(new multiply);
-        add_default_function(new divide);
-        add_default_function(new plus);
-        add_default_function(new minus);
-        add_default_function(new mod);
-        add_default_function(new dup);
-        add_default_function(new drop);
-        add_default_function(new print);
-        add_default_function(new swap);
-        add_default_function(new rot);
-        add_default_function(new over);
-        add_default_function(new emit);
-        add_default_function(new cr);
-        add_default_function(new less);
-        add_default_function(new greater);
-        add_default_function(new equal);
-        add_default_function(new reference);
-        add_default_function(new dereference);
-    }
-    void add_default_function(default_function* func) {
-        default_functions.insert(std::map<std::string, default_function*>::value_type\
-        (func->get_name(), func));
+    void add_default_function(std::shared_ptr<default_function> func) {
+        default_functions.insert({func->get_name(), func});
     }
 private:
-    std::map<std::string, default_function*> default_functions;
+    default_functions_factory() = default;
+    std::map<std::string, std::shared_ptr<default_function>> default_functions;
 };
+#endif
