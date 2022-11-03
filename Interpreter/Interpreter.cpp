@@ -15,7 +15,7 @@ void Interpreter::process_text(std::stringstream& in) {
 }
 
 int Interpreter::categorize(std::string name) {
-    if (name == "i") LOG(ERROR)<<"using i outside the loop";;
+    if (name == "i") LOG(ERROR)<<"using i outside the loop";
     for (int i = 0; i < name.length(); i++) {
         if(!isdigit(name[i])) break;
         if(isdigit(name[i]) & (i == name.length()-1)) return number;

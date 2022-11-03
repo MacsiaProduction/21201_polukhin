@@ -22,6 +22,7 @@ public:
     }
 private:
     default_functions_factory() = default;
+    default_functions_factory(default_functions_factory&) = delete;
     std::map<std::string, std::shared_ptr<default_function>> default_functions;
 };
 #endif
