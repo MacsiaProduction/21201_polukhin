@@ -1,4 +1,1 @@
-1 2 3 4 5 1
-do i . loop 
-troll
-1 2 3 .
+variable kek kek @ . 100 kek ! kek @ .

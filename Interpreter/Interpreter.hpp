@@ -1,18 +1,20 @@
 #ifndef Interpreter_HPP
 #define Interpreter_HPP
 
+#include <fstream>
 #include <sstream>
 
 #include "default_functions.hpp"
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
-typelog log_level = INFO;
+
+typelog log_level = ERROR;
 
 class Interpreter
 {
 public:
-    void process_text(std::ifstream &in);
+    void process_file(std::ifstream &in);
     void process_text(std::stringstream &in);
 
 protected:

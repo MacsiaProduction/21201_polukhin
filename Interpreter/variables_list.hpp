@@ -6,7 +6,7 @@ public:
         vars.push(0);
         long long* reference = &(vars.top());
         long long tmp = reinterpret_cast<long long>(reference);
-        variables.insert(std::map<std::string,long long>::value_type(name, tmp));
+        variables.insert({name, tmp});
     };
     bool in_list(std::string name) {
         return variables.find(name) != variables.end();
