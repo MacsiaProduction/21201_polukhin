@@ -1,1 +1,4 @@
-variable kek kek @ . 100 kek ! kek @ .
+10 : sum
+
+
+3 sum .

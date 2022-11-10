@@ -4,8 +4,10 @@
 #include <sstream>
 //default function interface
 struct default_function {
+    // function body
     virtual void work(std::stack<long long>& stack,\
     std::stringstream& in, std::stringstream& out) = 0;
+    //fucntion name
     virtual std::string get_name() = 0;
 };
 #endif

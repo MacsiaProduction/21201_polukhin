@@ -14,7 +14,9 @@ typelog log_level = ERROR;
 class Interpreter
 {
 public:
+    // interpret programm from file
     void process_file(std::ifstream &in);
+    //interpret programm from stringstream
     void process_text(std::stringstream &in);
 
 protected:
