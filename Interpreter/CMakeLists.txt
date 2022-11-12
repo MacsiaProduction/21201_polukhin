@@ -1,8 +1,30 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.8)
+
 project(Interpreter)
-# Locate GTest
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-# Link runTests with what we want to test and the GTest and pthread library
-add_executable(Interpreter_test Tests.cpp)
-target_link_libraries(Interpreter_test ${GTEST_LIBRARIES} pthread)
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+set(This Interpreter_main)
+
+set (HEADERS
+    Interpreter.hpp
+    auto_registration.hpp
+    default_function_interface.hpp
+    default_functions_factory.hpp
+    default_functions.hpp
+    mine_functions_list.hpp
+    variables_list.hpp
+)
+
+set ( SOURCES
+    Interpreter.cpp
+    default_functions.cpp
+)
+
+add_executable(${This} main.cpp ${SOURCES} ${HEADERS})
+
+add_library(${This} STATIC ${SOURCES} ${HEADERS})
+
+add_subdirectory(Test)
+
+enable_testing()

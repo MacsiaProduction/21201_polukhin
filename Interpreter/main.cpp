@@ -1,5 +1,5 @@
-#include "Interpreter.cpp"
-
+#include "Interpreter.hpp"
+#include <fstream>
 int main()
 {
     std::ifstream input("in.txt");

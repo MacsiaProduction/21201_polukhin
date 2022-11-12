@@ -1,10 +1,12 @@
 #ifndef auto_registration_HPP
 #define auto_registration_HPP
+#include <memory>
 #include "default_functions_factory.hpp"
 #include "../res/log.hpp"
+
 namespace auto_registration
 {
-    // register default_function in factory
+    // registers default_function in factory
     template <class T>
     struct register_function
     {

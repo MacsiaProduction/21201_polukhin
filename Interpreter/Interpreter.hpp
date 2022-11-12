@@ -1,22 +1,22 @@
 #ifndef Interpreter_HPP
 #define Interpreter_HPP
 
+#include <stack>
 #include <fstream>
 #include <sstream>
 
-#include "default_functions.hpp"
+#include "default_functions_factory.hpp"
+#include "default_functions.cpp" // TODO why??????????
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
 
-typelog log_level = ERROR;
-
 class Interpreter
 {
 public:
-    // interpret programm from file
+    // interprets programm from file
     void process_file(std::ifstream &in);
-    //interpret programm from stringstream
+    // interprets programm from stringstream
     void process_text(std::stringstream &in);
 
 protected:

@@ -20,7 +20,6 @@ struct multiply : default_function
         return "*";
     }
 };
-auto_registration::register_function<multiply> _multiply;
 
 struct divide : default_function
 {
@@ -39,7 +38,6 @@ struct divide : default_function
         return "/";
     }
 };
-auto_registration::register_function<divide> _divide;
 
 struct plus : default_function
 {
@@ -54,7 +52,6 @@ struct plus : default_function
         return "+";
     }
 };
-auto_registration::register_function<plus> _plus;
 
 struct minus : default_function
 {
@@ -71,7 +68,6 @@ struct minus : default_function
         return "-";
     }
 };
-auto_registration::register_function<minus> _minus;
 
 struct mod : default_function
 {
@@ -88,7 +84,6 @@ struct mod : default_function
         return "mod";
     }
 };
-auto_registration::register_function<mod> _mod;
 
 struct copy : default_function
 {
@@ -102,7 +97,6 @@ struct copy : default_function
         return "dup";
     }
 };
-auto_registration::register_function<copy> _dup;
 
 struct drop : default_function
 {
@@ -115,7 +109,6 @@ struct drop : default_function
         return "drop";
     }
 };
-auto_registration::register_function<drop> _drop;
 
 struct print : default_function
 {
@@ -132,7 +125,6 @@ struct print : default_function
         return ".";
     }
 };
-auto_registration::register_function<print> _print;
 
 struct swap : default_function
 {
@@ -150,7 +142,6 @@ struct swap : default_function
         return "swap";
     }
 };
-auto_registration::register_function<swap> _swap;
 
 // works in real Forth way))
 struct rot : default_function
@@ -172,7 +163,6 @@ struct rot : default_function
         return "rot";
     }
 };
-auto_registration::register_function<rot> _rot;
 
 struct over : default_function
 {
@@ -190,7 +180,6 @@ struct over : default_function
         return "over";
     }
 };
-auto_registration::register_function<over> _over;
 
 struct emit : default_function
 {
@@ -204,7 +193,6 @@ struct emit : default_function
         return "emit";
     }
 };
-auto_registration::register_function<emit> _emit;
 
 struct cr : default_function
 {
@@ -217,7 +205,6 @@ struct cr : default_function
         return "cr";
     }
 };
-auto_registration::register_function<cr> _cr;
 
 struct less : default_function
 {
@@ -234,7 +221,6 @@ struct less : default_function
         return "<";
     }
 };
-auto_registration::register_function<less> _less;
 
 struct greater : default_function
 {
@@ -251,7 +237,6 @@ struct greater : default_function
         return ">";
     }
 };
-auto_registration::register_function<greater> _greater;
 
 struct equal : default_function
 {
@@ -268,7 +253,6 @@ struct equal : default_function
         return "=";
     }
 };
-auto_registration::register_function<equal> _equal;
 
 struct reference : default_function
 {
@@ -281,7 +265,6 @@ struct reference : default_function
         return "@";
     }
 };
-auto_registration::register_function<reference> _reference;
 
 struct dereference : default_function
 {
@@ -298,13 +281,14 @@ struct dereference : default_function
         return "!";
     }
 };
-auto_registration::register_function<dereference> _dereference;
 
 struct print_string : default_function
 {
     void work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out) override
     {
         char tmp = in.get();
+        if (tmp != ' ')
+            throw std::logic_error("expect ' ' in \" string\"");
         std::string str = "";
         while (true)
         {
@@ -322,7 +306,6 @@ struct print_string : default_function
         return ".\"";
     }
 };
-auto_registration::register_function<print_string> _print_string;
 
 struct conditional_operator : default_function
 {
@@ -362,6 +345,9 @@ struct conditional_operator : default_function
                     if (!condition)
                         out << tmp << " ";
                     break;
+                case complete:
+                    throw std::logic_error("incomplete if");
+                    break;
                 }
             }
         }
@@ -374,13 +360,12 @@ struct conditional_operator : default_function
             LOG(ERROR) << "didn't found ; after conditional operator";
             throw std::logic_error("didn't get ; after if");
         }
-    }
+    };
     std::string get_name() override
     {
         return "if";
-    }
+    };
 };
-auto_registration::register_function<conditional_operator> _conditional_operator;
 
 struct loop : default_function
 {
@@ -425,6 +410,5 @@ struct loop : default_function
         return "do";
     }
 };
-auto_registration::register_function<loop> _loop;
 
 #endif
