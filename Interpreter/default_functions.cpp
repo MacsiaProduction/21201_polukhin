@@ -312,10 +312,17 @@ void loop::work(std::stack<long long> &stack,
     LOG(INFO) << "called loop from " << start << " to " << end;
     std::stringstream body_flow;
     std::string tmp;
+    unsigned long long counter = 1;
     while (in >> tmp)
     {
+        if (tmp == "do")
+            counter++;
         if (tmp == "loop")
-            break;
+        {
+            counter--;
+            if (counter == 0)
+                break;
+        }
         body_flow << tmp << " ";
     }
     if (tmp != "loop")

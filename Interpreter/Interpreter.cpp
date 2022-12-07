@@ -1,7 +1,5 @@
 #include "Interpreter.hpp"
 
-typelog log_level = ERROR;
-
 void Interpreter::process_file(std::ifstream &in)
 {
     LOG(INFO) << "calling processing text from file";

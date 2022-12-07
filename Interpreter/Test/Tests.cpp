@@ -22,7 +22,7 @@ TEST(int_and_string, first)
 {
     for (long long int i = INT32_MIN; i < INT32_MIN + 100000; i++)
     {
-        check(std::to_string(i) + " .", std::to_string(i) + " ");
+        //check(std::to_string(i) + " .", std::to_string(i) + " ");
     }
     std::vector<std::string> strings = {"keks", "avbdsfa", "fasdfgfdsg", "dagfgsd", "fasdfat3 wrfgasf", "qaafsd", "afdsc", "fasdg dfsag sdfg dsgas f", "s", "", "fafe", "sdf  sdf"};
     for (auto &x : strings)
@@ -59,6 +59,10 @@ TEST(loop, first)
 {
     check("1 10 0 do i . loop ; .", "0 1 2 3 4 5 6 7 8 9 1 ");
     check("10 0 1 do 1 . loop ; .", "10 ");
+    check("0 3 1 2 1 1 1 3 1 do do i + loop ; loop ; .", "3 ");
+    check("3 1 3 1 3 1 3 1 3 1 3 1 do do 1 . loop ; loop ;", "1 1 1 1 ");
+    check(": foo 0 do 3 1 loop ;\n 32 foo \n do do do 1 . loop ; loop ; loop ;", "1 1 1 1 1 1 1 1 ");
+    check(": foo 0 do 3 1 loop ;\n 128 foo \n do do do do do do 1 . loop ; loop ; loop ; loop ; loop ; loop ; ", "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ");
     check_exception("10 0 1 do 1 . loop .");
     check_exception("10 0 1 do 1 .");
 }
@@ -66,6 +70,7 @@ TEST(loop, first)
 TEST(mine_funcs, first)
 {
     check(": foo 0 do .\" Foo\" loop ;\n 3 foo 5 foo", "Foo Foo Foo Foo Foo Foo Foo Foo ");
+    check(": foo 0 do 1 + loop ;\n 0 1024 foo .", "1024 ");
 }
 
 TEST(vars, first)

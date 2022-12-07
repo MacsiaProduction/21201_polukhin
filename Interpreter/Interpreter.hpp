@@ -6,10 +6,12 @@
 #include <sstream>
 
 #include "default_functions_factory.hpp"
-#include "default_functions.hpp" // ? why
+#include "default_functions.cpp" // ? why
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
+
+typelog log_level = ERROR;
 
 class Interpreter
 {
