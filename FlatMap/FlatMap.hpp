@@ -2,7 +2,7 @@
 #define FlatMap_HPP
 
 #include "../res/mine_vector.hpp"
-
+#include <stdexcept>
 // Associative container that allows you to store key-value pairs
 template <class Key, class Value>
 class FlatMap

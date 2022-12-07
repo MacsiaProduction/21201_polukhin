@@ -1,5 +1,7 @@
 #ifndef mine_vector_HPP
 #define mine_vector_HPP
+#include <stddef.h>
+#include <algorithm>
 template <class K>
 class mine_vector
 {
