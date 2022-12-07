@@ -1,5 +1,9 @@
+#ifndef variables_list_HPP
+#define variables_list_HPP
+
 #include <map>
 #include <stack>
+
 class variables_list
 {
 public:
@@ -22,7 +26,8 @@ public:
         return variables.at(name);
     }
 
-protected:
+private:
     std::stack<long long> vars;
     std::map<std::string, long long> variables;
 };
+#endif

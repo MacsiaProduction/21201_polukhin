@@ -6,7 +6,7 @@
 #include <sstream>
 
 #include "default_functions_factory.hpp"
-#include "default_functions.cpp" // TODO why??????????
+#include "default_functions.hpp" // ? why
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
@@ -19,7 +19,7 @@ public:
     // interprets programm from stringstream
     void process_text(std::stringstream &in);
 
-protected:
+private:
     int categorize(std::string name);
     void process_word(std::string tmp, std::stringstream &in);
     void use_function(std::string name, std::stringstream &in);
@@ -41,8 +41,8 @@ private:
         use_var
     };
     std::stack<long long> stack;
-    default_functions_factory &default_functions =
-        *default_functions_factory::get_factory_instance();
+    default_functions_factory<default_function> &default_functions =
+        *default_functions_factory<default_function>::get_factory_instance();
     mine_functions_list mine_functions;
     variables_list variables;
 };

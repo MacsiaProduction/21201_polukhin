@@ -79,7 +79,7 @@ void Interpreter::use_function(std::string name, std::stringstream &in)
 {
     LOG(INFO) << "called function '" << name << "'";
     std::stringstream out;
-    default_functions.call_by_name(name, stack, in, out);
+    default_functions.get_by_name(name)->work(stack, in, out);
     process_text(out);
 };
 

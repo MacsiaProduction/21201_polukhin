@@ -1,8 +1,8 @@
 #ifndef auto_registration_HPP
 #define auto_registration_HPP
+
 #include <memory>
 #include "default_functions_factory.hpp"
-#include "../res/log.hpp"
 
 namespace auto_registration
 {
@@ -12,8 +12,8 @@ namespace auto_registration
     {
         register_function()
         {
-            default_functions_factory::get_factory_instance()
-                ->add_default_function(std::shared_ptr<T>(new T));
+            default_functions_factory<default_function>::get_factory_instance()
+                ->add_default_function(std::move(std::unique_ptr<T>(new T)));
         }
     };
 };
