@@ -63,6 +63,9 @@ private:
         case ERROR:
             label = "\033[1;31mERROR\033[0m";
             break;
+        default:
+            label = "";
+            break;
         }
         return label;
     }
