@@ -309,7 +309,7 @@ void loop::work(std::stack<long long> &stack,
     LOG(INFO) << "called loop from " << start << " to " << end;
     std::stringstream body_flow;
     std::string tmp;
-    unsigned long long counter = 1;
+    size_t counter = 1;
     while (in >> tmp)
     {
         if (tmp == "do")
@@ -325,7 +325,7 @@ void loop::work(std::stack<long long> &stack,
     if (tmp != "loop")
         throw std::logic_error("incomplete loop");
     LOG(INFO) << "loop's body is \"" << body_flow.str() << "\"";
-    for (int i = start; i < end; i++)
+    for (size_t i = start; i < end; i++)
     {
         std::stringstream body_flow_copy(body_flow.str());
         while (body_flow_copy >> tmp)
