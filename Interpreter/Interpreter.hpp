@@ -6,7 +6,7 @@
 #include <sstream>
 
 #include "default_functions_factory.hpp"
-#include "default_functions.cpp" // ? why
+#include "default_functions.cpp"
 #include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"

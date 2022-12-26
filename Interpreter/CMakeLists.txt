@@ -17,8 +17,8 @@ set (HEADERS
 )
 
 set ( SOURCES
-    Interpreter.cpp
     default_functions.cpp
+    Interpreter.cpp
 )
 
 add_executable(${This} main.cpp ${SOURCES} ${HEADERS})

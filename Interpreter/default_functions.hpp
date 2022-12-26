@@ -135,26 +135,4 @@ struct loop : default_function
     std::string get_name() override;
 };
 
-auto_registration::register_function<multiply> _multiply;
-auto_registration::register_function<divide> _divide;
-auto_registration::register_function<plus> _plus;
-auto_registration::register_function<minus> _minus;
-auto_registration::register_function<mod> _mod;
-auto_registration::register_function<copy> _dup;
-auto_registration::register_function<drop> _drop;
-auto_registration::register_function<print> _print;
-auto_registration::register_function<swap> _swap;
-auto_registration::register_function<rot> _rot;
-auto_registration::register_function<over> _over;
-auto_registration::register_function<emit> _emit;
-auto_registration::register_function<cr> _cr;
-auto_registration::register_function<less> _less;
-auto_registration::register_function<greater> _greater;
-auto_registration::register_function<equal> _equal;
-auto_registration::register_function<reference> _reference;
-auto_registration::register_function<dereference> _dereference;
-auto_registration::register_function<print_string> _print_string;
-auto_registration::register_function<conditional_operator> _conditional_operator;
-auto_registration::register_function<loop> _loop;
-
 #endif
