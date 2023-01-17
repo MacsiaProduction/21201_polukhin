@@ -1,6 +1,7 @@
 #include "default_functions.hpp"
+#include "variables_list.hpp"
 
-void multiply::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void multiply::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -13,7 +14,7 @@ std::string multiply::get_name()
     return "*";
 }
 
-void divide::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void divide::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -28,7 +29,7 @@ std::string divide::get_name()
     return "/";
 }
 
-void plus::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void plus::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -39,7 +40,7 @@ std::string plus::get_name()
     return "+";
 }
 
-void minus::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void minus::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -52,7 +53,7 @@ std::string minus::get_name()
     return "-";
 }
 
-void mod::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void mod::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -65,7 +66,7 @@ std::string mod::get_name()
     return "mod";
 }
 
-void copy::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void copy::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int tmp = stack.top();
     stack.push(tmp);
@@ -75,7 +76,7 @@ std::string copy::get_name()
     return "dup";
 }
 
-void drop::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void drop::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     stack.pop();
 }
@@ -84,7 +85,7 @@ std::string drop::get_name()
     return "drop";
 }
 
-void print::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void print::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     if (stack.empty())
         throw std::out_of_range("empty stack");
@@ -97,7 +98,7 @@ std::string print::get_name()
     return ".";
 }
 
-void swap::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void swap::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int tmp = stack.top();
     stack.pop();
@@ -111,7 +112,7 @@ std::string swap::get_name()
     return "swap";
 }
 
-void rot::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void rot::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int tmp1 = stack.top();
     stack.pop();
@@ -128,7 +129,7 @@ std::string rot::get_name()
     return "rot";
 }
 
-void over::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void over::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int tmp1 = stack.top();
     stack.pop();
@@ -142,7 +143,7 @@ std::string over::get_name()
     return "over";
 }
 
-void emit::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void emit::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     std::cout << (char)stack.top() << " ";
     stack.pop();
@@ -152,7 +153,7 @@ std::string emit::get_name()
     return "emit";
 }
 
-void cr::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void cr::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     std::cout << std::endl;
 }
@@ -161,7 +162,7 @@ std::string cr::get_name()
     return "cr";
 }
 
-void less::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void less::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -173,7 +174,7 @@ std::string less::get_name()
 {
     return "<";
 }
-void greater::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void greater::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -186,7 +187,7 @@ std::string greater::get_name()
     return ">";
 }
 
-void equal::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void equal::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int first = stack.top();
     stack.pop();
@@ -199,28 +200,28 @@ std::string equal::get_name()
     return "=";
 }
 
-void reference::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void reference::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
-    stack.top() = *reinterpret_cast<long long *>(stack.top());
+    stack.top() = vars.value_by_id(stack.top());
 }
 std::string reference::get_name()
 {
     return "@";
 }
-void dereference::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void dereference::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     long long tmp1 = stack.top();
     stack.pop();
     long long tmp2 = stack.top();
     stack.pop();
-    *(reinterpret_cast<long long *>(tmp1)) = tmp2;
+    vars.value_by_id(tmp1) = tmp2;
 }
 std::string dereference::get_name()
 {
     return "!";
 }
 
-void print_string::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void print_string::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     char tmp = in.get();
     if (tmp != ' ')
@@ -242,7 +243,7 @@ std::string print_string::get_name()
     return ".\"";
 }
 
-void conditional_operator::work(std::stack<long long> &stack, std::stringstream &in, std::stringstream &out)
+void conditional_operator::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     const bool condition = stack.top();
     stack.pop();
@@ -299,8 +300,7 @@ std::string conditional_operator::get_name()
     return "if";
 };
 
-void loop::work(std::stack<long long> &stack,
-                std::stringstream &in, std::stringstream &out)
+void loop::work(std::stack<long long> &stack, variables_list &vars, std::stringstream &in, std::stringstream &out)
 {
     int start = stack.top();
     stack.pop();
@@ -369,4 +369,4 @@ auto_registration::register_function<dereference> _dereference;
 auto_registration::register_function<print_string> _print_string;
 auto_registration::register_function<conditional_operator> _conditional_operator;
 auto_registration::register_function<loop> _loop;
-//keks
+// keks

@@ -6,13 +6,13 @@
 #include "default_function_interface.hpp"
 
 template <class T>
-class default_functions_factory
+class factory
 {
 public:
     // get factory instance
-    static default_functions_factory *get_factory_instance()
+    static factory *get_factory_instance()
     {
-        static default_functions_factory instance;
+        static factory instance;
         return &instance;
     }
     // checs if function with 'name' is in factory
@@ -21,19 +21,19 @@ public:
         return (default_functions.count(name) != 0);
     };
     // returns object by name
-    std::unique_ptr<T>& get_by_name(std::string &name)
+    std::unique_ptr<T> &get_by_name(std::string &name)
     {
         return default_functions.at(name);
     }
     // adding additional default_function to factory
-    void add_default_function(std::unique_ptr<T>&& func)
+    void add_object(std::unique_ptr<T> &&func)
     {
         default_functions.insert({func->get_name(), std::move(func)});
     }
 
 private:
-    default_functions_factory() = default;
-    default_functions_factory(default_functions_factory &) = delete;
+    factory() = default;
+    factory(factory &) = delete;
     std::map<std::string, std::unique_ptr<T>> default_functions;
 };
 #endif

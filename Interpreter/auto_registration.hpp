@@ -12,8 +12,8 @@ namespace auto_registration
     {
         register_function()
         {
-            default_functions_factory<default_function>::get_factory_instance()
-                ->add_default_function(std::move(std::unique_ptr<T>(new T)));
+            factory<default_function>::get_factory_instance()
+                ->add_object(std::move(std::unique_ptr<T>(new T)));
         }
     };
 };

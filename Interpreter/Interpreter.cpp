@@ -17,7 +17,7 @@ void Interpreter::process_text(std::stringstream &in)
         process_word(tmp, in);
 }
 
-int Interpreter::categorize(std::string name)
+int Interpreter::categorize(std::string &name)
 {
     if (name == "i")
         LOG(ERROR) << "using i outside the loop";
@@ -43,7 +43,7 @@ int Interpreter::categorize(std::string name)
     return error;
 };
 
-void Interpreter::process_word(std::string tmp, std::stringstream &in)
+void Interpreter::process_word(std::string &tmp, std::stringstream &in)
 {
     switch (categorize(tmp))
     {
@@ -73,11 +73,11 @@ void Interpreter::process_word(std::string tmp, std::stringstream &in)
     }
 }
 
-void Interpreter::use_function(std::string name, std::stringstream &in)
+void Interpreter::use_function(std::string &name, std::stringstream &in)
 {
     LOG(INFO) << "called function '" << name << "'";
     std::stringstream out;
-    default_functions.get_by_name(name)->work(stack, in, out);
+    default_functions.get_by_name(name)->work(stack, variables, in, out);
     process_text(out);
 };
 
@@ -91,7 +91,7 @@ void Interpreter::add_mine_function(std::stringstream &in)
     LOG(INFO) << "added new function " << name << " with body " << body_str;
 }
 
-void Interpreter::use_mine_function(std::string name)
+void Interpreter::use_mine_function(std::string &name)
 {
     std::stringstream body;
     body << mine_functions.body_by_name(name);
@@ -104,11 +104,9 @@ void Interpreter::add_variable(std::stringstream &in)
     std::string name;
     in >> name;
     variables.add_variable(name);
-    LOG(INFO) << "new var " << name << " now it's = " << *reinterpret_cast<long long *>(variables.pointer_by_name(name));
 }
 
-void Interpreter::use_variable(std::string name)
+void Interpreter::use_variable(std::string &name)
 {
-    stack.push(variables.pointer_by_name(name));
-    LOG(INFO) << "pushed pointer of var " << name << " now it's = " << *reinterpret_cast<long long *>(variables.pointer_by_name(name));
+    stack.push(variables.id_by_name(name));
 }

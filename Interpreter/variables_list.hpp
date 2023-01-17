@@ -3,31 +3,34 @@
 
 #include <map>
 #include <stack>
+#include <string>
 
 class variables_list
 {
 public:
     // adds variable to list
-    void add_variable(std::string name)
+    void add_variable(std::string &name)
     {
-        vars.push(0);
-        long long *reference = &(vars.top());
-        long long tmp = reinterpret_cast<long long>(reference);
-        variables.insert({name, tmp});
+        number_of_vars++;
+        _id_by_name.insert({name, number_of_vars});
+        _value_by_id.insert({number_of_vars, 0});
     };
-    // checks if variable is in list
-    bool in_list(std::string name)
+    bool in_list(std::string &name)
     {
-        return variables.find(name) != variables.end();
+        return _id_by_name.count(name) != 0;
     };
-    // returns casted pointer be name of var
-    long long pointer_by_name(std::string name)
+    int id_by_name(std::string &name)
     {
-        return variables.at(name);
+        return _id_by_name.at(name);
+    }
+    int &value_by_id(int id)
+    {
+        return _value_by_id.at(id);
     }
 
 private:
-    std::stack<long long> vars;
-    std::map<std::string, long long> variables;
+    size_t number_of_vars = 0;
+    std::map<std::string, int> _id_by_name;
+    std::map<int, int> _value_by_id;
 };
 #endif
