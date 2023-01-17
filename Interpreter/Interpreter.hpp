@@ -7,7 +7,6 @@
 
 #include "default_functions_factory.hpp"
 #include "default_functions.cpp"
-#include "mine_functions_list.hpp"
 #include "variables_list.hpp"
 #include "../res/log.hpp"
 
@@ -46,7 +45,7 @@ private:
     std::stack<long long> stack;
     factory<default_function> &default_functions =
         *factory<default_function>::get_factory_instance();
-    mine_functions_list mine_functions;
+    std::map<std::string, std::string> mine_functions;
     variables_list variables;
 };
 #endif

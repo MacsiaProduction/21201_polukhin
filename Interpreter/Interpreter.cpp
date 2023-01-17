@@ -36,7 +36,7 @@ int Interpreter::categorize(std::string &name)
         return add_var;
     if (default_functions.in_list(name))
         return def_func;
-    if (mine_functions.in_list(name))
+    if (mine_functions.count(name) != 0)
         return use_mine;
     if (variables.in_list(name))
         return use_var;
@@ -87,14 +87,14 @@ void Interpreter::add_mine_function(std::stringstream &in)
     in >> name;
     std::string body_str;
     std::getline(in, body_str);
-    mine_functions.add_mine_func(name, body_str);
+    mine_functions.insert({name, body_str});
     LOG(INFO) << "added new function " << name << " with body " << body_str;
 }
 
 void Interpreter::use_mine_function(std::string &name)
 {
     std::stringstream body;
-    body << mine_functions.body_by_name(name);
+    body << mine_functions.at(name);
     LOG(INFO) << "called function " << name << " with body " << body.str();
     process_text(body);
 }
