@@ -1,10 +1,11 @@
 #ifndef out_HPP
 #define out_HPP
+
 #include <iostream>
 #include <sstream>
 #include <string>
 
-#define mine_testing
+extern bool mine_testing;
 
 class mine_out
 {
@@ -13,11 +14,10 @@ public:
     template <class T>
     mine_out &operator<<(const T &msg)
     {
-#ifndef mine_testing
-        std::cout << msg;
-#else
-        get_output() << msg;
-#endif
+        if (!mine_testing)
+            std::cout << msg;
+        else
+            get_output() << msg;
         return *this;
     }
     static std::stringstream &get_output()
