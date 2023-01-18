@@ -22,7 +22,7 @@ TEST(int_and_string, first)
 {
     for (long long int i = INT32_MIN; i < INT32_MIN + 100000; i++)
     {
-        //check(std::to_string(i) + " .", std::to_string(i) + " ");
+        // check(std::to_string(i) + " .", std::to_string(i) + " ");
     }
     std::vector<std::string> strings = {"keks", "avbdsfa", "fasdfgfdsg", "dagfgsd", "fasdfat3 wrfgasf", "qaafsd", "afdsc", "fasdg dfsag sdfg dsgas f", "s", "", "fafe", "sdf  sdf"};
     for (auto &x : strings)
@@ -76,6 +76,9 @@ TEST(mine_funcs, first)
 TEST(vars, first)
 {
     check("variable kek kek @ . 100 kek ! kek @ .", "0 100 ");
+    check("variable k1 1 k1 ! variable k2 2 k2 ! k1 @ . variable k3 3 k3 ! k1 @ . variable k4 4 k4 ! k1 @ .",
+          "1 1 1 ");
+    check("variable k1 1 k1 ! variable k2 2 k2 ! k1 @ . k2 @ . variable k3 3 k3 ! k1 @ . k2 @ . k3 @ . variable k4  4 k4 ! k1 @ .", "1 2 1 2 3 1 ");
 }
 
 TEST(file, last)
