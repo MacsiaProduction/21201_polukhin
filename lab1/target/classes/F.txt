@@ -1,0 +1,1 @@
+dirFile.classes=polukhin.myDir,polukhin.myFile,polukhin.mySymlink
