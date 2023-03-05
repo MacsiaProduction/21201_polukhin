@@ -1,6 +1,8 @@
 package polukhin;
 
 import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 public abstract class dirFile {
     private final Path file;
@@ -21,6 +23,9 @@ public abstract class dirFile {
     public int mine_depth() {
         return mine_depth;
     }
-    abstract public void print();
-    //abstract public Predicate<Path> getfactoryPredicate();
+    abstract public void print(Comparator<dirFile> comparator);
+
+    public static Predicate<Path> getFactoryPredicate() {
+        throw new UnsupportedOperationException("getFactoryPredicate() is not implemented in myDir subclass");
+    }
 }

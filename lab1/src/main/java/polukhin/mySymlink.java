@@ -3,37 +3,35 @@ package polukhin;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class mySymlink extends dirFile {
-    private final Long size = (long)8*1024;
     public mySymlink(Path file, Options options, int mine_depth) {
         super(file, options, mine_depth);
-        if(!Files.isSymbolicLink(file)) {
-            System.err.println("not a symlink " + file);
-            System.exit(1);
+        if(!getFactoryPredicate().test(file)) {
+            throw new IllegalArgumentException("try of init mySymlink with not a symbolic link");
         }
     }
     @Override
     public Long calculateSize() {
-        return size;
+        return (long) 8 * 1024;
     }
 
     @Override
-    public void print() {
+    public void print(Comparator<dirFile> comparator) {
+        System.out.print(" ".repeat(mine_depth()) + "." + file().getFileName() +
+                Converter.convert(calculateSize()) + "\n");
         if (options().followSymLinks()) {
             try {
-                generator.determine(Files.readSymbolicLink(file()), options(), mine_depth()+1);
+                PathFactory.create(Files.readSymbolicLink(file()), options(), mine_depth() + 1).print(comparator);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            System.out.print(" ".repeat(mine_depth()) + "." + file().getFileName() + "[" + calculateSize().toString() + "bytes]\n");
         }
     }
 
-    //@Override
-    public static Predicate<Path> getfactoryPredicate() {
+    public static Predicate<Path> getFactoryPredicate() {
         return Files::isSymbolicLink;
     }
 }

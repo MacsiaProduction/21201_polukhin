@@ -39,11 +39,11 @@ public class PathFactory {
     private void register(Class<? extends dirFile> clazz) {
         this.classes.add(clazz);
         try {
-            Method method = clazz.getMethod("getfactoryPredicate");
+            Method method = clazz.getDeclaredMethod("getFactoryPredicate");
             Predicate<Path> predicate = (Predicate<Path>) method.invoke(null);
             this.comparators.add(predicate);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Can't find a method getFactoryPredicate() for class" + clazz);
         }
     }
 
