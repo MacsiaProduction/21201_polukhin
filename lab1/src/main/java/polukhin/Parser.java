@@ -4,6 +4,12 @@ import org.apache.commons.cli.*;
 import java.nio.file.Path;
 
 public class Parser {
+    /**
+     * Parses the command line arguments and returns an instance of the Options class.
+     *
+     * @param args The command line arguments.
+     * @return An instance of the Options class encapsulating the parsed options.
+     */
     public static Options getOptions(String[] args) {
         // Set default values
         int depth = 10;

@@ -11,6 +11,10 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 
+/**
+ * Creates an instance of the PathFactory class and registers all available classes that implement
+ * the dirFile interface and their corresponding predicates to test if a path can be processed by each class.
+ */
 public class PathFactory {
     private static PathFactory instance;
     private final List<Class<? extends dirFile>> classes;
@@ -30,14 +34,20 @@ public class PathFactory {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Gets the singleton instance of the PathFactory class.
+     * @return the PathFactory instance.
+     */
     private static synchronized PathFactory getInstance() {
         if (instance == null) {
             instance = new PathFactory();
         }
         return instance;
     }
-
+    /**
+     * Registers a class that implements the dirFile interface and its corresponding predicate to the PathFactory.
+     * @param clazz the class to register.
+     */
     private void register(Class<? extends dirFile> clazz) {
         this.classes.add(clazz);
         try {
@@ -48,7 +58,15 @@ public class PathFactory {
             throw new IllegalArgumentException("Can't find a method getFactoryPredicate() for class" + clazz);
         }
     }
-
+    /**
+     * Creates an instance of a class that implements the dirFile interface based on the given path and options.
+     * @param path the path to create an instance for.
+     * @param options the options to pass to the instance constructor.
+     * @param mine_depth the depth of the current directory.
+     * @return an instance of a class that implements the dirFile interface.
+     * @throws RuntimeException if there is an error creating an instance of the class for the given path.
+     * @throws IllegalArgumentException if no class is registered that can process the given path.
+     */
     public static dirFile create(Path path, Options options, int mine_depth) {
         PathFactory factory = PathFactory.getInstance();
         for (int i = 0; i < factory.classes.size(); i++) {
