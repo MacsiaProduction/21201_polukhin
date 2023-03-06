@@ -1,4 +1,8 @@
-package polukhin;
+package polukhin.Types;
+
+import polukhin.Converter;
+import polukhin.Options;
+import polukhin.PathFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +13,7 @@ import java.util.function.Predicate;
 
 import static java.lang.Math.min;
 
-public class myDir extends dirFile{
+public class myDir extends dirFile {
     private Long size = (long)0;
     private final ArrayList<dirFile> Children = new ArrayList<>();
     public myDir(Path dir, Options options, int mine_depth) {

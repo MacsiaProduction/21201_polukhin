@@ -1,4 +1,7 @@
-package polukhin;
+package polukhin.Types;
+import polukhin.Converter;
+import polukhin.Options;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

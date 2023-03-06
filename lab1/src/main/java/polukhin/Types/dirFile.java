@@ -1,4 +1,6 @@
-package polukhin;
+package polukhin.Types;
+
+import polukhin.Options;
 
 import java.nio.file.Path;
 import java.util.Comparator;

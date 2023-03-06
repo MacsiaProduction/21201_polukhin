@@ -1,5 +1,7 @@
 package polukhin;
 
+import polukhin.Types.dirFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -17,7 +19,7 @@ public class PathFactory {
         classes = new ArrayList<>();
         comparators = new ArrayList<>();
         Properties props = new Properties();
-        try (InputStream in = PathFactory.class.getResourceAsStream("/F.txt")) {
+        try (InputStream in = PathFactory.class.getResourceAsStream("/factory.config")) {
             props.load(in);
             String[] classNames = props.getProperty("dirFile.classes").split(",");
             for (String className : classNames) {

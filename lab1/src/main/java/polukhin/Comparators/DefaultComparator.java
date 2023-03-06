@@ -1,6 +1,6 @@
 package polukhin.Comparators;
 
-import polukhin.dirFile;
+import polukhin.Types.dirFile;
 
 import java.util.Comparator;
 
