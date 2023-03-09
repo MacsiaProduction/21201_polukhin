@@ -52,6 +52,7 @@ public class PathFactory {
         this.classes.add(classToReg);
         try {
             Method method = classToReg.getDeclaredMethod("getFactoryPredicate");
+            @SuppressWarnings("unchecked")
             Predicate<Path> predicate = (Predicate<Path>) method.invoke(null);
             this.comparators.add(predicate);
         } catch (Exception e) {
