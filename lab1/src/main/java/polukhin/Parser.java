@@ -21,11 +21,17 @@ public class Parser {
         options.addOption("depth", true, "maximum depth to search");
         options.addOption("L", false, "follow symbolic links");
         options.addOption("limit", true, "maximum number of files to display");
+        options.addOption("h", "help", false, "print help message");
 
         // Parse command line arguments
         CommandLineParser parser = new BasicParser();
         try {
             CommandLine cmd = parser.parse(options, args);
+
+            if (cmd.hasOption("h")) {
+                printHelp(options);
+                System.exit(0);
+            }
 
             if (cmd.hasOption("depth")) {
                 depth = Integer.parseInt(cmd.getOptionValue("depth"));
@@ -46,8 +52,14 @@ public class Parser {
             base_directory = Path.of(remainingArgs[0]);
         } catch (ParseException e) {
             System.err.println("Error parsing command line arguments: " + e.getMessage());
+            printHelp(options);
             System.exit(1);
         }
         return new Options(base_directory,depth,followSymLinks,limit);
+    }
+
+    private static void printHelp(org.apache.commons.cli.Options options) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("java Parser [options] <directory>", options);
     }
 }

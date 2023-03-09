@@ -46,16 +46,16 @@ public class PathFactory {
     }
     /**
      * Registers a class that implements the dirFile interface and its corresponding predicate to the PathFactory.
-     * @param clazz the class to register.
+     * @param classToReg the class to register.
      */
-    private void register(Class<? extends dirFile> clazz) {
-        this.classes.add(clazz);
+    private void register(Class<? extends dirFile> classToReg) {
+        this.classes.add(classToReg);
         try {
-            Method method = clazz.getDeclaredMethod("getFactoryPredicate");
+            Method method = classToReg.getDeclaredMethod("getFactoryPredicate");
             Predicate<Path> predicate = (Predicate<Path>) method.invoke(null);
             this.comparators.add(predicate);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Can't find a method getFactoryPredicate() for class" + clazz);
+            throw new IllegalArgumentException("Can't find a method getFactoryPredicate() for class" + classToReg);
         }
     }
     /**
