@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public class mySymlink extends dirFile {
-    public mySymlink(Path file, Options options, int mine_depth) {
+public class MySymlink extends DuFile {
+    public MySymlink(Path file, Options options, int mine_depth) {
         super(file, options, mine_depth);
         if(!getFactoryPredicate().test(file)) {
             throw new IllegalArgumentException("try of init mySymlink with not a symbolic link");
@@ -23,7 +23,7 @@ public class mySymlink extends dirFile {
     }
 
     @Override
-    public void print(Comparator<dirFile> comparator) {
+    public void print(Comparator<DuFile> comparator) {
         System.out.print(" ".repeat(mine_depth()) + "." + file().getFileName() +
                 Converter.convert(calculateSize()) + "\n");
         if (options().followSymLinks()) {

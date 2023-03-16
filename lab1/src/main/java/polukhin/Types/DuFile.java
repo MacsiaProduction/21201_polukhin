@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public abstract class dirFile {
+public abstract class DuFile {
     private final Path file;
     private final Options options;
     private final int mine_depth;
@@ -17,7 +17,7 @@ public abstract class dirFile {
      * @param options the options of calculation
      * @param mine_depth the depth of printing
      */
-    public dirFile(Path file, Options options, int mine_depth) {
+    public DuFile(Path file, Options options, int mine_depth) {
         this.file = file;
         this.options = options;
         this.mine_depth = mine_depth;
@@ -42,7 +42,7 @@ public abstract class dirFile {
      *
      * @param comparator the comparator to be used for sorting
      */
-    abstract public void print(Comparator<dirFile> comparator);
+    abstract public void print(Comparator<DuFile> comparator);
     /**
      * Returns a predicate to be used for creating a dirFile object of a specific subclass in PathFactory.
      *

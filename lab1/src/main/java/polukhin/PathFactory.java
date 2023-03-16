@@ -1,6 +1,6 @@
 package polukhin;
 
-import polukhin.Types.dirFile;
+import polukhin.Types.DuFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ import java.util.function.Predicate;
  */
 public class PathFactory {
     private static PathFactory instance;
-    private final List<Class<? extends dirFile>> classes;
+    private final List<Class<? extends DuFile>> classes;
     private final List<Predicate<Path>> comparators;
     private PathFactory() {
         classes = new ArrayList<>();
@@ -25,10 +25,10 @@ public class PathFactory {
         Properties props = new Properties();
         try (InputStream in = PathFactory.class.getResourceAsStream("/factory.config")) {
             props.load(in);
-            String[] classNames = props.getProperty("dirFile.classes").split(",");
+            String[] classNames = props.getProperty("DuFiles.classes").split(",");
             for (String className : classNames) {
                 Class<?> clazz = Class.forName(className);
-                register(clazz.asSubclass(dirFile.class));
+                register(clazz.asSubclass(DuFile.class));
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -48,7 +48,7 @@ public class PathFactory {
      * Registers a class that implements the dirFile interface and its corresponding predicate to the PathFactory.
      * @param classToReg the class to register.
      */
-    private void register(Class<? extends dirFile> classToReg) {
+    private void register(Class<? extends DuFile> classToReg) {
         this.classes.add(classToReg);
         try {
             Method method = classToReg.getDeclaredMethod("getFactoryPredicate");
@@ -68,19 +68,19 @@ public class PathFactory {
      * @throws RuntimeException if there is an error creating an instance of the class for the given path.
      * @throws IllegalArgumentException if no class is registered that can process the given path.
      */
-    public static dirFile create(Path path, Options options, int mine_depth) {
+    public static DuFile create(Path path, Options options, int mine_depth) {
         PathFactory factory = PathFactory.getInstance();
         for (int i = 0; i < factory.classes.size(); i++) {
             if (factory.comparators.get(i).test(path)) {
                 try {
-                    Class<? extends dirFile> clazz = factory.classes.get(i);
-                    Constructor<? extends dirFile> constructor = clazz.getConstructor(Path.class, Options.class, int.class);
+                    Class<? extends DuFile> clazz = factory.classes.get(i);
+                    Constructor<? extends DuFile> constructor = clazz.getConstructor(Path.class, Options.class, int.class);
                     return constructor.newInstance(path, options, mine_depth);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new RuntimeException("Error creating instance of class " + factory.classes.get(i), e);
                 }
             }
         }
-        throw new IllegalArgumentException("No matching processor found for path " + path);
+        throw new IllegalStateException("Path" + path + "can't be recognized as any type");
     }
 }
