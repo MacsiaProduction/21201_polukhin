@@ -3,8 +3,6 @@ package polukhin.Types;
 import polukhin.Options;
 
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.function.Predicate;
 
 public abstract class DuFile {
     private final Path file;
@@ -37,18 +35,5 @@ public abstract class DuFile {
     public int mine_depth() {
         return mine_depth;
     }
-    /**
-     * Prints the directory or file represented by this instance using the specified comparator.
-     *
-     * @param comparator the comparator to be used for sorting
-     */
-    abstract public void print(Comparator<DuFile> comparator);
-    /**
-     * Returns a predicate to be used for creating a dirFile object of a specific subclass in PathFactory.
-     *
-     * @return the predicate
-     */
-    public static Predicate<Path> getFactoryPredicate() {
-        throw new UnsupportedOperationException("getFactoryPredicate() predicate is not implemented in myDir subclass");
-    }
+    abstract public Printer<Type> getPrinter();
 }
