@@ -35,5 +35,4 @@ public abstract class DuFile {
     public int mine_depth() {
         return mine_depth;
     }
-    abstract public Printer<Type> getPrinter();
 }
