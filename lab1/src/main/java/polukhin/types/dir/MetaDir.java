@@ -1,18 +1,12 @@
-package polukhin.Types.Dir;
+package polukhin.types.dir;
 
-import polukhin.Types.Printer;
-import polukhin.Types.TypeFactory;
+import polukhin.types.MetaType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
-public class MetaDir implements TypeFactory<DirType> {
-    @Override
-    public Printer<DirType> getPrinter() {
-        return new DirPrinter();
-    }
-
+public class MetaDir implements MetaType<DirType> {
     @Override
     public Class<DirType> getFileType() {
         return DirType.class;

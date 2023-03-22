@@ -1,18 +1,12 @@
-package polukhin.Types.File;
+package polukhin.types.file;
 
-import polukhin.Types.Printer;
-import polukhin.Types.TypeFactory;
+import polukhin.types.MetaType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
-public class MetaFile implements TypeFactory<FileType> {
-    @Override
-    public Printer<FileType> getPrinter() {
-        return new FilePrinter();
-    }
-
+public class MetaFile implements MetaType<FileType> {
     @Override
     public Class<FileType> getFileType() {
         return FileType.class;

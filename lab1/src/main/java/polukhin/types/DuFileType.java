@@ -1,10 +1,14 @@
-package polukhin.Types;
+package polukhin.types;
 
 import polukhin.Options;
 
 import java.nio.file.Path;
-
-public abstract class DuFile {
+import java.util.Comparator;
+/**
+ * Base class for a Type you want to add for a fdu implementation,
+ * it should be able to print itself and calculate it's size.
+ */
+public abstract class DuFileType {
     private final Path file;
     private final Options options;
     private final int mine_depth;
@@ -15,7 +19,7 @@ public abstract class DuFile {
      * @param options the options of calculation
      * @param mine_depth the depth of printing
      */
-    public DuFile(Path file, Options options, int mine_depth) {
+    public DuFileType(Path file, Options options, int mine_depth) {
         this.file = file;
         this.options = options;
         this.mine_depth = mine_depth;
@@ -26,6 +30,7 @@ public abstract class DuFile {
      * @return the size of the directory or file in bytes
      */
     abstract public Long calculateSize();
+    public abstract void print(Comparator<DuFileType> comparator);
     public Path file() {
         return file;
     }

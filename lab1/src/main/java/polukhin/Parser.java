@@ -1,6 +1,6 @@
 package polukhin;
 import org.apache.commons.cli.*;
-import polukhin.Exceptions.*;
+import polukhin.exceptions.*;
 
 import java.nio.file.Path;
 
