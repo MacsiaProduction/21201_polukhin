@@ -6,29 +6,34 @@ import java.nio.file.Path;
 
 public class Parser {
     // Set default values
-    private static final int depth = 10;
+    private static final int DEPTH = 10;
+    // CR: naming
     private static final int limit = 10;
     private static final boolean followSymLinks = false;
     private static final Path base_directory = Path.of(".");
-    private static final org.apache.commons.cli.Options DU_OPTIONS;
+
+    private static final Options DU_OPTIONS;
+
     static {
-        DU_OPTIONS = new org.apache.commons.cli.Options();
+        DU_OPTIONS = new Options();
         DU_OPTIONS.addOption("depth", true, "maximum depth to search");
         DU_OPTIONS.addOption("L", false, "follow symbolic links");
         DU_OPTIONS.addOption("limit", true, "maximum number of files to display");
         DU_OPTIONS.addOption("h", "help", false, "print help message");
     }
+
     /**
      * Parses the command line arguments and returns an instance of the Options class.
      *
      * @param args The command line arguments.
      * @return An instance of the Options class encapsulating the parsed options.
      */
-    public static Options getOptions(String[] args) throws DuParseException {
-        int depth = Parser.depth;
+    public static JduOptions getOptions(String[] args) throws DuParseException {
+        int depth = Parser.DEPTH;
         int limit = Parser.limit;
         boolean followSymLinks = Parser.followSymLinks;
-        Path base_directory = Parser.base_directory;
+        // CR: naming
+        Path baseDirectory = Parser.base_directory;
         // Parse command line arguments
         CommandLineParser parser = new BasicParser();
         try {
@@ -36,10 +41,12 @@ public class Parser {
 
             if (cmd.hasOption("h")) {
                 printHelp();
+                // CR: return null
                 throw new DuPrintHelpException("Requested to print help");
             }
 
             if (cmd.hasOption("depth")) {
+                // CR: parseUnsignedInt(String)
                 depth = Integer.parseInt(cmd.getOptionValue("depth"));
             }
 
@@ -51,18 +58,20 @@ public class Parser {
                 limit = Integer.parseInt(cmd.getOptionValue("limit"));
             }
 
+            // CR: move before if's
             String[] remainingArgs = cmd.getArgs();
             if (remainingArgs.length > 1) {
                 throw new ParseException("Invalid number of arguments");
             } else if (remainingArgs.length == 1) {
-                base_directory = Path.of(remainingArgs[0]);
+                baseDirectory = Path.of(remainingArgs[0]);
             }
         } catch (ParseException e) {
             System.err.println("Error parsing command line arguments: " + e.getMessage());
+            // CR: catch custom exception in main, print help
             printHelp();
             throw new DuParseException("Can't parse input");
         }
-        return new Options(base_directory,depth,followSymLinks,limit);
+        return new JduOptions(baseDirectory,depth,followSymLinks,limit);
     }
 
     private static void printHelp() {

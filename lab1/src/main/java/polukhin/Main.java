@@ -4,11 +4,14 @@ import polukhin.comparators.*;
 import polukhin.exceptions.DuParseException;
 import polukhin.types.DuFileType;
 
-public class jdu {
+public class Main {
     public static void main(String[] args) {
         try {
-            Options options = Parser.getOptions(args);
-            DuFileType tmp = PathFactory.create(options.base_dir(), options, 0);
+            JduOptions jduOptions = Parser.getOptions(args);
+            // CR: check Files.exists(...)
+            // CR: call overload without curDepth
+            // CR: ConfigIterator, returns classes
+            DuFileType tmp = PathFactory.create(jduOptions.rootPath(), jduOptions, 0);
             tmp.print(new InverseComparator());
         } catch (DuParseException e) {
             System.exit(0);
