@@ -1,22 +1,23 @@
 package m_polukhin.presenter;
 
 import m_polukhin.model.*;
+import m_polukhin.utils.*;
 import m_polukhin.view.GameView;
 
 import java.rmi.AccessException;
 
-public class GamePresenter {
+public class GamePresenter implements ModelListener, ViewListener {
     public final int NUM_ROWS = 10;
     public final int NUM_COLUMNS = 10;
     private final GameModel model;
     private final GameView view;
 
     public GamePresenter() {
-        this.model = new GameModel(this);
-        this.view  =  new GameView(this);
+        this.model = new GameModel(this,NUM_ROWS,NUM_COLUMNS);
+        this.view  =  new GameView(this,NUM_ROWS,NUM_COLUMNS);
         newGameButton();
     }
-    public HexCellInfo GetCellState(int y,int x) throws AccessException {
+    public HexCellInfo GetCellState(int y, int x) throws AccessException {
         return model.getCellInfo(y,x);
     }
     public boolean areValidCords(int y,int x) {
@@ -29,7 +30,7 @@ public class GamePresenter {
         model.nextTurn();
     }
     public void newGameButton() {
-        model.initBoard();
+        model.initBoard(new BoardGenerator());
         view.updateState();
     }
     public void cellClicked(HexCellInfo cell) throws MoveException {

@@ -1,6 +1,6 @@
 package m_polukhin.view;
 
-import m_polukhin.model.HexCellInfo;
+import m_polukhin.utils.HexCellInfo;
 
 import java.awt.*;
 

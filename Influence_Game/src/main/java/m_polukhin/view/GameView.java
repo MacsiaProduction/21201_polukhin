@@ -1,15 +1,18 @@
+
+
 package m_polukhin.view;
 
-import m_polukhin.model.Player;
-import m_polukhin.presenter.GamePresenter;
+import m_polukhin.utils.Player;
+import m_polukhin.utils.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameView {
+    private final JButton nextTurnButton;
     private final GamePlane gamePanel;
     private final JTextArea infoTable;
-    public GameView(GamePresenter presenter) {
+    public GameView(ViewListener presenter, int y, int x) {
         JFrame frame = new JFrame("Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout()); // set the layout manager to BorderLayout
@@ -22,7 +25,7 @@ public class GameView {
         // Create the buttons for next turn and end game
         Font font = new Font("Square 721", Font.BOLD, 18);
 
-        JButton nextTurnButton = new JButton("Next Turn");
+        nextTurnButton = new JButton("Next Turn");
         nextTurnButton.setFont(font);
         nextTurnButton.setFocusable(false);
         nextTurnButton.setPreferredSize(new Dimension(120, 50)); // set button size
@@ -59,7 +62,7 @@ public class GameView {
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
         // Create the game panel and add it to the center of the main panel
-        gamePanel = new GamePlane(presenter);
+        gamePanel = new GamePlane(presenter, y, x);
         frame.add(gamePanel, BorderLayout.CENTER);
 
         frame.pack();
@@ -67,18 +70,27 @@ public class GameView {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
     public void setAttackInfo(Player player) {
-        infoTable.setText("Cur_Player: "+player.number+"\n"+"Cur_State:  Attack\n");
+        nextTurnButton.setBackground(player.color);
+        infoTable.setText("Cur_State:  Attack\n");
     }
+
     public void setReinforceInfo(Player player, int powerRemain) {
-        infoTable.setText("Cur_Player: "+player.number+"\n"+"Cur_State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
+        infoTable.setText("Cur_State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
     }
+
     public void updateState() {
         gamePanel.invalidate();
         gamePanel.repaint();
     }
 
     public void gameOver() {
-        JOptionPane.showMessageDialog(null, "Game Over!");
+        while (true) {
+            JOptionPane.showMessageDialog(null, "Game Over!");
+        }
     }
 }
+
+
+
