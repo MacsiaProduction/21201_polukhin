@@ -1,6 +1,6 @@
-package polukhin.types.symlink;
+package polukhin.modules.symlink;
 
-import polukhin.types.MetaType;
+import polukhin.modules.MetaType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

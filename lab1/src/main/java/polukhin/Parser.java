@@ -2,6 +2,7 @@ package polukhin;
 import org.apache.commons.cli.*;
 import polukhin.exceptions.*;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Parser {
@@ -10,7 +11,7 @@ public class Parser {
     // CR: naming
     private static final int limit = 10;
     private static final boolean followSymLinks = false;
-    private static final Path base_directory = Path.of(".");
+    private static final Path baseDir = Path.of(".");
 
     private static final Options DU_OPTIONS;
 
@@ -32,13 +33,20 @@ public class Parser {
         int depth = Parser.DEPTH;
         int limit = Parser.limit;
         boolean followSymLinks = Parser.followSymLinks;
-        // CR: naming
-        Path baseDirectory = Parser.base_directory;
+        Path baseDirectory = Parser.baseDir;
         // Parse command line arguments
         CommandLineParser parser = new BasicParser();
         try {
             CommandLine cmd = parser.parse(DU_OPTIONS, args);
-
+            String[] remainingArgs = cmd.getArgs();
+            if (remainingArgs.length > 1) {
+                throw new DuParseException("Invalid number of arguments");
+            } else if (remainingArgs.length == 1) {
+                baseDirectory = Path.of(remainingArgs[0]);
+                if(!Files.exists(baseDirectory)) {
+                    throw new DuParseException("Invalid base directory");
+                }
+            }
             if (cmd.hasOption("h")) {
                 printHelp();
                 // CR: return null
@@ -56,14 +64,6 @@ public class Parser {
 
             if (cmd.hasOption("limit")) {
                 limit = Integer.parseInt(cmd.getOptionValue("limit"));
-            }
-
-            // CR: move before if's
-            String[] remainingArgs = cmd.getArgs();
-            if (remainingArgs.length > 1) {
-                throw new ParseException("Invalid number of arguments");
-            } else if (remainingArgs.length == 1) {
-                baseDirectory = Path.of(remainingArgs[0]);
             }
         } catch (ParseException e) {
             System.err.println("Error parsing command line arguments: " + e.getMessage());
