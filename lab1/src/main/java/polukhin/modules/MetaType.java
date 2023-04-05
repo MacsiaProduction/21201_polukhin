@@ -1,4 +1,4 @@
-package polukhin.types;
+package polukhin.modules;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;

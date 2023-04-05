@@ -2,18 +2,20 @@ package polukhin;
 
 import polukhin.comparators.*;
 import polukhin.exceptions.DuParseException;
-import polukhin.types.DuFileType;
+import polukhin.exceptions.PathFactoryException;
+import polukhin.modules.DuFileType;
+import polukhin.modules.Printer;
 
 public class Main {
     public static void main(String[] args) {
         try {
             JduOptions jduOptions = Parser.getOptions(args);
             // CR: check Files.exists(...)
-            // CR: call overload without curDepth
             // CR: ConfigIterator, returns classes
-            DuFileType tmp = PathFactory.create(jduOptions.rootPath(), jduOptions, 0);
-            tmp.print(new InverseComparator());
-        } catch (DuParseException e) {
+            DuFileType tmp = PathFactory.create(jduOptions.rootPath(), jduOptions);
+            Printer printer = new Printer(jduOptions, new DefaultComparator());
+            printer.print(tmp);
+        } catch (DuParseException | PathFactoryException e) {
             System.exit(0);
         }
     }

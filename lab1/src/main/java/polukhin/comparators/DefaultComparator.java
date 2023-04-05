@@ -1,6 +1,6 @@
 package polukhin.comparators;
 
-import polukhin.types.DuFileType;
+import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
 
