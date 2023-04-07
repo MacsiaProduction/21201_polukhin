@@ -11,7 +11,7 @@ public interface ViewListener {
 
     void endTurnButtonClicked();
 
-    void newGameButton();
+    void newGame();
 
     void cellClicked(HexCellInfo cell) throws MoveException;
 }

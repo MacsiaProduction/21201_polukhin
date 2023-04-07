@@ -1,7 +1,11 @@
-package m_polukhin.utils;
+package m_polukhin.presenter;
 
 import m_polukhin.model.GameModel;
 import m_polukhin.model.GameTurnState;
+import m_polukhin.utils.HexCellInfo;
+import m_polukhin.utils.ModelListener;
+import m_polukhin.utils.MoveException;
+import m_polukhin.utils.Player;
 
 import java.rmi.AccessException;
 import java.util.ArrayList;
@@ -10,7 +14,7 @@ import java.util.List;
 public class AI implements ModelListener {
     private Player owner;
     private final GameModel model;
-    AI(GameModel model) {
+    public AI(GameModel model) {
         this.model = model;
     }
 
@@ -25,8 +29,7 @@ public class AI implements ModelListener {
         try {
             generateTurn(state);
         } catch (MoveException e) {
-            System.out.println(e);
-            //throw new RuntimeException(e+"\nwrong turn made by ai");
+            throw new RuntimeException(e+"\nwrong turn made by ai");
         }
     }
 

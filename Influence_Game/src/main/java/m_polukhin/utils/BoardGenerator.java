@@ -2,20 +2,19 @@ package m_polukhin.utils;
 
 import m_polukhin.model.GameModel;
 import m_polukhin.model.HexCell;
-import m_polukhin.presenter.GamePresenter;
+import m_polukhin.presenter.AI;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class BoardGenerator {
-    private List<HexCell> inited = new ArrayList<>();
+    private final List<HexCell> inited = new ArrayList<>();
     List<Player> playerList = new ArrayList<>();
     private void initBoard(GameModel model) {
         Point cords = new Point(0,0);
         model.initCell(cords);
-        for(int i = 0; i < 30; i++) {
-            System.out.println("cell inited" + cords);
+        for(int i = 0; i < 50; i++) {
             var neighbours = model.getPossibleNeighbors(cords);
             int randomNum = new Random().nextInt(neighbours.size());
             cords = neighbours.get(randomNum);

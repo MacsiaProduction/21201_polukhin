@@ -22,6 +22,8 @@ public class GameView {
         Color cyan = new Color(129, 223, 223);
         Color lightPurple = new Color(158, 129, 190);
         Color darkBlueGray = new Color(121, 142, 178);
+        Color darkBlue = new Color(51, 73, 113);
+        Color whiteTransparent = new Color (255, 255, 255, 175);
 
         // Create the buttons for next turn and end game
         Font font = new Font("Square 721", Font.BOLD, 18);
@@ -30,19 +32,49 @@ public class GameView {
         nextTurnButton.setFont(font);
         nextTurnButton.setFocusable(false);
         nextTurnButton.setPreferredSize(new Dimension(120, 50)); // set button size
-        nextTurnButton.setForeground(Color.WHITE); // set font color
-        nextTurnButton.setBackground(cyan); // set background color
+        nextTurnButton.setForeground(whiteTransparent); // set font color
+        nextTurnButton.setBackground(darkBlue); // set background color
+        nextTurnButton.setBorderPainted(false);
+        nextTurnButton.setOpaque(true);
+        nextTurnButton.setContentAreaFilled(true);
+        nextTurnButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
+        nextTurnButton.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                nextTurnButton.setBackground(cyan);
+            }
 
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                nextTurnButton.setBackground(darkBlue);
+            }
+        });
         nextTurnButton.addActionListener(e -> presenter.endTurnButtonClicked());
 
-        JButton endGameButton = new JButton("New Game");
+        JButton endGameButton = new JButton("Multiplayer");
         endGameButton.setFont(font);
         endGameButton.setFocusable(false);
         endGameButton.setPreferredSize(new Dimension(120, 50)); // set button size
-        endGameButton.setForeground(Color.WHITE); // set font color
-        endGameButton.setBackground(lightPurple); // set background color
+        endGameButton.setForeground(whiteTransparent); // set font color
+        endGameButton.setBackground(darkBlue); // set background color
+        endGameButton.setBorderPainted(false);
+        endGameButton.setOpaque(true);
+        endGameButton.setContentAreaFilled(true);
+        endGameButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
+        endGameButton.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                endGameButton.setBackground(lightPurple);
+            }
 
-        endGameButton.addActionListener(e -> presenter.newGameButton());
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                endGameButton.setBackground(darkBlue);
+            }
+        });
+        endGameButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "In future)"));
 
         // Create the info table
         infoTable = new JTextArea(3, 20);
@@ -52,12 +84,14 @@ public class GameView {
         infoTable.setFont(font);
         infoTable.setBackground(darkBlueGray);
         infoTable.setText("Cur_Player: \nCur_State: Chill\n");
+        infoTable.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
 
         // Create the button panel and set its background color
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
         buttonPanel.add(infoTable);
         buttonPanel.add(nextTurnButton);
         buttonPanel.add(endGameButton);
+        buttonPanel.setBackground(darkBlue);
 
         // Add the button panel to the main panel
         frame.add(buttonPanel, BorderLayout.SOUTH);
@@ -67,17 +101,17 @@ public class GameView {
         frame.add(gamePanel, BorderLayout.CENTER);
 
         frame.pack();
-        frame.setSize(600, 600);
+        frame.setSize(600, 650);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     public void setAttackInfo(Player player) {
-        infoTable.setText("Cur_State:  Attack\n");
+        infoTable.setText("State:  Attack\n");
     }
 
     public void setReinforceInfo(Player player, int powerRemain) {
-        infoTable.setText("Cur_State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
+        infoTable.setText("State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
     }
 
     public void updateState() {

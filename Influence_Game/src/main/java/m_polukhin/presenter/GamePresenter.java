@@ -15,7 +15,7 @@ public class GamePresenter implements ModelListener, ViewListener {
     public GamePresenter() {
         this.model = new GameModel(this,NUM_ROWS,NUM_COLUMNS);
         this.view  =  new GameView(this,NUM_ROWS,NUM_COLUMNS);
-        newGameButton();
+        newGame();
     }
     @Override
     public void setOwner(Player owner) {
@@ -34,7 +34,7 @@ public class GamePresenter implements ModelListener, ViewListener {
     public void endTurnButtonClicked() {
         model.nextTurn();
     }
-    public void newGameButton() {
+    public void newGame() {
         model.initBoard(new BoardGenerator());
         view.updateState();
     }
