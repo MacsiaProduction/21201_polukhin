@@ -3,6 +3,12 @@ package m_polukhin.utils;
 import java.awt.Color;
 
 public class Player {
+    private ModelListener listener;
+
+    public ModelListener getListener() {
+        return listener;
+    }
+
     public final int number;
     public final Color color;
     private int numberOfCells = 0;
@@ -13,6 +19,10 @@ public class Player {
     public Player() {
         this.number = playerCount++;
         color = numberToColor(number);
+    }
+    public void setPresenter(ModelListener listener) {
+        if(this.listener != null) throw new UnsupportedOperationException("already inited");
+        this.listener = listener;
     }
     private static Color numberToColor(int x) {
         float hue = (float) x / 10.0f;

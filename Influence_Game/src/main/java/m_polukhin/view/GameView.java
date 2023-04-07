@@ -2,6 +2,7 @@
 
 package m_polukhin.view;
 
+import m_polukhin.model.GameTurnState;
 import m_polukhin.utils.Player;
 import m_polukhin.utils.ViewListener;
 
@@ -72,7 +73,6 @@ public class GameView {
     }
 
     public void setAttackInfo(Player player) {
-        nextTurnButton.setBackground(player.color);
         infoTable.setText("Cur_State:  Attack\n");
     }
 
@@ -89,6 +89,10 @@ public class GameView {
         while (true) {
             JOptionPane.showMessageDialog(null, "Game Over!");
         }
+    }
+
+    public void askTurn(GameTurnState state) {
+        JOptionPane.showMessageDialog(null, "It's your turn to "+ state.name());
     }
 }
 

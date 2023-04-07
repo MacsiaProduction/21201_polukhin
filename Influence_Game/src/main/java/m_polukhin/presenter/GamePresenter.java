@@ -11,11 +11,16 @@ public class GamePresenter implements ModelListener, ViewListener {
     public final int NUM_COLUMNS = 10;
     private final GameModel model;
     private final GameView view;
-
+    private Player owner;
     public GamePresenter() {
         this.model = new GameModel(this,NUM_ROWS,NUM_COLUMNS);
         this.view  =  new GameView(this,NUM_ROWS,NUM_COLUMNS);
         newGameButton();
+    }
+    @Override
+    public void setOwner(Player owner) {
+        if(this.owner != null) throw new UnsupportedOperationException();
+        this.owner = owner;
     }
     public HexCellInfo GetCellState(int y, int x) throws AccessException {
         return model.getCellInfo(y,x);
@@ -34,8 +39,14 @@ public class GamePresenter implements ModelListener, ViewListener {
         view.updateState();
     }
     public void cellClicked(HexCellInfo cell) throws MoveException {
-        model.cellClicked(cell);
+        model.cellClicked(owner, cell);
     }
+
+    @Override
+    public void askTurn(GameTurnState state) {
+        view.askTurn(state);
+    }
+
     public void updateView() {
         view.updateState();
     }

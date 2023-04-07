@@ -2,6 +2,7 @@ package m_polukhin.utils;
 
 import m_polukhin.model.GameModel;
 import m_polukhin.model.HexCell;
+import m_polukhin.presenter.GamePresenter;
 
 import java.awt.*;
 import java.util.*;
@@ -24,9 +25,17 @@ public class BoardGenerator {
         }
     }
 
-    private void initPlayers(GameModel model) {
-        for (int i = 0; i<2; i++) {
-            Player tmp = new Player();
+    private void initPlayers(GameModel model, ModelListener presenter) {
+        Player tmp = new Player();
+        tmp.setPresenter(presenter);
+        presenter.setOwner(tmp);
+        playerList.add(tmp);
+        model.addPlayer(tmp);
+        for (int i = 1; i<2; i++) {
+            tmp = new Player();
+            AI ai = new AI(model);
+            ai.setOwner(tmp);
+            tmp.setPresenter(ai);
             playerList.add(tmp);
             model.addPlayer(tmp);
         }
@@ -46,8 +55,8 @@ public class BoardGenerator {
             player.addCell();
         });
     }
-    public void init(GameModel model) {
+    public void init(GameModel model, ModelListener presenter) {
         initBoard(model);
-        initPlayers(model);
+        initPlayers(model, presenter);
     }
 }
