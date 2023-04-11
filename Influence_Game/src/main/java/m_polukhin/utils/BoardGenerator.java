@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.List;
 
 public class BoardGenerator {
+    // CR: return result of generation, set to model (in main)
     private final List<HexCell> inited = new ArrayList<>();
     List<Player> playerList = new ArrayList<>();
     private void initBoard(GameModel model) {

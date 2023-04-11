@@ -11,6 +11,32 @@ import java.rmi.AccessException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+
+
+Presenter
+  abstract void askMove();
+  void setAttackInfo() { ... }
+  ...
+
+AIPresenter
+  AIPresenter(AI ai) {}
+  askMove() { ai.generateMove(); }
+
+PlayerPresenter
+  PlayerPresenter(View view) {}
+  askMove() { view.requestMove(); }
+
+
+OpponentPresenter
+  OpponentPresenter(Socket socket) {}
+  askMove() { socket.write(...) {}
+
+
+ */
+
+
 public class AI implements ModelListener {
     private Player owner;
     private final GameModel model;

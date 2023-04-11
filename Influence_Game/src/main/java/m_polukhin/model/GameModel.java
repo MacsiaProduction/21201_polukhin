@@ -5,7 +5,6 @@ import m_polukhin.utils.BoardGenerator;
 import m_polukhin.utils.HexCellInfo;
 import m_polukhin.utils.ModelListener;
 import m_polukhin.utils.MoveException;
-import m_polukhin.presenter.GamePresenter;
 import m_polukhin.utils.Player;
 
 import java.awt.*;
@@ -28,6 +27,7 @@ public class GameModel {
 
     private final List<Player> playerList = new ArrayList<>();
 
+    // CR: null instead of optional
     private final Optional<HexCell>[][] board;
 
     private final ModelListener presenter;
@@ -65,6 +65,7 @@ public class GameModel {
         return tmp;
     }
 
+    // CR: use custom point
     public List<Point> getPossibleNeighbors(Point position) {
         List<Point> list = new ArrayList<>();
         if(areValidCords(position.y-1, position.x-1)) {
@@ -197,6 +198,7 @@ public class GameModel {
     }
 
     //todo can use digital signatures for purposes of Player field in the multiplayer
+    // CR: pass coords
     public void cellClicked(Player player, HexCellInfo cell) throws MoveException {
         if (player != currentPlayer)
             throw new MoveException("not current player trying to make a turn");
