@@ -1,16 +1,7 @@
 package m_polukhin.presenter;
 
-import m_polukhin.model.AI;
-import m_polukhin.model.GameModel;
-import m_polukhin.model.GameTurnState;
-import m_polukhin.utils.HexCellInfo;
-import m_polukhin.utils.MoveException;
-import m_polukhin.utils.Player;
-
-import java.rmi.AccessException;
-import java.util.ArrayList;
-import java.util.List;
-
+import m_polukhin.model.*;
+import m_polukhin.utils.*;
 
 public class AIPresenter extends Presenter {
     private final AI ai;

@@ -2,7 +2,6 @@ package m_polukhin;
 
 import m_polukhin.model.GameModel;
 import m_polukhin.presenter.PlayerPresenter;
-import m_polukhin.utils.Point;
 
 public class Main {
     public final static int NUM_ROWS = 10;
