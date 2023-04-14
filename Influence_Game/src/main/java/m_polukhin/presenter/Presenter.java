@@ -20,11 +20,6 @@ public abstract class Presenter implements ViewListener, ModelListener {
     }
 
     @Override
-    public boolean areValidCords(int y, int x) {
-        return model.areValidCords(new Point(y, x));
-    }
-
-    @Override
     public boolean isCellPresent(int y, int x) {
         return model.isCellPresent(new Point(y,x));
     }
