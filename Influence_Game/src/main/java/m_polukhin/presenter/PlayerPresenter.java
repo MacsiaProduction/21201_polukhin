@@ -2,7 +2,6 @@ package m_polukhin.presenter;
 
 import m_polukhin.model.GameModel;
 import m_polukhin.model.GameTurnState;
-import m_polukhin.utils.*;
 import m_polukhin.view.GameView;
 
 public class PlayerPresenter extends Presenter {

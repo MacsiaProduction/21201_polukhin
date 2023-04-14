@@ -24,9 +24,9 @@ public class AIPresenter extends Presenter {
     @Override
     public void updateView() {}
     @Override
-    public void setAttackInfo(Player player) {}
+    public void setAttackInfo() {}
     @Override
-    public void setReinforceInfo(Player player, int powerRemain) {}
+    public void setReinforceInfo(int powerRemain) {}
     @Override
     public void gameOver() {}
 }

@@ -158,7 +158,7 @@ public class GameModel {
             playerList.get(i).setPresenter(presenters.get(i));
         }
         setFirstPlayer(playerList.get(0));
-        currentPlayer.getListener().setAttackInfo(currentPlayer);
+        currentPlayer.getListener().setAttackInfo();
         currentPlayer.getListener().updateView();
     }
 
@@ -170,12 +170,12 @@ public class GameModel {
         if(turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = currentPlayer.getNumberOfCells();
-            currentPlayer.getListener().setReinforceInfo(currentPlayer, reinforcePoints);
+            currentPlayer.getListener().setReinforceInfo(reinforcePoints);
         } else {
             turnState = GameTurnState.ATTACK;
             currentPlayerListPos = (currentPlayerListPos + 1) % playerList.size();
             currentPlayer = playerList.get(currentPlayerListPos);
-            currentPlayer.getListener().setAttackInfo(currentPlayer);
+            currentPlayer.getListener().setAttackInfo();
         }
         currentPlayer.getListener().askTurn(turnState);
         playerList.forEach(p->p.getListener().updateView());
@@ -198,10 +198,10 @@ public class GameModel {
         } else try {
             if (turnState == GameTurnState.ATTACK) {
                 attack(selected, newSelected);
-                currentPlayer.getListener().setAttackInfo(currentPlayer);
+                currentPlayer.getListener().setAttackInfo();
             } else if (turnState == GameTurnState.REINFORCE) {
                 reinforce(currentPlayer, newSelected);
-                currentPlayer.getListener().setReinforceInfo(currentPlayer, reinforcePoints);
+                currentPlayer.getListener().setReinforceInfo(reinforcePoints);
             } else {
                 throw new UnsupportedOperationException("GameTurnState don't implemented");
             }

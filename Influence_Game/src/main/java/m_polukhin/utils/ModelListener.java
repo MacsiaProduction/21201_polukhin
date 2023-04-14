@@ -7,8 +7,8 @@ public interface ModelListener {
     void init(Player owner, GameModel model);
     void askTurn(GameTurnState state);
     void updateView();
-    void setAttackInfo(Player player);
-    void setReinforceInfo(Player player, int powerRemain);
+    void setAttackInfo();
+    void setReinforceInfo(int powerRemain);
     void gameOver();
 }
 
