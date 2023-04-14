@@ -1,5 +1,6 @@
 package m_polukhin.model;
 
+import m_polukhin.presenter.Presenter;
 import m_polukhin.utils.*;
 
 import java.rmi.AccessException;
@@ -10,7 +11,7 @@ public class GameModel {
 
     public final int columns;
 
-    GameTurnState turnState;
+    private GameTurnState turnState;
 
     private Player currentPlayer;
 
@@ -22,8 +23,6 @@ public class GameModel {
 
     private final HexCell[][] board;
 
-    private ModelListener presenter;
-
     private HexCell selected;
 
     public GameModel(int y, int x) {
@@ -34,53 +33,28 @@ public class GameModel {
             Arrays.fill(board[i], null);
         }
     }
-    public void setPresenter(ModelListener presenter) {
-        this.presenter = presenter;
-    }
 
-    public void addPlayer(Player p) {
-        playerList.add(p);
-    }
-
-    public HexCell initCell(Point cords) {
-        if(isCellPresent(cords)) {
-            throw new IllegalArgumentException("cell already presents");
-        }
-        if(!areValidCords(cords))
-            throw new IllegalArgumentException("illegal coordinates of cell");
-        HexCell tmp = new HexCell(cords);
-        System.out.println(cords.y+" "+cords.x+" inited");
-        board[cords.y][cords.x] = tmp;
-        return tmp;
+    public static List<Point> getPossibleNeighbors(int y_max, int x_max, Point cords) {
+        List<Point> list = new ArrayList<>();
+        list.add(new Point(cords.y+1, cords.x));
+        list.add(new Point(cords.y-1, cords.x));
+        list.add(new Point(cords.y, cords.x+1));
+        list.add(new Point(cords.y, cords.x-1));
+        list.add(new Point(cords.y+1, cords.x+1-2*(cords.y%2)));
+        list.add(new Point(cords.y-1, cords.x+1-2*(cords.y%2)));
+        list.removeIf(point -> !areValidCords(y_max, x_max, point));
+        return list;
     }
 
     public List<Point> getPossibleNeighbors(Point cords) {
         List<Point> list = new ArrayList<>();
-        Point point;
-        point = new Point(cords.y+1, cords.x);
-        if(areValidCords(point)) {
-            list.add(point);
-        }
-        point = new Point(cords.y-1, cords.x);
-        if(areValidCords(point)) {
-            list.add(point);
-        }
-        point = new Point(cords.y, cords.x+1);
-        if(areValidCords(point)) {
-            list.add(point);
-        }
-        point = new Point(cords.y, cords.x-1);
-        if(areValidCords(point)) {
-            list.add(point);
-        }
-        point = new Point(cords.y+1, cords.x+1-2*(cords.y%2));
-        if(areValidCords(point)) {
-            list.add(point);
-        }
-        point = new Point(cords.y-1, cords.x+1-2*(cords.y%2));
-        if(areValidCords(point)) {
-            list.add(point);
-        }
+        list.add(new Point(cords.y+1, cords.x));
+        list.add(new Point(cords.y-1, cords.x));
+        list.add(new Point(cords.y, cords.x+1));
+        list.add(new Point(cords.y, cords.x-1));
+        list.add(new Point(cords.y+1, cords.x+1-2*(cords.y%2)));
+        list.add(new Point(cords.y-1, cords.x+1-2*(cords.y%2)));
+        list.removeIf(point -> !areValidCords(point));
         return list;
     }
 
@@ -106,8 +80,12 @@ public class GameModel {
         return getNeighbors(cell1.position()).contains(cell2);
     }
 
+    public static boolean areValidCords(int y_max, int x_max, Point cords) {
+        return cords.y >= 0 && cords.y < y_max && cords.x >= 0 && cords.x < x_max;
+    }
+
     public boolean areValidCords(Point cords) {
-        return cords.y >= 0 && cords.y < rows && cords.x >= 0 && cords.x < columns;
+        return cords.y >= 0 && cords.y < columns && cords.x >= 0 && cords.x < rows;
     }
 
     public boolean isCellPresent(Point cords) {
@@ -157,20 +135,38 @@ public class GameModel {
         reinforcePoints--;
     }
 
-    public void setFirstPlayer(Player firstPlayer) {
+    private void setFirstPlayer(Player player) {
         if(currentPlayer!=null)
             throw new UnsupportedOperationException("Trying set first player when there already is one");
-        currentPlayer = firstPlayer;
-        currentPlayerListPos = playerList.indexOf(firstPlayer);
+        currentPlayer = player;
+        currentPlayerListPos = playerList.indexOf(player);
         turnState = GameTurnState.ATTACK;
     }
 
-    public void initBoard(BoardGenerator generator) {
-        generator.init(this, presenter);
-        presenter.setAttackInfo(currentPlayer);
+    public void initModel(List<Point> existingCells, List<Point> startingCells, List<Presenter> presenters) {
+        if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
+        existingCells.forEach(cords -> {
+            board[cords.y][cords.x] = new HexCell(cords);
+        });
+        startingCells.forEach(cords -> {
+            Player player = new Player();
+            board[cords.y][cords.x].setOwner(player);
+            player.addCell();
+            board[cords.y][cords.x].setPower(2);
+            playerList.add(player);
+        });
+        for(int i = 0; i < presenters.size(); i++) {
+            presenters.get(i).init(playerList.get(i), this);
+            playerList.get(i).setPresenter(presenters.get(i));
+        }
+        setFirstPlayer(playerList.get(0));
+        currentPlayer.getListener().setAttackInfo(currentPlayer);
+        currentPlayer.getListener().updateView();
     }
 
-    public void nextTurn() {
+    //todo can use digital signatures for purposes of Player field in the multiplayer
+    public void nextTurn(Player player) throws MoveException {
+        if(currentPlayer!= player) throw new MoveException("not current player trying to make a turn");
         TurnCheck();
         selected = null;
         if(turnState == GameTurnState.ATTACK) {
@@ -184,6 +180,7 @@ public class GameModel {
             currentPlayer.getListener().setAttackInfo(currentPlayer);
         }
         currentPlayer.getListener().askTurn(turnState);
+        playerList.forEach(p->p.getListener().updateView());
     }
 
     //todo can use digital signatures for purposes of Player field in the multiplayer
@@ -211,20 +208,25 @@ public class GameModel {
                 throw new UnsupportedOperationException("GameTurnState don't implemented");
             }
         } finally {
-            presenter.updateView();
+            currentPlayer.getListener().updateView();
             selected = null;
         }
     }
 
     private void TurnCheck() {
-        playerList.removeIf(p->p.getNumberOfCells() == 0);
+        playerList.removeIf(p-> {
+            if(p.getNumberOfCells() == 0)
+                p.getListener().gameOver();
+            return p.getNumberOfCells() == 0;
+        });
         if (playerList.size() <= 1) {
             gameOver();
         }
     }
 
     private void gameOver() {
-        presenter.gameOver();
+        playerList.forEach(player -> player.getListener().gameOver());
     }
+
 }
 

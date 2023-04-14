@@ -3,6 +3,7 @@
 package m_polukhin.view;
 
 import m_polukhin.model.GameTurnState;
+import m_polukhin.utils.MoveException;
 import m_polukhin.utils.Player;
 import m_polukhin.utils.ViewListener;
 
@@ -50,7 +51,13 @@ public class GameView {
                 nextTurnButton.setBackground(darkBlue);
             }
         });
-        nextTurnButton.addActionListener(e -> presenter.endTurnButtonClicked());
+        nextTurnButton.addActionListener(e -> {
+            try {
+                presenter.endTurnButtonClicked();
+            } catch (MoveException ex) {
+                //todo show tip
+            }
+        });
 
         JButton endGameButton = new JButton("Multiplayer");
         endGameButton.setFont(font);

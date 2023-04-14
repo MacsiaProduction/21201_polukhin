@@ -4,9 +4,13 @@ import m_polukhin.model.*;
 import m_polukhin.utils.*;
 
 public class AIPresenter extends Presenter {
-    private final AI ai;
-    public AIPresenter(AI ai) {
-        this.ai = ai;
+    private AI ai;
+
+    @Override
+    public void init(Player owner, GameModel model) {
+        this.owner = owner;
+        this.model = model;
+        ai = new AI(model, owner);
     }
 
     @Override

@@ -13,11 +13,6 @@ public class PlayerPresenter extends Presenter {
         this.view = new GameView(this, model.rows, model.columns);
     }
 
-    public void newGame() {
-        model.initBoard(new BoardGenerator());
-        view.updateState();
-    }
-
     @Override
     public void askTurn(GameTurnState state) {
         view.askTurn(state);

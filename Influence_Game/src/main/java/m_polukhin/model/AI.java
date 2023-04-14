@@ -52,13 +52,13 @@ public class AI {
                     }
                 }
             }
-            model.nextTurn();
+            model.nextTurn(owner);
         } else if(state==GameTurnState.REINFORCE) {
             for (var cell : cellList) {
                 model.cellClicked(owner,cell.position());
                 model.cellClicked(owner,cell.position());
             }
-            model.nextTurn();
+            model.nextTurn(owner);
         } else throw new UnsupportedOperationException("new GameTurnState not implemented");
     }
 

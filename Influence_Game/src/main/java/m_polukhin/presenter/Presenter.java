@@ -25,8 +25,8 @@ public abstract class Presenter implements ViewListener, ModelListener {
     }
 
     @Override
-    public void endTurnButtonClicked() {
-        model.nextTurn();
+    public void endTurnButtonClicked() throws MoveException {
+        model.nextTurn(owner);
     }
 
     @Override
