@@ -32,14 +32,10 @@ public class GamePlane extends JPanel {
                 for (Pair HexShape : HexShapes) {
                     if (HexShape.shape().contains(e.getPoint())) {
                         highlighted = HexShape;
+                        repaint();
                         break;
                     }
                 }
-            }
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                updateHighlighted(e);
-                repaint();
             }
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -190,23 +186,14 @@ public class GamePlane extends JPanel {
 
         updateBackgroundImage(g2d);
 
+        HexShapes.forEach(coloredShape -> drawHexShape(g2d, coloredShape));
+
         if (highlighted != null) {
-            GradientPaint gradient = new GradientPaint(
-                    highlighted.shape().getBounds().x,
-                    highlighted.shape().getBounds().y,
-                    Color.GREEN,
-                    highlighted.shape().getBounds().x + highlighted.shape().getBounds().width,
-                    highlighted.shape().getBounds().y + highlighted.shape().getBounds().height,
-                    Color.GREEN);
-
-            g2d.setPaint(gradient);
-            g2d.fill(highlighted.shape());
+            //todo: shape should glow translucently
+            g2d.setColor(new Color(148, 171, 103, 132)); // set the outline color with alpha
+            g2d.fill(highlighted.shape()); // fill the highlighted shape with the translucent color
+            g2d.draw(highlighted.shape()); // draw the outline
         }
-
-        HexShapes.forEach(coloredShape -> {
-            if(coloredShape != highlighted) drawHexShape(g2d, coloredShape);
-        });
-
         g2d.dispose();
     }
 
