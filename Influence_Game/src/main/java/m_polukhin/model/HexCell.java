@@ -1,9 +1,9 @@
 package m_polukhin.model;
 
-import m_polukhin.utils.HexCellInfo;
-import m_polukhin.utils.Player;
+import m_polukhin.utils.*;
 
-import java.awt.*;
+import java.awt.Color;
+
 
 public class HexCell {
     private Player owner = null;

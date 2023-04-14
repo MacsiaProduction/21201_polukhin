@@ -42,7 +42,7 @@ public class Parser {
             if (cmd.hasOption("h")) {
                 printHelp();
                 // CR: return null
-                throw new DuPrintHelpException("Requested to print help");
+                //throw new DuPrintHelpException("Requested to print help");
             }
 
             if (cmd.hasOption("depth")) {

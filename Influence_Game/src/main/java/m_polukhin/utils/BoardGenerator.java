@@ -1,12 +1,10 @@
 package m_polukhin.utils;
 
-import m_polukhin.model.GameModel;
-import m_polukhin.model.HexCell;
-import m_polukhin.presenter.AI;
+import m_polukhin.model.*;
 
-import java.awt.*;
+import m_polukhin.presenter.AIPresenter;
+
 import java.util.*;
-import java.util.List;
 
 public class BoardGenerator {
     // CR: return result of generation, set to model (in main)
@@ -19,7 +17,7 @@ public class BoardGenerator {
             var neighbours = model.getPossibleNeighbors(cords);
             int randomNum = new Random().nextInt(neighbours.size());
             cords = neighbours.get(randomNum);
-            if (model.isCellPresent(cords.y, cords.x)) continue;
+            if (model.isCellPresent(cords)) continue;
             HexCell added = model.initCell(cords);
             inited.add(added);
         }
@@ -28,13 +26,13 @@ public class BoardGenerator {
     private void initPlayers(GameModel model, ModelListener presenter) {
         Player tmp = new Player();
         tmp.setPresenter(presenter);
-        presenter.setOwner(tmp);
+        presenter.init(tmp, model);
         playerList.add(tmp);
         model.addPlayer(tmp);
         for (int i = 1; i<2; i++) {
             tmp = new Player();
-            AI ai = new AI(model);
-            ai.setOwner(tmp);
+            AIPresenter ai = new AIPresenter(new AI(model, tmp));
+            ai.init(tmp, model);
             tmp.setPresenter(ai);
             playerList.add(tmp);
             model.addPlayer(tmp);
@@ -55,6 +53,7 @@ public class BoardGenerator {
             player.addCell();
         });
     }
+
     public void init(GameModel model, ModelListener presenter) {
         initBoard(model);
         initPlayers(model, presenter);

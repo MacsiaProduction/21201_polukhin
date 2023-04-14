@@ -1,0 +1,41 @@
+package m_polukhin.presenter;
+
+import m_polukhin.model.GameModel;
+import m_polukhin.utils.*;
+
+import java.rmi.AccessException;
+
+public abstract class Presenter implements ViewListener, ModelListener {
+    protected GameModel model;
+    protected Player owner;
+
+    public void init(Player owner, GameModel model) {
+        this.owner = owner;
+        this.model = model;
+    }
+
+    @Override
+    public HexCellInfo getCellState(int y, int x) throws AccessException {
+        return model.getCellInfo(new Point(y,x));
+    }
+
+    @Override
+    public boolean areValidCords(int y, int x) {
+        return model.areValidCords(new Point(y, x));
+    }
+
+    @Override
+    public boolean isCellPresent(int y, int x) {
+        return model.isCellPresent(new Point(y,x));
+    }
+
+    @Override
+    public void endTurnButtonClicked() {
+        model.nextTurn();
+    }
+
+    @Override
+    public void cellClicked(Point cords) throws MoveException {
+        model.cellClicked(owner, cords);
+    }
+}

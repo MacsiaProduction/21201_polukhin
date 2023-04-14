@@ -21,12 +21,11 @@ import java.util.function.Predicate;
 public class PathFactory {
     private static PathFactory instance;
     private final List<Class<? extends DuFileType>> classes;
-    // CR: naming
-    private final List<Predicate<Path>> comparators;
+    private final List<Predicate<Path>> predicates;
 
     private PathFactory() {
         classes = new ArrayList<>();
-        comparators = new ArrayList<>();
+        predicates = new ArrayList<>();
         Properties props = new Properties();
         try (InputStream in = PathFactory.class.getResourceAsStream("/factory.config")) {
             props.load(in);
@@ -68,7 +67,7 @@ public class PathFactory {
             @SuppressWarnings("unchecked")
             Class<? extends DuFileType> clazz = (Class<? extends DuFileType>) classGetter.invoke(instance);
             this.classes.add(clazz);
-            this.comparators.add(factoryPredicate);
+            this.predicates.add(factoryPredicate);
         } catch (Exception e) {
             throw new IllegalArgumentException("Can't find a method getFactoryPredicate() for class" + metaClass);
         }
@@ -87,7 +86,7 @@ public class PathFactory {
     public static DuFileType create(Path path, JduOptions jduOptions, int curDepth) {
         PathFactory factory = PathFactory.getInstance();
         for (int i = 0; i < factory.classes.size(); i++) {
-            if (factory.comparators.get(i).test(path)) {
+            if (factory.predicates.get(i).test(path)) {
                 try {
                     Class<? extends DuFileType> clazz = factory.classes.get(i);
                     Constructor<? extends DuFileType> constructor = clazz.getConstructor(Path.class, JduOptions.class, int.class);

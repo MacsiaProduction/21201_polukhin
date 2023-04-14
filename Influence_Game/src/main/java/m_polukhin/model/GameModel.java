@@ -1,16 +1,9 @@
 package m_polukhin.model;
 
+import m_polukhin.utils.*;
 
-import m_polukhin.utils.BoardGenerator;
-import m_polukhin.utils.HexCellInfo;
-import m_polukhin.utils.ModelListener;
-import m_polukhin.utils.MoveException;
-import m_polukhin.utils.Player;
-
-import java.awt.*;
 import java.rmi.AccessException;
 import java.util.*;
-import java.util.List;
 
 public class GameModel {
     public final int rows;
@@ -27,78 +20,80 @@ public class GameModel {
 
     private final List<Player> playerList = new ArrayList<>();
 
-    // CR: null instead of optional
-    private final Optional<HexCell>[][] board;
+    private final HexCell[][] board;
 
-    private final ModelListener presenter;
+    private ModelListener presenter;
 
     private HexCell selected;
 
-    public GameModel(ModelListener presenter, int y, int x) {
-        this.presenter = presenter;
+    public GameModel(int y, int x) {
         this.rows = y;
         this.columns = x;
-        board = (Optional<HexCell>[][]) new Optional[rows][columns];
+        board = new HexCell[y][x];
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                    board[i][j] = Optional.empty();
-            }
+            Arrays.fill(board[i], null);
         }
+    }
+    public void setPresenter(ModelListener presenter) {
+        this.presenter = presenter;
     }
 
     public void addPlayer(Player p) {
         playerList.add(p);
     }
 
-    public void removePlayer(Player p) {
-        playerList.remove(p);
-    }
-
     public HexCell initCell(Point cords) {
-        if(isCellPresent(cords.y,cords.x)) {
+        if(isCellPresent(cords)) {
             throw new IllegalArgumentException("cell already presents");
         }
-        if(!areValidCords(cords.y, cords.x))
+        if(!areValidCords(cords))
             throw new IllegalArgumentException("illegal coordinates of cell");
         HexCell tmp = new HexCell(cords);
-        board[cords.y][cords.x] = Optional.of(tmp);
+        System.out.println(cords.y+" "+cords.x+" inited");
+        board[cords.y][cords.x] = tmp;
         return tmp;
     }
 
-    // CR: use custom point
-    public List<Point> getPossibleNeighbors(Point position) {
+    public List<Point> getPossibleNeighbors(Point cords) {
         List<Point> list = new ArrayList<>();
-        if(areValidCords(position.y-1, position.x-1)) {
-            list.add(new Point(position.x-1,position.y-1));
+        Point point;
+        point = new Point(cords.y+1, cords.x);
+        if(areValidCords(point)) {
+            list.add(point);
         }
-        if(areValidCords(position.y+1, position.x-1)) {
-            list.add(new Point(position.x-1,position.y+1));
+        point = new Point(cords.y-1, cords.x);
+        if(areValidCords(point)) {
+            list.add(point);
         }
-        if(areValidCords(position.y-1, position.x+1)) {
-            list.add(new Point(position.x+1,position.y-1));
+        point = new Point(cords.y, cords.x+1);
+        if(areValidCords(point)) {
+            list.add(point);
         }
-        if(areValidCords(position.y+1, position.x+1)) {
-            list.add(new Point(position.x+1,position.y+1));
+        point = new Point(cords.y, cords.x-1);
+        if(areValidCords(point)) {
+            list.add(point);
         }
-        if(areValidCords(position.y, position.x-2)) {
-            list.add(new Point(position.x-2, position.y));
+        point = new Point(cords.y+1, cords.x+1-2*(cords.y%2));
+        if(areValidCords(point)) {
+            list.add(point);
         }
-        if(areValidCords(position.y, position.x+2)) {
-            list.add(new Point(position.x+2, position.y));
+        point = new Point(cords.y-1, cords.x+1-2*(cords.y%2));
+        if(areValidCords(point)) {
+            list.add(point);
         }
         return list;
     }
 
-    public List<HexCellInfo> getNeighbors(HexCellInfo cell) {
-        if(board[cell.position().y][cell.position().x].isEmpty()){
+    public List<HexCellInfo> getNeighbors(Point cords) {
+        if(board[cords.y][cords.x]==null){
             throw new IllegalArgumentException("Empty Cell");
         }
-        var initialPointList = getPossibleNeighbors(cell.position());
+        var initialPointList = getPossibleNeighbors(cords);
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : initialPointList) {
-            if(board[point.y][point.x].isPresent()) {
+            if(board[point.y][point.x]!=null) {
                 try {
-                    list.add(getCellInfo(point.y,point.x));
+                    list.add(getCellInfo(point));
                 } catch (AccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -108,32 +103,26 @@ public class GameModel {
     }
 
     private boolean areNeighbors(HexCellInfo cell1, HexCellInfo cell2) {
-        return getNeighbors(cell1).contains(cell2);
+        return getNeighbors(cell1.position()).contains(cell2);
     }
 
-    public boolean areValidCords(int y, int x) {
-        if (y < 0 || y >= rows || x < 0 || x >= columns) {
-            return false;
-        } else return (x + y) % 2 == 0;
+    public boolean areValidCords(Point cords) {
+        return cords.y >= 0 && cords.y < rows && cords.x >= 0 && cords.x < columns;
     }
 
-    public boolean isCellPresent(int y, int x) {
-        return areValidCords(y,x) && board[y][x].isPresent();
+    public boolean isCellPresent(Point cords) {
+        return areValidCords(cords) && board[cords.y][cords.x]!=null;
     }
 
-    public HexCellInfo getCellInfo(int y, int x) throws AccessException {
-        if(!areValidCords(y,x))
+    public HexCellInfo getCellInfo(Point cords) throws AccessException {
+        if(!areValidCords(cords))
             throw new IllegalArgumentException("invalid cords");
-        if(board[y][x].isEmpty())
+        if(board[cords.y][cords.x]==null)
             throw new AccessException("no such cell");
-        return board[y][x].get().getInfo();
+        return board[cords.y][cords.x].getInfo();
     }
 
     private void attack(HexCell cell1, HexCell cell2) throws MoveException {
-        System.out.println(cell1.getInfo());
-        System.out.print(cell1.getInfo());
-        System.out.println(" attacks ");
-        System.out.println(cell2.getInfo());
         if(cell1.getOwner()!=currentPlayer) {
             throw new MoveException("You can't attack with not your cell");
         } else if(cell2.getOwner()==currentPlayer) {
@@ -198,26 +187,25 @@ public class GameModel {
     }
 
     //todo can use digital signatures for purposes of Player field in the multiplayer
-    // CR: pass coords
-    public void cellClicked(Player player, HexCellInfo cell) throws MoveException {
+    public void cellClicked(Player player, Point cords) throws MoveException {
         if (player != currentPlayer)
             throw new MoveException("not current player trying to make a turn");
-        if (cell == null) {
+        if (cords == null || !isCellPresent(cords)) {
             selected = null;
             return;
         }
-        Optional<HexCell> newSelected = board[cell.position().y][cell.position().x];
-        if (newSelected.isEmpty()) {
+        HexCell newSelected = board[cords.y][cords.x];
+        if (newSelected==null) {
             throw new MoveException("Impossible action");
         } else if (selected == null) {
-            selected = newSelected.get();
-            System.out.println("selected"+cell);
+            selected = newSelected;
+            System.out.println("selected "+cords.y+" "+cords.x);
         } else try {
             if (turnState == GameTurnState.ATTACK) {
-                attack(selected, newSelected.get());
+                attack(selected, newSelected);
                 currentPlayer.getListener().setAttackInfo(currentPlayer);
             } else if (turnState == GameTurnState.REINFORCE) {
-                reinforce(currentPlayer, newSelected.get());
+                reinforce(currentPlayer, newSelected);
                 currentPlayer.getListener().setReinforceInfo(currentPlayer, reinforcePoints);
             } else {
                 throw new UnsupportedOperationException("GameTurnState don't implemented");
@@ -229,11 +217,7 @@ public class GameModel {
     }
 
     private void TurnCheck() {
-        for(var player: playerList) {
-            if (player.getNumberOfCells() == 0) {
-                removePlayer(player);
-            }
-        }
+        playerList.removeIf(p->p.getNumberOfCells() == 0);
         if (playerList.size() <= 1) {
             gameOver();
         }

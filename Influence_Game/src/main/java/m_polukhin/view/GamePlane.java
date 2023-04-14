@@ -21,6 +21,7 @@ public class GamePlane extends JPanel {
     private final ViewListener presenter;
     private final List<Pair> HexShapes = new ArrayList<>();
     private Pair highlighted;
+
     public GamePlane(ViewListener presenter, int y, int x) {
         this.presenter = presenter;
         this.rows = y;
@@ -47,7 +48,7 @@ public class GamePlane extends JPanel {
                     if(highlighted==null) {
                         presenter.cellClicked(null);
                     } else {
-                        presenter.cellClicked(highlighted.info());
+                        presenter.cellClicked(highlighted.info().position());
                     }
                 } catch (MoveException ex) {
                     System.out.println("wrong action"+ex);
@@ -98,10 +99,9 @@ public class GamePlane extends JPanel {
         double yPos = size / 2d;
         for (int row = 0; row < rows; row++) {
             double offset = (width / 2d);
-            if (row % 2 == 0) offset = 0;
+            if (row % 2 == 1) offset = 0;
             double xPos = offset;
             for (int col = 0; col < columns; col++) {
-                if(!presenter.areValidCords(row,col)) continue;
                 if(!presenter.isCellPresent(row,col)) {
                     xPos += width;
                     continue;
@@ -110,7 +110,7 @@ public class GamePlane extends JPanel {
                 Area area = new Area(path);
                 area = area.createTransformedArea(at);
                 try {
-                    HexShapes.add(new Pair(area, presenter.GetCellState(row,col)));
+                    HexShapes.add(new Pair(area, presenter.getCellState(row,col)));
                 } catch (AccessException e) {
                     assert(false);
                     //it's impossible to get here.
@@ -190,10 +190,22 @@ public class GamePlane extends JPanel {
 
         updateBackgroundImage(g2d);
 
-        if (highlighted != null) { //todo
+        if (highlighted != null) {
+            GradientPaint gradient = new GradientPaint(
+                    highlighted.shape().getBounds().x,
+                    highlighted.shape().getBounds().y,
+                    Color.GREEN,
+                    highlighted.shape().getBounds().x + highlighted.shape().getBounds().width,
+                    highlighted.shape().getBounds().y + highlighted.shape().getBounds().height,
+                    Color.GREEN);
+
+            g2d.setPaint(gradient);
+            g2d.fill(highlighted.shape());
         }
 
-        HexShapes.forEach(coloredShape -> drawHexShape(g2d, coloredShape));
+        HexShapes.forEach(coloredShape -> {
+            if(coloredShape != highlighted) drawHexShape(g2d, coloredShape);
+        });
 
         g2d.dispose();
     }

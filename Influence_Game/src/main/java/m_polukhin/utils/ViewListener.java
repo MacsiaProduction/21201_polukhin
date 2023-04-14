@@ -3,7 +3,7 @@ package m_polukhin.utils;
 import java.rmi.AccessException;
 
 public interface ViewListener {
-    HexCellInfo GetCellState(int y, int x) throws AccessException;
+    HexCellInfo getCellState(int y, int x) throws AccessException;
 
     boolean areValidCords(int y, int x);
 
@@ -11,8 +11,6 @@ public interface ViewListener {
 
     void endTurnButtonClicked();
 
-    void newGame();
-
-    void cellClicked(HexCellInfo cell) throws MoveException;
+    void cellClicked(Point cords) throws MoveException;
 }
 
