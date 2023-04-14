@@ -145,9 +145,7 @@ public class GameModel {
 
     public void initModel(List<Point> existingCells, List<Point> startingCells, List<Presenter> presenters) {
         if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
-        existingCells.forEach(cords -> {
-            board[cords.y][cords.x] = new HexCell(cords);
-        });
+        existingCells.forEach(cords -> board[cords.y][cords.x] = new HexCell(cords));
         startingCells.forEach(cords -> {
             Player player = new Player();
             board[cords.y][cords.x].setOwner(player);

@@ -22,12 +22,12 @@ public class PlayerPresenter extends Presenter {
         view.updateState();
     }
 
-    public void setAttackInfo(Player player) {
-        view.setAttackInfo(player);
+    public void setAttackInfo() {
+        view.setAttackInfo();
     }
 
-    public void setReinforceInfo(Player player, int powerRemain) {
-        view.setReinforceInfo(player, powerRemain);
+    public void setReinforceInfo(int powerRemain) {
+        view.setReinforceInfo(powerRemain);
     }
 
     public void gameOver() {

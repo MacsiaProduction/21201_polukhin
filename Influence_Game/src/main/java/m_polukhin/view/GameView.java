@@ -4,7 +4,6 @@ package m_polukhin.view;
 
 import m_polukhin.model.GameTurnState;
 import m_polukhin.utils.MoveException;
-import m_polukhin.utils.Player;
 import m_polukhin.utils.ViewListener;
 
 import javax.swing.*;
@@ -113,11 +112,11 @@ public class GameView {
         frame.setVisible(true);
     }
 
-    public void setAttackInfo(Player player) {
+    public void setAttackInfo() {
         infoTable.setText("State:  Attack\n");
     }
 
-    public void setReinforceInfo(Player player, int powerRemain) {
+    public void setReinforceInfo(int powerRemain) {
         infoTable.setText("State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
     }
 
