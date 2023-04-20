@@ -18,6 +18,7 @@ public class AI {
         this.owner = owner;
     }
 
+    // CR: move to model
     private List<HexCellInfo> getPlayerCellList() {
         List<HexCellInfo> cellList= new ArrayList<>();
         for(int i =0; i< model.rows; i++) {

@@ -1,5 +1,6 @@
 package m_polukhin.utils;
 
+// CR: record
 public class Point {
     public final int y;
     public final int x;
