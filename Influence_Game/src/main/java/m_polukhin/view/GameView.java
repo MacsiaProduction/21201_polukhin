@@ -38,8 +38,7 @@ public class GameView {
         nextTurnButton.setOpaque(true);
         nextTurnButton.setContentAreaFilled(true);
         nextTurnButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
-        nextTurnButton.addMouseListener(new java.awt.event.MouseAdapter()
-        {
+        nextTurnButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
                 nextTurnButton.setBackground(cyan);
@@ -68,8 +67,7 @@ public class GameView {
         endGameButton.setOpaque(true);
         endGameButton.setContentAreaFilled(true);
         endGameButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
-        endGameButton.addMouseListener(new java.awt.event.MouseAdapter()
-        {
+        endGameButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
                 endGameButton.setBackground(lightPurple);
