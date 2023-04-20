@@ -27,7 +27,7 @@ public class GameView {
 
         // Create the buttons for next turn and end game
         Font font = new Font("Square 721", Font.BOLD, 18);
-
+        //todo unite in mybuttton class
         nextTurnButton = new JButton("Next Turn");
         nextTurnButton.setFont(font);
         nextTurnButton.setFocusable(false);
