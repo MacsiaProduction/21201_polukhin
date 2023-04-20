@@ -10,7 +10,7 @@ public class AIPresenter extends Presenter {
     public void init(Player owner, GameModel model) {
         this.owner = owner;
         this.model = model;
-        ai = new AI(model, owner);
+        this.ai = new AI(model, owner);
     }
 
     @Override

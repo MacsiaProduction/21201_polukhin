@@ -18,7 +18,6 @@ public class AI {
         this.owner = owner;
     }
 
-
     private List<HexCellInfo> getPlayerCellList() {
         List<HexCellInfo> cellList= new ArrayList<>();
         for(int i =0; i< model.rows; i++) {
@@ -45,7 +44,6 @@ public class AI {
                 var neighbours = model.getNeighbors(attacker.position());
                 for (var victim : neighbours) {
                     if (victim.owner() != attacker.owner()) {
-                        //model.cellClicked(owner,null);
                         model.cellClicked(owner,attacker.position());
                         model.cellClicked(owner,victim.position());
                         break;
