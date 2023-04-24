@@ -24,7 +24,8 @@ public class Printer {
             List<DuFileType> children = compoundType.getChildren();
             //children.sort(comparator);
             sort(children,comparator);
-            var sublist = children.subList(0,limit);
+            var neededLen = Integer.min(limit, children.size()-1);
+            var sublist = children.subList(0,neededLen);
             for (DuFileType child : sublist) {
                 print(child);
             }
