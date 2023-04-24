@@ -1,6 +1,7 @@
 package polukhin.modules.file;
 
 import polukhin.JduOptions;
+import polukhin.exceptions.FileMissingException;
 import polukhin.modules.DuFileType;
 
 import java.io.IOException;
@@ -14,12 +15,11 @@ public final class FileType extends DuFileType {
     }
 
     @Override
-    public Long calculateSize() {
+    public Long calculateSize() throws FileMissingException {
         try {
             return Files.size(path());
         } catch (IOException e) {
-            // CR: custom exception
-            throw new RuntimeException("file not found");
+            throw new FileMissingException("file not found");
         }
     }
 
