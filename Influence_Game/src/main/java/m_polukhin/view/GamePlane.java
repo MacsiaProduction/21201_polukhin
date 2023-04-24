@@ -1,6 +1,7 @@
 package m_polukhin.view;
 
 import m_polukhin.utils.MoveException;
+import m_polukhin.utils.Player;
 import m_polukhin.utils.ViewListener;
 
 import javax.imageio.ImageIO;
@@ -11,7 +12,6 @@ import java.awt.geom.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.AccessException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,12 +105,7 @@ public class GamePlane extends JPanel {
                 AffineTransform at = AffineTransform.getTranslateInstance(xPos + (size * 0.38), yPos);
                 Area area = new Area(path);
                 area = area.createTransformedArea(at);
-                try {
-                    HexShapes.add(new Pair(area, presenter.getCellState(row,col)));
-                } catch (AccessException e) {
-                    assert(false);
-                    //it's impossible to get here.
-                }
+                HexShapes.add(new Pair(area, presenter.getCellState(row,col)));
                 xPos += width;
             }
             yPos += height * 0.75;
@@ -132,7 +127,7 @@ public class GamePlane extends JPanel {
 
     private void drawHexShape(Graphics2D g2d, Pair coloredShape) {
         // drawing cell
-        g2d.setColor(coloredShape.info().color()); // set the filling color
+        g2d.setColor(getPlayerColor(coloredShape.info().owner())); // set the filling color
 
         // Create a gradient paint
         GradientPaint gradient = new GradientPaint(
@@ -141,7 +136,7 @@ public class GamePlane extends JPanel {
                 Color.WHITE,
                 coloredShape.shape().getBounds().x + coloredShape.shape().getBounds().width,
                 coloredShape.shape().getBounds().y + coloredShape.shape().getBounds().height,
-                coloredShape.info().color());
+                getPlayerColor(coloredShape.info().owner()));
 
         // Set the gradient paint
         g2d.setPaint(gradient);
@@ -200,6 +195,14 @@ public class GamePlane extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(200, 500);
+    }
+
+    Color getPlayerColor(Player owner) {
+        if (owner == null) return Color.CYAN;
+        float hue = (float) owner.number / 10.0f;
+        float saturation = 0.8f;
+        float brightness = 0.8f;
+        return Color.getHSBColor(hue, saturation, brightness);
     }
 }
 

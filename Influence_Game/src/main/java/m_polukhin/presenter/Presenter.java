@@ -3,8 +3,6 @@ package m_polukhin.presenter;
 import m_polukhin.model.GameModel;
 import m_polukhin.utils.*;
 
-import java.rmi.AccessException;
-
 public abstract class Presenter implements ViewListener, ModelListener {
     protected GameModel model;
     protected Player owner;
@@ -15,7 +13,7 @@ public abstract class Presenter implements ViewListener, ModelListener {
     }
 
     @Override
-    public HexCellInfo getCellState(int y, int x) throws AccessException {
+    public HexCellInfo getCellState(int y, int x) {
         return model.getCellInfo(new Point(y,x));
     }
 

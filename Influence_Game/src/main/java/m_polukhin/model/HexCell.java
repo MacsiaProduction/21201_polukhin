@@ -2,8 +2,6 @@ package m_polukhin.model;
 
 import m_polukhin.utils.*;
 
-import java.awt.Color;
-
 
 public class HexCell {
     private Player owner = null;
@@ -11,10 +9,6 @@ public class HexCell {
     private final Point position;
     public HexCell(Point position) {
         this.position = position;
-    }
-    public Color getColor() {
-        if(owner!=null) return owner.color;
-        else return Color.CYAN;
     }
     public Player getOwner() {
         return owner;
@@ -32,6 +26,6 @@ public class HexCell {
         return position;
     }
     public HexCellInfo getInfo() {
-        return new HexCellInfo(getPower(), getOwner(), getPosition(), getColor());
+        return new HexCellInfo(getPower(), getOwner(), getPosition());
     }
 }

@@ -1,9 +1,7 @@
 package m_polukhin.utils;
 
-import java.rmi.AccessException;
-
 public interface ViewListener {
-    HexCellInfo getCellState(int y, int x) throws AccessException;
+    HexCellInfo getCellState(int y, int x);
 
     boolean isCellPresent(int y, int x);
 

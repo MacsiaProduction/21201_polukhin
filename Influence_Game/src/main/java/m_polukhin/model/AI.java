@@ -3,10 +3,7 @@ package m_polukhin.model;
 import m_polukhin.utils.HexCellInfo;
 import m_polukhin.utils.MoveException;
 import m_polukhin.utils.Player;
-import m_polukhin.utils.Point;
 
-import java.rmi.AccessException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AI {
@@ -18,27 +15,8 @@ public class AI {
         this.owner = owner;
     }
 
-    // CR: move to model
-    private List<HexCellInfo> getPlayerCellList() {
-        List<HexCellInfo> cellList= new ArrayList<>();
-        for(int i =0; i< model.rows; i++) {
-            for(int j = 0; j< model.columns; j++){
-                var point = new Point(i,j);
-                if(model.isCellPresent(point)) {
-                    try {
-                        var tmp = model.getCellInfo(point);
-                        if (tmp.owner() == owner)
-                            cellList.add(tmp);
-                    } catch (AccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
-        return cellList;
-    }
     public void generateTurn(GameTurnState state) throws MoveException {
-        List<HexCellInfo> cellList = getPlayerCellList();
+        List<HexCellInfo> cellList = model.getPlayerCellList(owner);
         if(state==GameTurnState.ATTACK) {
             for (var attacker : cellList) {
                 if (attacker.power() < 2) continue;

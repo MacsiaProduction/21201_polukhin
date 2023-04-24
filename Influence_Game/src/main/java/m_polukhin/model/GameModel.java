@@ -3,15 +3,20 @@ package m_polukhin.model;
 import m_polukhin.presenter.Presenter;
 import m_polukhin.utils.*;
 
-import java.rmi.AccessException;
 import java.util.*;
 
 public class GameModel {
+    private final int rows;
 
-    // CR: getter
-    public final int rows;
+    public int rows() {
+        return rows;
+    }
 
-    public final int columns;
+    private final int columns;
+
+    public int columns() {
+        return columns;
+    }
 
     private GameTurnState turnState;
 
@@ -38,12 +43,12 @@ public class GameModel {
 
     public static List<Point> getPossibleNeighbors(int y_max, int x_max, Point cords) {
         List<Point> list = new ArrayList<>();
-        list.add(new Point(cords.y+1, cords.x));
-        list.add(new Point(cords.y-1, cords.x));
-        list.add(new Point(cords.y, cords.x+1));
-        list.add(new Point(cords.y, cords.x-1));
-        list.add(new Point(cords.y+1, cords.x+1-2*(cords.y%2)));
-        list.add(new Point(cords.y-1, cords.x+1-2*(cords.y%2)));
+        list.add(new Point(cords.y()+1, cords.x()));
+        list.add(new Point(cords.y()-1, cords.x()));
+        list.add(new Point(cords.y(), cords.x()+1));
+        list.add(new Point(cords.y(), cords.x()-1));
+        list.add(new Point(cords.y()+1, cords.x()+1-2*(cords.y()%2)));
+        list.add(new Point(cords.y()-1, cords.x()+1-2*(cords.y()%2)));
         list.removeIf(point -> !areValidCords(y_max, x_max, point));
         return list;
     }
@@ -51,29 +56,25 @@ public class GameModel {
     // CR: copy paste
     public List<Point> getPossibleNeighbors(Point cords) {
         List<Point> list = new ArrayList<>();
-        list.add(new Point(cords.y+1, cords.x));
-        list.add(new Point(cords.y-1, cords.x));
-        list.add(new Point(cords.y, cords.x+1));
-        list.add(new Point(cords.y, cords.x-1));
-        list.add(new Point(cords.y+1, cords.x+1-2*(cords.y%2)));
-        list.add(new Point(cords.y-1, cords.x+1-2*(cords.y%2)));
+        list.add(new Point(cords.y()+1, cords.x()));
+        list.add(new Point(cords.y()-1, cords.x()));
+        list.add(new Point(cords.y(), cords.x()+1));
+        list.add(new Point(cords.y(), cords.x()-1));
+        list.add(new Point(cords.y()+1, cords.x()+1-2*(cords.y()%2)));
+        list.add(new Point(cords.y()-1, cords.x()+1-2*(cords.y()%2)));
         list.removeIf(point -> !areValidCords(point));
         return list;
     }
 
     public List<HexCellInfo> getNeighbors(Point cords) {
-        if(board[cords.y][cords.x]==null){
+        if(board[cords.y()][cords.x()]==null){
             throw new IllegalArgumentException("Empty Cell");
         }
         var initialPointList = getPossibleNeighbors(cords);
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : initialPointList) {
-            if(board[point.y][point.x]!=null) {
-                try {
-                    list.add(getCellInfo(point));
-                } catch (AccessException e) {
-                    throw new RuntimeException(e);
-                }
+            if(board[point.y()][point.x()]!=null) {
+                list.add(getCellInfo(point));
             }
         }
         return list;
@@ -84,25 +85,39 @@ public class GameModel {
     }
 
     public static boolean areValidCords(int y_max, int x_max, Point cords) {
-        return cords.y >= 0 && cords.y < y_max && cords.x >= 0 && cords.x < x_max;
+        return cords.y() >= 0 && cords.y() < y_max && cords.x() >= 0 && cords.x() < x_max;
     }
 
     // CR: copy paste
     public boolean areValidCords(Point cords) {
-        return cords.y >= 0 && cords.y < columns && cords.x >= 0 && cords.x < rows;
+        return cords.y() >= 0 && cords.y() < columns && cords.x() >= 0 && cords.x() < rows;
     }
 
     public boolean isCellPresent(Point cords) {
-        return areValidCords(cords) && board[cords.y][cords.x]!=null;
+        return areValidCords(cords) && board[cords.y()][cords.x()]!=null;
     }
 
-    public HexCellInfo getCellInfo(Point cords) throws AccessException {
+    public HexCellInfo getCellInfo(Point cords) {
         if(!areValidCords(cords))
             throw new IllegalArgumentException("invalid cords");
-        if(board[cords.y][cords.x]==null)
-//          CR: IllegalArgumentException
-            throw new AccessException("no such cell");
-        return board[cords.y][cords.x].getInfo();
+        if(board[cords.y()][cords.x()]==null)
+            throw new IllegalArgumentException("no such cell");
+        return board[cords.y()][cords.x()].getInfo();
+    }
+
+    public List<HexCellInfo> getPlayerCellList(Player owner) {
+        List<HexCellInfo> cellList= new ArrayList<>();
+        for(int i =0; i< rows; i++) {
+            for(int j = 0; j< columns; j++){
+                var point = new Point(i,j);
+                if(isCellPresent(point)) {
+                    var tmp = getCellInfo(point);
+                    if (tmp.owner() == owner)
+                        cellList.add(tmp);
+                }
+            }
+        }
+        return cellList;
     }
 
     private void attack(HexCell cell1, HexCell cell2) throws MoveException {
@@ -148,14 +163,15 @@ public class GameModel {
         turnState = GameTurnState.ATTACK;
     }
 
-    public void initModel(List<Point> existingCells, List<Point> startingCells, List<ModelListener> presenters) {
+    // todo ModelListener
+    public void initModel(List<Point> existingCells, List<Point> startingCells, List<Presenter> presenters) {
         if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
-        existingCells.forEach(cords -> board[cords.y][cords.x] = new HexCell(cords));
+        existingCells.forEach(cords -> board[cords.y()][cords.x()] = new HexCell(cords));
         startingCells.forEach(cords -> {
             Player player = new Player();
-            board[cords.y][cords.x].setOwner(player);
+            board[cords.y()][cords.x()].setOwner(player);
             player.addCell();
-            board[cords.y][cords.x].setPower(2);
+            board[cords.y()][cords.x()].setPower(2);
             playerList.add(player);
         });
         for(int i = 0; i < presenters.size(); i++) {
@@ -190,7 +206,7 @@ public class GameModel {
     public void cellClicked(Player player, Point cords) throws MoveException {
 //        assert areValidCords(cords) : cords;
 //        if (selected == null) {
-//            HexCell cell = board[cords.y][cords.x];
+//            HexCell cell = board[cords.y()][cords.x()];
 //            if (isPlayerCell(cell)) {
 //                selected = cell;
 //                listener.fieldUpdated();
@@ -204,7 +220,7 @@ public class GameModel {
 //                }
 //            }
 //        } else {
-//            HexCell newSelected = board[cords.y][cords.x];
+//            HexCell newSelected = board[cords.y()][cords.x()];
 //            if (newSelected != selected) {
 //                selected = newSelected;
 //            } else {
@@ -219,12 +235,12 @@ public class GameModel {
             selected = null;
             return;
         }
-        HexCell newSelected = board[cords.y][cords.x];
+        HexCell newSelected = board[cords.y()][cords.x()];
         if (newSelected==null) {
             throw new MoveException("Impossible action");
         } else if (selected == null) {
             selected = newSelected;
-            System.out.println("selected "+cords.y+" "+cords.x);
+            System.out.println("selected "+cords.y()+" "+cords.x());
         } else try {
             if (turnState == GameTurnState.ATTACK) {
                 attack(selected, newSelected);
@@ -255,6 +271,5 @@ public class GameModel {
     private void gameOver() {
         playerList.forEach(player -> player.getListener().gameOver());
     }
-
 }
 
