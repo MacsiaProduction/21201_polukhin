@@ -1,15 +1,11 @@
 package polukhin;
 
 import polukhin.exceptions.ClassLoadException;
-import polukhin.exceptions.PathFactoryException;
 import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 public interface ConfigIterator {
     static List<Class<? extends MetaType<? extends DuFileType>>> loadFactoryClasses() throws ClassLoadException {
