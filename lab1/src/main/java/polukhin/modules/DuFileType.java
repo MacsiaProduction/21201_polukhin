@@ -1,6 +1,7 @@
 package polukhin.modules;
 
 import polukhin.JduOptions;
+import polukhin.exceptions.FileMissingException;
 import polukhin.exceptions.PathFactoryException;
 
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public abstract class DuFileType {
      *
      * @return the size of the directory or file in bytes
      */
-    abstract public Long calculateSize() throws PathFactoryException;
+    abstract public Long calculateSize() throws PathFactoryException, FileMissingException;
 
     public abstract String getPrefix();
 
