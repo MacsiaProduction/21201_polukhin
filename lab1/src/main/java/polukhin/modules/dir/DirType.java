@@ -22,16 +22,14 @@ public class DirType extends DuFileType implements DuCompoundType {
     public List<DuFileType> getChildren() throws PathFactoryException, FileMissingException {
         if(children == null) {
             children = new ArrayList<>();
-            Stream<Path> stream = null;
-            try {
-                stream = Files.list(path());
+            try(Stream<Path> stream = Files.list(path())) {
+                Iterator<Path> iterator = stream.iterator();
+                while (iterator.hasNext()) {
+                    Path path = iterator.next();
+                    children.add(PathFactory.create(path, options()));
+                }
             } catch (IOException e) {
                 throw new FileMissingException("file not found");
-            }
-            Iterator<Path> iterator = stream.iterator();
-            while (iterator.hasNext()) {
-                Path path = iterator.next();
-                children.add(PathFactory.create(path, options()));
             }
         }
         return children;
