@@ -1,10 +1,7 @@
 package polukhin;
 
 import polukhin.comparators.*;
-import polukhin.exceptions.ClassLoadException;
-import polukhin.exceptions.DuParseException;
-import polukhin.exceptions.FileMissingException;
-import polukhin.exceptions.PathFactoryException;
+import polukhin.exceptions.*;
 import polukhin.modules.DuFileType;
 import polukhin.modules.Printer;
 
@@ -20,7 +17,8 @@ public class Main {
             DuFileType tmp = PathFactory.create(jduOptions.rootPath(), jduOptions);
             Printer printer = new Printer(jduOptions, new DefaultComparator());
             printer.print(tmp);
-        } catch (DuParseException | PathFactoryException | ClassLoadException | FileMissingException e) {
+        } catch (DuParseException | PathFactoryException | ClassLoadException | FileMissingUncheckedException |
+                 PathFactoryUncheckedException e) {
             System.exit(0);
         }
     }

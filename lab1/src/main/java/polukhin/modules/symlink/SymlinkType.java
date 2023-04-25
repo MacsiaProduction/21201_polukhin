@@ -27,7 +27,7 @@ public class SymlinkType extends DuFileType implements DuCompoundType {
     }
 
     @Override
-    public List<DuFileType> getChildren() throws PathFactoryException {
+    public List<DuFileType> getChildren() {
         List<DuFileType> list = new ArrayList<>();
         if (options().followSymLinks()) {
             try {

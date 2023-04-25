@@ -1,12 +1,13 @@
 package polukhin.comparators;
 
-import polukhin.exceptions.FileMissingException;
-import polukhin.exceptions.PathFactoryException;
+import polukhin.exceptions.FileMissingUncheckedException;
 import polukhin.modules.DuFileType;
 
-public class InverseComparator implements DuFileTypeComparator {
+import java.util.Comparator;
+
+public class InverseComparator implements Comparator<DuFileType> {
     @Override
-    public int compare(DuFileType file1, DuFileType file2) throws PathFactoryException, FileMissingException {
+    public int compare(DuFileType file1, DuFileType file2) throws FileMissingUncheckedException {
         return file2.calculateSize().compareTo(file1.calculateSize());
     }
 }

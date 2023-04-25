@@ -1,6 +1,7 @@
 package polukhin;
 
 import polukhin.exceptions.PathFactoryException;
+import polukhin.exceptions.PathFactoryUncheckedException;
 import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
 
@@ -49,7 +50,7 @@ public class PathFactory {
         }
     }
 
-    public static DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryException {
+    public static DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryUncheckedException {
         PathFactory factory = PathFactory.getInstance();
         for (int i = 0; i < factory.types.size(); i++) {
             if (factory.predicates.get(i).test(path)) {
@@ -59,15 +60,15 @@ public class PathFactory {
                     return constructor.newInstance(path, jduOptions);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                          InvocationTargetException e) {
-                    throw new PathFactoryException("Error creating instance of class " + factory.types.get(i));
+                    throw new PathFactoryUncheckedException("Error creating instance of class " + factory.types.get(i));
                 }
             }
         }
-        throw new PathFactoryException("Path" + path + "can't be recognized as any type");
+        throw new PathFactoryUncheckedException("Path" + path + "can't be recognized as any type");
     }
 
-    private static PathFactory getInstance() throws PathFactoryException {
-        if(instance == null) throw new PathFactoryException("PathFactory wasn't inited");
+    private static PathFactory getInstance() {
+        if(instance == null) throw new IllegalStateException("PathFactory wasn't inited");
         else return instance;
     }
 }

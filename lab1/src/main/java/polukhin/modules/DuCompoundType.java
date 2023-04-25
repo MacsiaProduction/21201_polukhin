@@ -1,10 +1,9 @@
 package polukhin.modules;
 
-import polukhin.exceptions.FileMissingException;
-import polukhin.exceptions.PathFactoryException;
+import polukhin.exceptions.FileMissingUncheckedException;
 
 import java.util.List;
 
 public interface DuCompoundType {
-    List<DuFileType> getChildren() throws PathFactoryException, FileMissingException;
+    List<DuFileType> getChildren();
 }

@@ -2,8 +2,7 @@ package polukhin.modules.dir;
 
 import polukhin.JduOptions;
 import polukhin.PathFactory;
-import polukhin.exceptions.FileMissingException;
-import polukhin.exceptions.PathFactoryException;
+import polukhin.exceptions.FileMissingUncheckedException;
 import polukhin.modules.DuCompoundType;
 import polukhin.modules.DuFileType;
 
@@ -16,10 +15,12 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class DirType extends DuFileType implements DuCompoundType {
-    private Long size = -1L;
+    private Long size = null;
+
     private List<DuFileType> children = null;
+
     @Override
-    public List<DuFileType> getChildren() throws PathFactoryException, FileMissingException {
+    public List<DuFileType> getChildren() throws FileMissingUncheckedException {
         if(children == null) {
             children = new ArrayList<>();
             try(Stream<Path> stream = Files.list(path())) {
@@ -29,17 +30,19 @@ public class DirType extends DuFileType implements DuCompoundType {
                     children.add(PathFactory.create(path, options()));
                 }
             } catch (IOException e) {
-                throw new FileMissingException("file not found");
+                throw new FileMissingUncheckedException("file not found");
             }
         }
         return children;
     }
+
     public DirType(Path dir, JduOptions jduOptions) {
         super(dir, jduOptions);
     }
+
     @Override
-    public Long calculateSize() throws PathFactoryException, FileMissingException {
-        if (size == -1) {
+    public Long calculateSize() throws FileMissingUncheckedException {
+        if (size == null) {
             size = 0L;
             for (DuFileType file : getChildren()) {
                 size += file.calculateSize();
