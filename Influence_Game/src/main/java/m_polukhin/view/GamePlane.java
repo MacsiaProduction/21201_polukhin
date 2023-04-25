@@ -19,8 +19,8 @@ public class GamePlane extends JPanel {
     final int columns;
     final int rows;
     private final ViewListener presenter;
-    private final List<Pair> HexShapes = new ArrayList<>();
-    private Pair highlighted;
+    private final List<HexShape> HexShapes = new ArrayList<>();
+    private HexShape highlighted;
 
     public GamePlane(ViewListener presenter, int y, int x) {
         this.presenter = presenter;
@@ -29,7 +29,7 @@ public class GamePlane extends JPanel {
         addMouseListener(new MouseAdapter() {
             private void updateHighlighted(MouseEvent e) {
                 highlighted = null;
-                for (Pair HexShape : HexShapes) {
+                for (m_polukhin.view.HexShape HexShape : HexShapes) {
                     if (HexShape.shape().contains(e.getPoint())) {
                         highlighted = HexShape;
                         repaint();
@@ -105,7 +105,7 @@ public class GamePlane extends JPanel {
                 AffineTransform at = AffineTransform.getTranslateInstance(xPos + (size * 0.38), yPos);
                 Area area = new Area(path);
                 area = area.createTransformedArea(at);
-                HexShapes.add(new Pair(area, presenter.getCellState(row,col)));
+                HexShapes.add(new HexShape(area, presenter.getCellState(row,col)));
                 xPos += width;
             }
             yPos += height * 0.75;
@@ -125,7 +125,7 @@ public class GamePlane extends JPanel {
         }
     }
 
-    private void drawHexShape(Graphics2D g2d, Pair coloredShape) {
+    private void drawHexShape(Graphics2D g2d, HexShape coloredShape) {
         // drawing cell
         g2d.setColor(getPlayerColor(coloredShape.info().owner())); // set the filling color
 
