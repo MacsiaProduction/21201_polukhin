@@ -170,7 +170,7 @@ public class GameModel {
     }
 
     //todo can use digital signatures for purposes of Player field in the multiplayer
-    public void nextTurn(Player player) throws MoveException {
+    public void nextTurn(Player player) {
         assert player == currentPlayer : player;
 
         playerList.forEach(p->p.getListener().updateView());

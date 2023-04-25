@@ -5,7 +5,7 @@ public interface ViewListener {
 
     boolean isCellPresent(int y, int x);
 
-    void endTurnButtonClicked() throws MoveException;
+    void endTurnButtonClicked();
 
     void cellClicked(Point cords) throws MoveException;
 }

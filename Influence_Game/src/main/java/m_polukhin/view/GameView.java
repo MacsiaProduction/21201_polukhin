@@ -40,11 +40,7 @@ public class GameView {
         });
 
         nextTurnButton.addActionListener(e -> {
-            try {
-                presenter.endTurnButtonClicked();
-            } catch (MoveException ex) {
-                //todo show tip
-            }
+            presenter.endTurnButtonClicked();
         });
 
         JButton endGameButton = new MyButton("Multiplayer", font, whiteTransparent, darkBlue, lightPurple);
