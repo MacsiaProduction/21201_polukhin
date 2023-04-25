@@ -1,6 +1,5 @@
 package m_polukhin.model;
 
-import m_polukhin.presenter.Presenter;
 import m_polukhin.utils.*;
 
 import java.util.*;
@@ -163,8 +162,7 @@ public class GameModel {
         turnState = GameTurnState.ATTACK;
     }
 
-    // todo ModelListener
-    public void initModel(List<Point> existingCells, List<Point> startingCells, List<Presenter> presenters) {
+    public void initModel(List<Point> existingCells, List<Point> startingCells, List<ModelListener> presenters) {
         if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
         existingCells.forEach(cords -> board[cords.y()][cords.x()] = new HexCell(cords));
         startingCells.forEach(cords -> {
@@ -186,6 +184,7 @@ public class GameModel {
     //todo can use digital signatures for purposes of Player field in the multiplayer
     public void nextTurn(Player player) throws MoveException {
         if(currentPlayer!= player) throw new MoveException("not current player trying to make a turn");
+        playerList.forEach(p->p.getListener().updateView());
         TurnCheck();
         selected = null;
         if(turnState == GameTurnState.ATTACK) {
@@ -199,12 +198,11 @@ public class GameModel {
             currentPlayer.getListener().setAttackInfo();
         }
         currentPlayer.getListener().askTurn(turnState);
-        playerList.forEach(p->p.getListener().updateView());
     }
 
     //todo can use digital signatures for purposes of Player field in the multiplayer
     public void cellClicked(Player player, Point cords) throws MoveException {
-//        assert areValidCords(cords) : cords;
+//        assert isCellPresent(cords) : cords;
 //        if (selected == null) {
 //            HexCell cell = board[cords.y()][cords.x()];
 //            if (isPlayerCell(cell)) {
@@ -236,9 +234,7 @@ public class GameModel {
             return;
         }
         HexCell newSelected = board[cords.y()][cords.x()];
-        if (newSelected==null) {
-            throw new MoveException("Impossible action");
-        } else if (selected == null) {
+        if (selected == null) {
             selected = newSelected;
             System.out.println("selected "+cords.y()+" "+cords.x());
         } else try {

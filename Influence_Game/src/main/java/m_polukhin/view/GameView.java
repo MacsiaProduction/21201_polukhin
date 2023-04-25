@@ -1,5 +1,3 @@
-
-
 package m_polukhin.view;
 
 import m_polukhin.model.GameTurnState;
@@ -27,17 +25,8 @@ public class GameView {
 
         // Create the buttons for next turn and end game
         Font font = new Font("Square 721", Font.BOLD, 18);
-        //todo unite in mybuttton class
-        nextTurnButton = new JButton("Next Turn");
-        nextTurnButton.setFont(font);
-        nextTurnButton.setFocusable(false);
-        nextTurnButton.setPreferredSize(new Dimension(120, 50)); // set button size
-        nextTurnButton.setForeground(whiteTransparent); // set font color
-        nextTurnButton.setBackground(darkBlue); // set background color
-        nextTurnButton.setBorderPainted(false);
-        nextTurnButton.setOpaque(true);
-        nextTurnButton.setContentAreaFilled(true);
-        nextTurnButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
+
+        nextTurnButton = new MyButton("Next Turn", font, whiteTransparent, darkBlue, lightPurple);
         nextTurnButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
@@ -49,6 +38,7 @@ public class GameView {
                 nextTurnButton.setBackground(darkBlue);
             }
         });
+
         nextTurnButton.addActionListener(e -> {
             try {
                 presenter.endTurnButtonClicked();
@@ -57,16 +47,7 @@ public class GameView {
             }
         });
 
-        JButton endGameButton = new JButton("Multiplayer");
-        endGameButton.setFont(font);
-        endGameButton.setFocusable(false);
-        endGameButton.setPreferredSize(new Dimension(120, 50)); // set button size
-        endGameButton.setForeground(whiteTransparent); // set font color
-        endGameButton.setBackground(darkBlue); // set background color
-        endGameButton.setBorderPainted(false);
-        endGameButton.setOpaque(true);
-        endGameButton.setContentAreaFilled(true);
-        endGameButton.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
+        JButton endGameButton = new MyButton("Multiplayer", font, whiteTransparent, darkBlue, lightPurple);
         endGameButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
@@ -78,17 +59,12 @@ public class GameView {
                 endGameButton.setBackground(darkBlue);
             }
         });
+
         endGameButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "In future)"));
 
         // Create the info table
-        infoTable = new JTextArea(3, 20);
-        infoTable.setEditable(false);
-        infoTable.setLineWrap(true);
-        infoTable.setWrapStyleWord(true);
-        infoTable.setFont(font);
-        infoTable.setBackground(darkBlueGray);
-        infoTable.setText("Cur_Player: \nCur_State: Chill\n");
-        infoTable.setBorder(BorderFactory.createLineBorder(lightPurple, 3));
+        infoTable = new InfoTable(2,11,font,darkBlueGray, lightPurple);
+        infoTable.setText("Cur_State: Chill\n");
 
         // Create the button panel and set its background color
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
@@ -115,7 +91,7 @@ public class GameView {
     }
 
     public void setReinforceInfo(int powerRemain) {
-        infoTable.setText("State:  Reinforce\n" + "Points Remain: "+powerRemain+"\n");
+        infoTable.setText("State:  Reinforce\n" + "Points Remain: "+powerRemain);
     }
 
     public void updateState() {
@@ -124,9 +100,7 @@ public class GameView {
     }
 
     public void gameOver() {
-        while (true) {
-            JOptionPane.showMessageDialog(null, "Game Over!");
-        }
+        JOptionPane.showMessageDialog(null, "Game Over!");
     }
 
     public void askTurn(GameTurnState state) {

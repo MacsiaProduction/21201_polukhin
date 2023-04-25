@@ -34,8 +34,8 @@ public interface BoardGenerator {
         return list;
     }
 
-    static List<Presenter> generatePlayers(int size, Presenter host) {
-        List<Presenter> presenters = new ArrayList<>();
+    static List<ModelListener> generatePlayers(int size, Presenter host) {
+        List<ModelListener> presenters = new ArrayList<>();
         presenters.add(host);
         for(int i = 1;  i< size; i++) {
             presenters.add(new AIPresenter());

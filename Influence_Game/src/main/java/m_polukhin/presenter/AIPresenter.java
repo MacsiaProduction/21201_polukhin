@@ -18,7 +18,7 @@ public class AIPresenter extends Presenter {
         try {
             ai.generateTurn(state);
         } catch (MoveException e) {
-            throw new RuntimeException(e+"\nwrong turn made by ai");
+            throw new RuntimeException(e+"\nWrong turn made by ai");
         }
     }
     @Override
