@@ -2,7 +2,6 @@ package polukhin.modules.symlink;
 
 import polukhin.JduOptions;
 import polukhin.PathFactory;
-import polukhin.exceptions.PathFactoryException;
 import polukhin.modules.DuCompoundType;
 import polukhin.modules.DuFileType;
 
