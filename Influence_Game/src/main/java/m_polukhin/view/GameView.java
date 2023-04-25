@@ -1,7 +1,6 @@
 package m_polukhin.view;
 
 import m_polukhin.model.GameTurnState;
-import m_polukhin.utils.MoveException;
 import m_polukhin.utils.ViewListener;
 
 import javax.swing.*;
@@ -39,9 +38,7 @@ public class GameView {
             }
         });
 
-        nextTurnButton.addActionListener(e -> {
-            presenter.endTurnButtonClicked();
-        });
+        nextTurnButton.addActionListener(e -> presenter.endTurnButtonClicked());
 
         JButton endGameButton = new MyButton("Multiplayer", font, whiteTransparent, darkBlue, lightPurple);
         endGameButton.addMouseListener(new java.awt.event.MouseAdapter() {
