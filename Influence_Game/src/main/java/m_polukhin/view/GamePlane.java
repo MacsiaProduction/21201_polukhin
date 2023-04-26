@@ -59,7 +59,7 @@ public class GamePlane extends JPanel {
         updateHoneyComb();
     }
 
-    protected void updateHoneyComb() {
+    private void updateHoneyComb() {
         GeneralPath path = new GeneralPath();
 
         double rowHeight = ((getHeight() * 1.14f) / 3f);

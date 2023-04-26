@@ -74,16 +74,12 @@ public class GameModel {
         return getNeighbors(cell1.position()).contains(cell2);
     }
 
-    public static boolean areValidCords(int y_max, int x_max, Point cords) {
-        return cords.y() >= 0 && cords.y() < y_max && cords.x() >= 0 && cords.x() < x_max;
-    }
-
-    public boolean areValidCords(Point cords) {
-        return areValidCords(columns, rows, cords);
+    public static boolean areValidCords(int yMax, int xMax, Point cords) {
+        return cords.y() >= 0 && cords.y() < yMax && cords.x() >= 0 && cords.x() < xMax;
     }
 
     public boolean isCellPresent(Point cords) {
-        return areValidCords(cords) && board[cords.y()][cords.x()]!=null;
+        return areValidCords(columns, rows, cords) && board[cords.y()][cords.x()]!=null;
     }
 
     public HexCellInfo getCellInfo(Point cords) {
@@ -196,7 +192,7 @@ public class GameModel {
             return;
         }
 
-        assert areValidCords(cords) : cords;
+        assert areValidCords(columns, rows, cords) : cords;
         assert player == currentPlayer : player;
 
         HexCell newSelected = board[cords.y()][cords.x()];
