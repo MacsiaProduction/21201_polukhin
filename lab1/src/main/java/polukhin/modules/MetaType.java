@@ -1,5 +1,7 @@
 package polukhin.modules;
 
+import polukhin.exceptions.PathFactoryException;
+
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
@@ -17,6 +19,8 @@ public interface MetaType<Type extends DuFileType> {
      * @return the Class object representing the file type.
      */
     Class<Type> getFileType();
+
+    // CR: boolean isCompatible(Path path) throws PathFactoryException;
 
     /**
      * Returns the Predicate object representing the factory predicate that is used to determine

@@ -15,6 +15,8 @@ public class SymlinkType extends DuFileType implements DuCompoundType {
     public SymlinkType(Path file, JduOptions jduOptions) {
         super(file, jduOptions);
     }
+
+    // CR: calculate for real
     @Override
     public Long calculateSize() {
         return (long) 8 * 1024;

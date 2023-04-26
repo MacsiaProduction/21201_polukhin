@@ -15,4 +15,5 @@ public class MetaSymlink implements MetaType<SymlinkType> {
     public Predicate<Path> getFactoryPredicate() {
         return Files::isSymbolicLink;
     }
+    // CR: move calculateSize here
 }

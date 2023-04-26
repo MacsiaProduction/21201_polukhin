@@ -40,6 +40,7 @@ public class DirType extends DuFileType implements DuCompoundType {
         super(dir, jduOptions);
     }
 
+    // CR: move to path factory
     @Override
     public Long calculateSize() throws FileMissingUncheckedException {
         if (size == null) {

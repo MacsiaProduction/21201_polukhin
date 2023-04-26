@@ -50,7 +50,6 @@ public class Parser {
             }
 
             if (cmd.hasOption("h")) {
-                printHelp();
                 return null;
             }
 
@@ -84,8 +83,9 @@ public class Parser {
 
     private static Path parsePath(String arg) throws DuParseException {
         Path path = Path.of(arg);
-        if(Files.notExists(path))
-            throw new DuParseException("Invalid path provided, file: "+path+" don't exist");
+        if(Files.notExists(path)) {
+            throw new DuParseException("Invalid path provided, file: " + path + " don't exist");
+        }
         return path;
     }
 }

@@ -7,6 +7,7 @@ import polukhin.modules.MetaType;
 import java.io.*;
 import java.util.*;
 
+// CR: rename, util class
 public interface ConfigIterator {
     static List<Class<? extends MetaType<? extends DuFileType>>> loadFactoryClasses() throws ClassLoadException {
         List<Class<? extends MetaType<? extends DuFileType>>> classes = new ArrayList<>();

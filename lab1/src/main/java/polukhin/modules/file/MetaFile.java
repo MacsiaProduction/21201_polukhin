@@ -1,5 +1,6 @@
 package polukhin.modules.file;
 
+import polukhin.exceptions.PathFactoryException;
 import polukhin.modules.MetaType;
 
 import java.nio.file.Files;
