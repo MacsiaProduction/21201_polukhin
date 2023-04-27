@@ -4,13 +4,17 @@ import polukhin.modules.DuCompoundFileType;
 import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Printer {
 
     private final Comparator<DuFileType> comparator;
+    private final JduOptions options;
 
-    public Printer(Comparator<DuFileType> comparator) {
+    public Printer(Comparator<DuFileType> comparator, JduOptions options) {
         this.comparator = comparator;
+        this.options = options;
     }
 
     public void print(DuFileType duFileType) {
@@ -22,9 +26,8 @@ public class Printer {
         String size = Converter.convert(duFileType.getCalculatedSize());
         System.out.println(" ".repeat(curDepth)+prefix+size);
         if (duFileType instanceof DuCompoundFileType compoundType) {
-            // CR: create in path factory, only until limit reached
-            var children = compoundType.getChildren();
-            children.sorted(comparator).forEachOrdered(child -> doPrint(child, curDepth + 1));
+            Stream<DuFileType> children = compoundType.getChildrenAsTypes();
+            children.sorted(comparator).limit(options.limit()).forEachOrdered(child -> doPrint(child, curDepth + 1));
         }
     }
 }

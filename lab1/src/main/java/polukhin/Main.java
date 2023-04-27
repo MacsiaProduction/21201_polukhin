@@ -19,11 +19,10 @@ public class Main {
             List<Class<? extends MetaType<? extends DuFileType>>> classes;
             classes = ClassLoader.loadFactoryClasses(Main.class.getResourceAsStream("/factory.config"));
             PathFactory pathFactory = new PathFactory(classes);
-            DuFileType tmp = pathFactory.create(jduOptions.rootPath(), jduOptions);
-            Printer printer = new Printer(new DefaultComparator());
-            printer.print(tmp);
-        } catch (DuParseException | PathFactoryException | ClassLoadException |
-                 PathFactoryUncheckedException e) {
+            DuFileType root = pathFactory.buildTree(jduOptions.rootPath(), jduOptions);
+            Printer printer = new Printer(new DefaultComparator(), jduOptions);
+            printer.print(root);
+        } catch (DuParseException | PathFactoryException | ClassLoadException | FileMissingException e) {
             System.exit(0);
         }
     }

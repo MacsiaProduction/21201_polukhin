@@ -1,15 +1,12 @@
 package polukhin.modules.dir;
 
-import polukhin.exceptions.FileMissingException;
-import polukhin.modules.CompoundMetaType;
 import polukhin.modules.DuFileType;
+import polukhin.modules.MetaType;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
 
-public class MetaDir implements CompoundMetaType<DirType> {
+public class MetaDir implements MetaType<DirType> {
     @Override
     public Class<DirType> getFileType() {
         return DirType.class;
@@ -21,16 +18,7 @@ public class MetaDir implements CompoundMetaType<DirType> {
     }
 
     @Override
-    public Long calculateSize(DirType instance) {
-        return instance.getChildren().mapToLong(DuFileType::getCalculatedSize).sum();
-    }
-
-    @Override
-    public Stream<Path> getChildren(DirType instance) throws FileMissingException {
-        try {
-            return Files.list(instance.path());
-        } catch (IOException e) {
-            throw new FileMissingException();
-        }
+    public void calculateSize(DuFileType instance) {
+        instance.setCalculatedSize(((DirType)instance).getChildrenAsTypes().mapToLong(DuFileType::getCalculatedSize).sum());
     }
 }
