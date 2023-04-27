@@ -5,6 +5,7 @@ import polukhin.exceptions.*;
 import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class Main {
@@ -16,12 +17,13 @@ public class Main {
                 Parser.printHelp();
                 return;
             }
-            List<Class<? extends MetaType<? extends DuFileType>>> classes = ConfigIterator.loadFactoryClasses();
+            List<Class<? extends MetaType<? extends DuFileType>>> classes;
+            classes = ClassLoader.loadFactoryClasses(Main.class.getResourceAsStream("/factory.config"));
             PathFactory pathFactory = new PathFactory(classes);
             DuFileType tmp = pathFactory.create(jduOptions.rootPath(), jduOptions);
             Printer printer = new Printer(jduOptions, new DefaultComparator());
             printer.print(tmp);
-        } catch (DuParseException | PathFactoryException | ClassLoadException | FileMissingUncheckedException |
+        } catch (DuParseException | PathFactoryException | ClassLoadException |
                  PathFactoryUncheckedException e) {
             System.exit(0);
         }

@@ -1,10 +1,9 @@
 package polukhin;
 
-import polukhin.modules.DuCompoundType;
+import polukhin.modules.DuCompoundFileType;
 import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class Printer {
 
@@ -17,24 +16,18 @@ public class Printer {
         this.comparator = comparator;
     }
 
-    public void print(DuFileType duFileType) throws FileMissingUncheckedException {
+    public void print(DuFileType duFileType) {
         doPrint(duFileType, 0);
     }
 
     private void doPrint(DuFileType duFileType, int curDepth) {
         String prefix = duFileType.getPrefix();
-        String size = Converter.convert(duFileType.calculateSize());
+        String size = Converter.convert(duFileType.getCalculatedSize());
         System.out.println(" ".repeat(curDepth)+prefix+size);
-        if (duFileType instanceof DuCompoundType compoundType) {
+        if (duFileType instanceof DuCompoundFileType compoundType) {
             // CR: create in path factory, only until limit reached
-            // CR: stream
-            List<DuFileType> children = compoundType.getChildren();
-            children.sort(comparator);
-            var neededLen = Integer.min(limit, children.size()-1);
-            var sublist = children.subList(0,neededLen);
-            for (DuFileType child : sublist) {
-                doPrint(child, curDepth + 1);
-            }
+            var children = compoundType.getChildren();
+            children.sorted(comparator).forEachOrdered(child -> doPrint(child, curDepth + 1));
         }
     }
 }

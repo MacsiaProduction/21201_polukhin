@@ -13,13 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-/**
- * Creates an instance of the PathFactory class and registers all available classes that implement
- * the dirFile interface and their corresponding predicates to test if a path can be processed by each class.
- */
 public class PathFactory {
-    protected final List<Class<? extends DuFileType>> types;
-    protected final List<Predicate<Path>> predicates;
+    protected final List<Class<? extends MetaType<? extends DuFileType>>> types;
 
     public PathFactory(List<Class<? extends MetaType<? extends DuFileType>>> metaTypes) throws PathFactoryException {
         types = new ArrayList<>();

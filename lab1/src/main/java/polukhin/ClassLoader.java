@@ -5,14 +5,15 @@ import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 
-public final class ConfigIterator {
-    static List<Class<? extends MetaType<? extends DuFileType>>> loadFactoryClasses() throws ClassLoadException {
+public final class ClassLoader {
+    static List<Class<? extends MetaType<? extends DuFileType>>> loadFactoryClasses(InputStream config) throws ClassLoadException {
         List<Class<? extends MetaType<? extends DuFileType>>> classes = new ArrayList<>();
         Properties props = new Properties();
-        try (InputStream in = PathFactory.class.getResourceAsStream("/factory.config")) {
-            props.load(in);
+        try {
+            props.load(config);
             String[] classNames = props.getProperty("MetaModules").split(",");
             for (String className : classNames) {
                 @SuppressWarnings("unchecked")

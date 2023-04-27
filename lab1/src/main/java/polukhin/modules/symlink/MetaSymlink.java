@@ -1,16 +1,11 @@
 package polukhin.modules.symlink;
 
-import polukhin.PathFactory;
 import polukhin.exceptions.FileMissingException;
 import polukhin.modules.CompoundMetaType;
-import polukhin.modules.DuFileType;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class MetaSymlink implements CompoundMetaType<SymlinkType> {

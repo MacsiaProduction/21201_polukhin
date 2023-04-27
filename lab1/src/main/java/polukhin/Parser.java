@@ -25,12 +25,6 @@ public class Parser {
         DU_OPTIONS.addOption("h", "help", false, "print help message");
     }
 
-    /**
-     * Parses the command line arguments and returns an instance of the Options class.
-     *
-     * @param args The command line arguments.
-     * @return An instance of the Options class encapsulating the parsed options.
-     */
     public static JduOptions getOptions(String[] args) throws DuParseException {
         int depth = Parser.depth;
         int limit = Parser.limit;
