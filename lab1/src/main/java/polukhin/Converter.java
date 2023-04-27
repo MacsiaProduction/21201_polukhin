@@ -1,4 +1,4 @@
-package polukhin.modules;
+package polukhin;
 
  /**
  *  The Converter class provides a static method convert that takes a long value representing a size in bytes

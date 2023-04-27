@@ -1,7 +1,7 @@
-package polukhin.modules;
+package polukhin;
 
-import polukhin.JduOptions;
-import polukhin.exceptions.*;
+import polukhin.modules.DuCompoundType;
+import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
 import java.util.List;

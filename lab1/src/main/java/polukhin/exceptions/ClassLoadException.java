@@ -1,3 +1,3 @@
 package polukhin.exceptions;
 
-public class ClassLoadException extends Throwable {}
+public class ClassLoadException extends Exception {}

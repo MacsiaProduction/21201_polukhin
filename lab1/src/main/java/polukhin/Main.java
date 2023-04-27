@@ -4,7 +4,6 @@ import polukhin.comparators.*;
 import polukhin.exceptions.*;
 import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
-import polukhin.modules.Printer;
 
 import java.util.List;
 
