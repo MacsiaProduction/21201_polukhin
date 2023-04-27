@@ -5,7 +5,6 @@ import polukhin.modules.DuFileType;
 import polukhin.modules.MetaType;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.*;
 
 public final class ClassLoader {

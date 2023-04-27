@@ -7,12 +7,9 @@ import java.util.Comparator;
 
 public class Printer {
 
-    private final int limit;
-
     private final Comparator<DuFileType> comparator;
 
-    public Printer(JduOptions options, Comparator<DuFileType> comparator) {
-        this.limit = options.limit();
+    public Printer(Comparator<DuFileType> comparator) {
         this.comparator = comparator;
     }
 

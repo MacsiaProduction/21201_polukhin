@@ -1,6 +1,5 @@
 package polukhin.comparators;
 
-import polukhin.exceptions.FileMissingUncheckedException;
 import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
