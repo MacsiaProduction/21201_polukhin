@@ -4,7 +4,6 @@ import polukhin.modules.DuCompoundFileType;
 import polukhin.modules.DuFileType;
 
 import java.util.Comparator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Printer {
