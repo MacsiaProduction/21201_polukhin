@@ -1,6 +1,6 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 import org.apache.commons.cli.*;
-import polukhin.exceptions.*;
+import ru.nsu.fit.polukhin.exceptions.DuParseException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

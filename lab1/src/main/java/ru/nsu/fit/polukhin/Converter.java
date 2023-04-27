@@ -1,4 +1,4 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
 public class Converter {
     public static String convert(long bytes) {

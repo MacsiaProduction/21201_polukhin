@@ -1,7 +1,7 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
-import polukhin.modules.DuCompoundFileType;
-import polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.DuCompoundFileType;
+import ru.nsu.fit.polukhin.modules.DuFileType;
 
 import java.util.Comparator;
 import java.util.stream.Stream;

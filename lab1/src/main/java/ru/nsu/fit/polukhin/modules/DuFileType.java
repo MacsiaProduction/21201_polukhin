@@ -1,6 +1,6 @@
-package polukhin.modules;
+package ru.nsu.fit.polukhin.modules;
 
-import polukhin.JduOptions;
+import ru.nsu.fit.polukhin.JduOptions;
 
 import java.nio.file.Path;
 

@@ -1,8 +1,8 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
-import polukhin.exceptions.ClassLoadException;
-import polukhin.modules.DuFileType;
-import polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.exceptions.ClassLoadException;
+import ru.nsu.fit.polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.MetaType;
 
 import java.io.*;
 import java.util.*;

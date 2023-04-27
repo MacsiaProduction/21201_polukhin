@@ -1,7 +1,7 @@
-package polukhin.modules.dir;
+package ru.nsu.fit.polukhin.modules.dir;
 
-import polukhin.modules.DuFileType;
-import polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.MetaType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

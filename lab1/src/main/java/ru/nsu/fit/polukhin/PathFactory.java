@@ -1,10 +1,10 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
-import polukhin.exceptions.FileMissingException;
-import polukhin.exceptions.PathFactoryException;
-import polukhin.modules.DuCompoundFileType;
-import polukhin.modules.DuFileType;
-import polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.exceptions.FileMissingException;
+import ru.nsu.fit.polukhin.exceptions.PathFactoryException;
+import ru.nsu.fit.polukhin.modules.DuCompoundFileType;
+import ru.nsu.fit.polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.MetaType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

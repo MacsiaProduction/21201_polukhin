@@ -1,8 +1,8 @@
-package polukhin.modules.dir;
+package ru.nsu.fit.polukhin.modules.dir;
 
-import polukhin.JduOptions;
-import polukhin.exceptions.FileMissingException;
-import polukhin.modules.DuCompoundFileType;
+import ru.nsu.fit.polukhin.JduOptions;
+import ru.nsu.fit.polukhin.exceptions.FileMissingException;
+import ru.nsu.fit.polukhin.modules.DuCompoundFileType;
 
 import java.io.IOException;
 import java.nio.file.Files;

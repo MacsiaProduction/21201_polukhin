@@ -1,6 +1,6 @@
-package polukhin.comparators;
+package ru.nsu.fit.polukhin.comparators;
 
-import polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.DuFileType;
 
 import java.util.Comparator;
 

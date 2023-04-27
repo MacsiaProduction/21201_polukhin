@@ -1,7 +1,7 @@
-package polukhin.modules.file;
+package ru.nsu.fit.polukhin.modules.file;
 
-import polukhin.JduOptions;
-import polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.JduOptions;
+import ru.nsu.fit.polukhin.modules.DuFileType;
 
 import java.nio.file.Path;
 

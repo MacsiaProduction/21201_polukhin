@@ -1,3 +1,3 @@
-package polukhin.exceptions;
+package ru.nsu.fit.polukhin.exceptions;
 
 public class FileMissingException extends Exception {}

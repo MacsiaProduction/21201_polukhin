@@ -1,6 +1,6 @@
-package polukhin.modules;
+package ru.nsu.fit.polukhin.modules;
 
-import polukhin.exceptions.FileMissingException;
+import ru.nsu.fit.polukhin.exceptions.FileMissingException;
 
 import java.nio.file.Path;
 

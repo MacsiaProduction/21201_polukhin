@@ -1,9 +1,12 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
-import polukhin.comparators.*;
-import polukhin.exceptions.*;
-import polukhin.modules.DuFileType;
-import polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.comparators.DefaultComparator;
+import ru.nsu.fit.polukhin.exceptions.DuParseException;
+import ru.nsu.fit.polukhin.exceptions.PathFactoryException;
+import ru.nsu.fit.polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.exceptions.ClassLoadException;
+import ru.nsu.fit.polukhin.exceptions.FileMissingException;
 
 import java.util.List;
 

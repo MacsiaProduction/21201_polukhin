@@ -1,4 +1,4 @@
-package polukhin;
+package ru.nsu.fit.polukhin;
 
 import java.nio.file.Path;
 

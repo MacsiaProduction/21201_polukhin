@@ -1,8 +1,8 @@
-package polukhin.modules.symlink;
+package ru.nsu.fit.polukhin.modules.symlink;
 
-import polukhin.exceptions.FileMissingException;
-import polukhin.modules.DuFileType;
-import polukhin.modules.MetaType;
+import ru.nsu.fit.polukhin.exceptions.FileMissingException;
+import ru.nsu.fit.polukhin.modules.DuFileType;
+import ru.nsu.fit.polukhin.modules.MetaType;
 
 import java.io.IOException;
 import java.nio.file.Files;
