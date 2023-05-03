@@ -36,7 +36,7 @@ public class GameModel {
         this.field = new Field(y,x);
     }
 
-    public static List<Point> getPossibleNeighbors(int y_max, int x_max, Point cords) {
+    public static List<Point> getPossibleNeighbors(int yMax, int xMax, Point cords) {
         List<Point> list = new ArrayList<>();
         list.add(new Point(cords.y()+1, cords.x()));
         list.add(new Point(cords.y()-1, cords.x()));
@@ -44,7 +44,7 @@ public class GameModel {
         list.add(new Point(cords.y(), cords.x()-1));
         list.add(new Point(cords.y()+1, cords.x()+1-2*(cords.y()%2)));
         list.add(new Point(cords.y()-1, cords.x()+1-2*(cords.y()%2)));
-        list.removeIf(point -> !areValidCords(y_max, x_max, point));
+        list.removeIf(point -> !areValidCords(yMax, xMax, point));
         return list;
     }
 
@@ -53,13 +53,9 @@ public class GameModel {
     }
 
     public List<HexCellInfo> getNeighbors(Point cords) {
-        if(field.getCell(cords) == null){
-            throw new IllegalArgumentException("Empty Cell");
-        }
-        var initialPointList = getPossibleNeighbors(cords);
         List<HexCellInfo> list = new ArrayList<>();
-        for (Point point : initialPointList) {
-            if(field.getCell(point)!=null) {
+        for (Point point : getPossibleNeighbors(cords)) {
+            if (isCellPresent(point)) {
                 list.add(getCellInfo(point));
             }
         }
@@ -86,28 +82,28 @@ public class GameModel {
     }
 
     public HexCellInfo getCellInfo(Point cords) {
-        if(!isCellPresent(cords))
+        if (!isCellPresent(cords))
             throw new IllegalArgumentException("invalid cords");
         return field.getCell(cords).getInfo();
     }
 
     private void attack(HexCell cell1, HexCell cell2) throws MoveException {
-        if(cell1.getOwner()!=currentPlayer) {
+        if (cell1.getOwner() != currentPlayer) {
             throw new MoveException("You can't attack with not your cell");
-        } else if(cell2.getOwner()==currentPlayer) {
+        } else if (cell2.getOwner() == currentPlayer) {
             throw new MoveException("You can't attack your own cell");
-        } else if (cell1.getPower()<=1) {
+        } else if (cell1.getPower() <= 1) {
             throw new MoveException("Only cells with >=2 power can attack");
         } else if (!areNeighbors(cell1.getInfo(),cell2.getInfo())) {
             throw new MoveException("Only neighbor cells can attack");
-        } else if(cell1.getOwner() == cell2.getOwner()) {
+        } else if (cell1.getOwner() == cell2.getOwner()) {
             throw new MoveException("Can not attack your own cells");
         } else while(cell1.getPower() > 1) {
             cell1.setPower(cell1.getPower() - 1);
             int attackPower = new Random().nextInt(3) + 1;
             cell2.setPower(cell2.getPower() - attackPower);
-            if(cell2.getPower() <= 0) {
-                if(cell2.getOwner()!=null) cell2.getOwner().deleteCell(cell2);
+            if (cell2.getPower() <= 0) {
+                if (cell2.getOwner()!=null) cell2.getOwner().deleteCell(cell2);
                 cell2.setOwner(cell1.getOwner());
                 cell1.getOwner().addCell(cell2);
                 cell2.setPower(cell1.getPower());
@@ -119,15 +115,15 @@ public class GameModel {
     }
 
     private void reinforce(HexCell cell) throws MoveException {
-        if(cell.getOwner() != currentPlayer)
+        if (cell.getOwner() != currentPlayer)
             throw new MoveException("You can only reinforce your cells");
-        if(reinforcePoints==0) return;
+        if (reinforcePoints == 0) return;
         cell.setPower(cell.getPower() + 1);
         reinforcePoints--;
     }
 
     private void setFirstPlayer(Player player) {
-        if(currentPlayer!=null)
+        if (currentPlayer!=null)
             throw new UnsupportedOperationException("Trying set first player when there already is one");
         currentPlayer = player;
         turnState = GameTurnState.ATTACK;
@@ -152,14 +148,14 @@ public class GameModel {
         currentPlayer.getListener().updateView();
     }
 
-    //todo can use digital signatures for purposes of playerId field in the multiplayer
+    //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextTurn(int playerId) {
         assert playerId == currentPlayer.number : currentPlayer;
 
         playerList.forEach(p->p.getListener().updateView());
         TurnCheck();
         selected = null;
-        if(turnState == GameTurnState.ATTACK) {
+        if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = currentPlayer.getNumberOfCells();
             currentPlayer.getListener().setReinforceInfo(reinforcePoints);
@@ -171,7 +167,7 @@ public class GameModel {
         currentPlayer.getListener().askTurn(turnState);
     }
 
-    //todo can use digital signatures for purposes of playerId field in the multiplayer
+    //todo digital signatures for purposes of playerId field in the multiplayer
     public void cellClicked(int playerId, Point cords) throws MoveException {
         if (cords == null || !isCellPresent(cords)) {
             selected = null;
@@ -202,8 +198,8 @@ public class GameModel {
     }
 
     private void TurnCheck() {
-        playerList.removeIf(p-> {
-            if(p.getNumberOfCells() == 0)
+        playerList.removeIf (p-> {
+            if (p.getNumberOfCells() == 0)
                 p.getListener().gameOver();
             return p.getNumberOfCells() == 0;
         });
