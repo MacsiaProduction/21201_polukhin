@@ -1,7 +1,6 @@
 package m_polukhin.view;
 
 import m_polukhin.utils.MoveException;
-import m_polukhin.utils.Player;
 import m_polukhin.utils.ViewListener;
 
 import javax.imageio.ImageIO;
@@ -127,7 +126,7 @@ public class GamePlane extends JPanel {
 
     private void drawHexShape(Graphics2D g2d, HexShape coloredShape) {
         // drawing cell
-        g2d.setColor(getPlayerColor(coloredShape.info().owner())); // set the filling color
+        g2d.setColor(getPlayerColor(coloredShape.info().ownerId())); // set the filling color
 
         // Create a gradient paint
         GradientPaint gradient = new GradientPaint(
@@ -136,7 +135,7 @@ public class GamePlane extends JPanel {
                 Color.WHITE,
                 coloredShape.shape().getBounds().x + coloredShape.shape().getBounds().width,
                 coloredShape.shape().getBounds().y + coloredShape.shape().getBounds().height,
-                getPlayerColor(coloredShape.info().owner()));
+                getPlayerColor(coloredShape.info().ownerId()));
 
         // Set the gradient paint
         g2d.setPaint(gradient);
@@ -197,9 +196,9 @@ public class GamePlane extends JPanel {
         return new Dimension(200, 500);
     }
 
-    Color getPlayerColor(Player owner) {
-        if (owner == null) return Color.CYAN;
-        float hue = (float) owner.number / 10.0f;
+    Color getPlayerColor(int playerId) {
+        if (playerId == 0) return Color.CYAN;
+        float hue = (float) playerId / 10.0f;
         float saturation = 0.8f;
         float brightness = 0.8f;
         return Color.getHSBColor(hue, saturation, brightness);

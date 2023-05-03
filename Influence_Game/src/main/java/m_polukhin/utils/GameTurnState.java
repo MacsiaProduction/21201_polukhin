@@ -1,4 +1,4 @@
-package m_polukhin.model;
+package m_polukhin.utils;
 
 public enum GameTurnState {
     ATTACK, REINFORCE

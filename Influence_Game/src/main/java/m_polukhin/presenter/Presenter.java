@@ -5,10 +5,10 @@ import m_polukhin.utils.*;
 
 public abstract class Presenter implements ViewListener, ModelListener {
     protected GameModel model;
-    protected Player owner;
+    protected int ownerId;
 
-    public void init(Player owner, GameModel model) {
-        this.owner = owner;
+    public void init(int ownerId, GameModel model) {
+        this.ownerId = ownerId;
         this.model = model;
     }
 
@@ -24,11 +24,11 @@ public abstract class Presenter implements ViewListener, ModelListener {
 
     @Override
     public void endTurnButtonClicked() {
-        model.nextTurn(owner);
+        model.nextTurn(ownerId);
     }
 
     @Override
     public void cellClicked(Point cords) throws MoveException {
-        model.cellClicked(owner, cords);
+        model.cellClicked(ownerId, cords);
     }
 }

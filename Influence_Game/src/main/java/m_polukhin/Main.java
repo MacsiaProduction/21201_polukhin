@@ -1,8 +1,6 @@
 package m_polukhin;
 
-import m_polukhin.model.GameModel;
-import m_polukhin.presenter.PlayerPresenter;
-import m_polukhin.utils.BoardGenerator;
+import m_polukhin.utils.ModelGenerator;
 
 public class Main {
     public final static int NUM_ROWS = 10;
@@ -10,11 +8,8 @@ public class Main {
     public final static int playerCounter = 2;
 
     public static void main(String[] args) {
-        var model = new GameModel(NUM_ROWS, NUM_COLUMNS);
-        var presenter = new PlayerPresenter(model);
-        var cells = BoardGenerator.generateBoard(NUM_ROWS, NUM_COLUMNS);
-        var starts = BoardGenerator.generateStarts(cells, playerCounter);
-        var players = BoardGenerator.generatePlayers(playerCounter, presenter);
-        model.initModel(cells, starts, players);
+        var model = ModelGenerator.generateModel(NUM_ROWS, NUM_COLUMNS, playerCounter);
     }
 }
+
+// todo player is only model abstraction(don't use it anywhere else)

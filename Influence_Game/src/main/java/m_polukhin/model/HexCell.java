@@ -2,8 +2,7 @@ package m_polukhin.model;
 
 import m_polukhin.utils.*;
 
-
-public class HexCell {
+class HexCell {
     private Player owner = null;
     private Integer power = 0;
     private final Point position;
@@ -26,6 +25,7 @@ public class HexCell {
         return position;
     }
     public HexCellInfo getInfo() {
-        return new HexCellInfo(getPower(), getOwner(), getPosition());
+        if (getOwner() == null) return new HexCellInfo(getPower(), 0, getPosition());
+        else return new HexCellInfo(getPower(), getOwner().number, getPosition());
     }
 }

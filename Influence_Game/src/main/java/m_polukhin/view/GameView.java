@@ -1,6 +1,6 @@
 package m_polukhin.view;
 
-import m_polukhin.model.GameTurnState;
+import m_polukhin.utils.GameTurnState;
 import m_polukhin.utils.ViewListener;
 
 import javax.swing.*;
@@ -93,7 +93,8 @@ public class GameView {
     }
 
     public void gameOver() {
-        JOptionPane.showMessageDialog(null, "Game Over!");
+        while (true)
+            JOptionPane.showMessageDialog(null, "Game Over!");
     }
 
     public void askTurn(GameTurnState state) {

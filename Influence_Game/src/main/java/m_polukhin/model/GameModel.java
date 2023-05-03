@@ -21,23 +21,19 @@ public class GameModel {
 
     private Player currentPlayer;
 
-    private int currentPlayerListPos;
-
     private int reinforcePoints;
 
-    private final List<Player> playerList = new ArrayList<>();
+    private final List<Player> playerList;
 
-    private final HexCell[][] board;
+    private final Field field;
 
     private HexCell selected;
 
     public GameModel(int y, int x) {
         this.rows = y;
         this.columns = x;
-        board = new HexCell[y][x];
-        for (int i = 0; i < rows; i++) {
-            Arrays.fill(board[i], null);
-        }
+        this.playerList = new ArrayList<>();
+        this.field = new Field(y,x);
     }
 
     public static List<Point> getPossibleNeighbors(int y_max, int x_max, Point cords) {
@@ -57,13 +53,13 @@ public class GameModel {
     }
 
     public List<HexCellInfo> getNeighbors(Point cords) {
-        if(board[cords.y()][cords.x()]==null){
+        if(field.getCell(cords) == null){
             throw new IllegalArgumentException("Empty Cell");
         }
         var initialPointList = getPossibleNeighbors(cords);
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : initialPointList) {
-            if(board[point.y()][point.x()]!=null) {
+            if(field.getCell(point)!=null) {
                 list.add(getCellInfo(point));
             }
         }
@@ -79,28 +75,20 @@ public class GameModel {
     }
 
     public boolean isCellPresent(Point cords) {
-        return areValidCords(columns, rows, cords) && board[cords.y()][cords.x()]!=null;
+        return areValidCords(columns, rows, cords) && field.getCell(cords)!=null;
+    }
+
+    public List<HexCellInfo> getPlayerCellList(int playerId) {
+        for(var player: playerList) {
+            if (player.number == playerId) return player.getPlayerCellList();
+        }
+        throw new IllegalArgumentException("incorrect playerId");
     }
 
     public HexCellInfo getCellInfo(Point cords) {
         if(!isCellPresent(cords))
             throw new IllegalArgumentException("invalid cords");
-        return board[cords.y()][cords.x()].getInfo();
-    }
-
-    public List<HexCellInfo> getPlayerCellList(Player owner) {
-        List<HexCellInfo> cellList= new ArrayList<>();
-        for(int i =0; i < rows; i++) {
-            for(int j = 0; j < columns; j++){
-                var point = new Point(i,j);
-                if(isCellPresent(point)) {
-                    var tmp = getCellInfo(point);
-                    if (tmp.owner() == owner)
-                        cellList.add(tmp);
-                }
-            }
-        }
-        return cellList;
+        return field.getCell(cords).getInfo();
     }
 
     private void attack(HexCell cell1, HexCell cell2) throws MoveException {
@@ -119,9 +107,9 @@ public class GameModel {
             int attackPower = new Random().nextInt(3) + 1;
             cell2.setPower(cell2.getPower() - attackPower);
             if(cell2.getPower() <= 0) {
-                if(cell2.getOwner()!=null) cell2.getOwner().deleteCell();
+                if(cell2.getOwner()!=null) cell2.getOwner().deleteCell(cell2);
                 cell2.setOwner(cell1.getOwner());
-                cell1.getOwner().addCell();
+                cell1.getOwner().addCell(cell2);
                 cell2.setPower(cell1.getPower());
                 cell1.setPower(1);
                 return;
@@ -142,32 +130,31 @@ public class GameModel {
         if(currentPlayer!=null)
             throw new UnsupportedOperationException("Trying set first player when there already is one");
         currentPlayer = player;
-        currentPlayerListPos = playerList.indexOf(player);
         turnState = GameTurnState.ATTACK;
     }
 
     public void initModel(List<Point> existingCells, List<Point> startingCells, List<ModelListener> presenters) {
         if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
-        existingCells.forEach(cords -> board[cords.y()][cords.x()] = new HexCell(cords));
+        existingCells.forEach(field::initCell);
         startingCells.forEach(cords -> {
             Player player = new Player();
-            board[cords.y()][cords.x()].setOwner(player);
-            player.addCell();
-            board[cords.y()][cords.x()].setPower(2);
+            field.getCell(cords).setOwner(player);
+            player.addCell(field.getCell(cords));
+            field.getCell(cords).setPower(2);
             playerList.add(player);
         });
         for(int i = 0; i < presenters.size(); i++) {
-            presenters.get(i).init(playerList.get(i), this);
-            playerList.get(i).setPresenter(presenters.get(i));
+            presenters.get(i).init(playerList.get(i).number, this);
+            playerList.get(i).setListener(presenters.get(i));
         }
         setFirstPlayer(playerList.get(0));
         currentPlayer.getListener().setAttackInfo();
         currentPlayer.getListener().updateView();
     }
 
-    //todo can use digital signatures for purposes of Player field in the multiplayer
-    public void nextTurn(Player player) {
-        assert player == currentPlayer : player;
+    //todo can use digital signatures for purposes of playerId field in the multiplayer
+    public void nextTurn(int playerId) {
+        assert playerId == currentPlayer.number : currentPlayer;
 
         playerList.forEach(p->p.getListener().updateView());
         TurnCheck();
@@ -178,24 +165,23 @@ public class GameModel {
             currentPlayer.getListener().setReinforceInfo(reinforcePoints);
         } else {
             turnState = GameTurnState.ATTACK;
-            currentPlayerListPos = (currentPlayerListPos + 1) % playerList.size();
-            currentPlayer = playerList.get(currentPlayerListPos);
+            currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
             currentPlayer.getListener().setAttackInfo();
         }
         currentPlayer.getListener().askTurn(turnState);
     }
 
-    //todo can use digital signatures for purposes of Player field in the multiplayer
-    public void cellClicked(Player player, Point cords) throws MoveException {
+    //todo can use digital signatures for purposes of playerId field in the multiplayer
+    public void cellClicked(int playerId, Point cords) throws MoveException {
         if (cords == null || !isCellPresent(cords)) {
             selected = null;
             return;
         }
 
         assert areValidCords(columns, rows, cords) : cords;
-        assert player == currentPlayer : player;
+        assert playerId == currentPlayer.number : currentPlayer;
 
-        HexCell newSelected = board[cords.y()][cords.x()];
+        HexCell newSelected = field.getCell(cords);
 
         if (selected == null) {
             selected = newSelected;
