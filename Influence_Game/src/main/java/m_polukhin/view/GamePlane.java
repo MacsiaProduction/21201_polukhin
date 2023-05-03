@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePlane extends JPanel {
+class GamePlane extends JPanel {
     final int columns;
     final int rows;
     private final ViewListener presenter;

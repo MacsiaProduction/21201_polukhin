@@ -4,4 +4,4 @@ import m_polukhin.utils.HexCellInfo;
 
 import java.awt.*;
 
-public record HexShape(Shape shape, HexCellInfo info) {}
+record HexShape(Shape shape, HexCellInfo info) {}

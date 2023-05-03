@@ -25,7 +25,7 @@ public class GameView {
         // Create the buttons for next turn and end game
         Font font = new Font("Square 721", Font.BOLD, 18);
 
-        nextTurnButton = new MyButton("Next Turn", font, whiteTransparent, darkBlue, lightPurple);
+        nextTurnButton = getButton("Next Turn", font, whiteTransparent, darkBlue, lightPurple);
         nextTurnButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
@@ -40,7 +40,7 @@ public class GameView {
 
         nextTurnButton.addActionListener(e -> presenter.endTurnButtonClicked());
 
-        JButton endGameButton = new MyButton("Multiplayer", font, whiteTransparent, darkBlue, lightPurple);
+        JButton endGameButton = getButton("Multiplayer", font, whiteTransparent, darkBlue, lightPurple);
         endGameButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
@@ -99,6 +99,20 @@ public class GameView {
 
     public void askTurn(GameTurnState state) {
         JOptionPane.showMessageDialog(null, "It's your turn to "+ state.name());
+    }
+
+    private JButton getButton(String text, Font font, Color foreground, Color background, Color boarder) {
+        JButton button = new JButton(text);
+        button.setFont(font);
+        button.setFocusable(false);
+        button.setPreferredSize(new Dimension(120, 50)); // set button size
+        button.setForeground(foreground); // set font color
+        button.setBackground(background); // set background color
+        button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorder(BorderFactory.createLineBorder(boarder, 3));
+        return button;
     }
 }
 

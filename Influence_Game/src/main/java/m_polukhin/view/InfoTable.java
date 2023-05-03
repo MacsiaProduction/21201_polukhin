@@ -3,7 +3,7 @@ package m_polukhin.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class InfoTable extends JTextArea {
+class InfoTable extends JTextArea {
     InfoTable(int rows, int columns, Font font, Color background, Color boarder) {
         super(rows,columns);
         this.setEditable(false);
