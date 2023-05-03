@@ -7,9 +7,9 @@ import java.util.Arrays;
 class Field {
     private final HexCell[][] board;
 
-    Field(int y_max, int x_max) {
-        board = new HexCell[y_max][x_max];
-        for (int i = 0; i < y_max; i++) {
+    Field(int yMax, int xMax) {
+        board = new HexCell[yMax][xMax];
+        for (int i = 0; i < yMax; i++) {
             Arrays.fill(board[i], null);
         }
     }

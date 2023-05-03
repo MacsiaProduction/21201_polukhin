@@ -48,13 +48,9 @@ public class GameModel {
         return list;
     }
 
-    public List<Point> getPossibleNeighbors(Point cords) {
-        return getPossibleNeighbors(columns, rows, cords);
-    }
-
     public List<HexCellInfo> getNeighbors(Point cords) {
         List<HexCellInfo> list = new ArrayList<>();
-        for (Point point : getPossibleNeighbors(cords)) {
+        for (Point point : getPossibleNeighbors(columns, rows, cords)) {
             if (isCellPresent(point)) {
                 list.add(getCellInfo(point));
             }
@@ -66,7 +62,7 @@ public class GameModel {
         return getNeighbors(cell1.position()).contains(cell2);
     }
 
-    public static boolean areValidCords(int yMax, int xMax, Point cords) {
+    private static boolean areValidCords(int yMax, int xMax, Point cords) {
         return cords.y() >= 0 && cords.y() < yMax && cords.x() >= 0 && cords.x() < xMax;
     }
 
