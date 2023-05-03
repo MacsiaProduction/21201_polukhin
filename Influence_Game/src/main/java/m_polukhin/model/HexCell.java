@@ -26,6 +26,6 @@ class HexCell {
     }
     public HexCellInfo getInfo() {
         if (getOwner() == null) return new HexCellInfo(getPower(), 0, getPosition());
-        else return new HexCellInfo(getPower(), getOwner().number, getPosition());
+        else return new HexCellInfo(getPower(), getOwner().getNumber(), getPosition());
     }
 }

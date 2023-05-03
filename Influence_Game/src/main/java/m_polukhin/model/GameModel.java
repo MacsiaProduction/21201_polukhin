@@ -76,7 +76,7 @@ public class GameModel {
 
     public List<HexCellInfo> getPlayerCellList(int playerId) {
         for(var player: playerList) {
-            if (player.number == playerId) return player.getPlayerCellList();
+            if (player.getNumber() == playerId) return player.getPlayerCellList();
         }
         throw new IllegalArgumentException("incorrect playerId");
     }
@@ -140,7 +140,7 @@ public class GameModel {
             playerList.add(player);
         });
         for(int i = 0; i < presenters.size(); i++) {
-            presenters.get(i).init(playerList.get(i).number, this);
+            presenters.get(i).init(playerList.get(i).getNumber(), this);
             playerList.get(i).setListener(presenters.get(i));
         }
         setFirstPlayer(playerList.get(0));
@@ -150,7 +150,7 @@ public class GameModel {
 
     //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextTurn(int playerId) {
-        assert playerId == currentPlayer.number : currentPlayer;
+        assert playerId == currentPlayer.getNumber() : currentPlayer;
 
         playerList.forEach(p->p.getListener().updateView());
         TurnCheck();
@@ -175,7 +175,7 @@ public class GameModel {
         }
 
         assert areValidCords(columns, rows, cords) : cords;
-        assert playerId == currentPlayer.number : currentPlayer;
+        assert playerId == currentPlayer.getNumber() : currentPlayer;
 
         HexCell newSelected = field.getCell(cords);
 

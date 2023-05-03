@@ -9,7 +9,11 @@ import java.util.List;
 class Player {
     private static int playerCount = 1;
 
-    public final int number;
+    private final int number;
+
+    public int getNumber() {
+        return number;
+    }
 
     private ModelListener listener;
 
@@ -29,12 +33,12 @@ class Player {
         this.listener = listener;
     }
 
-    public boolean addCell(HexCell cell) {
-        return hexCells.add(cell);
+    public void addCell(HexCell cell) {
+        hexCells.add(cell);
     }
 
-    public boolean deleteCell(HexCell cell) {
-        return hexCells.remove(cell);
+    public void deleteCell(HexCell cell) {
+        hexCells.remove(cell);
     }
 
     public int getNumberOfCells() {
