@@ -11,7 +11,7 @@ class Player {
 
     private final int number;
 
-    public int getNumber() {
+    public int getId() {
         return number;
     }
 
