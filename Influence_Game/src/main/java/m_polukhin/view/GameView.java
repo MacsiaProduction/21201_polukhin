@@ -1,6 +1,5 @@
 package m_polukhin.view;
 
-import m_polukhin.utils.GameTurnState;
 import m_polukhin.utils.ViewListener;
 
 import javax.swing.*;
