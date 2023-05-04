@@ -8,12 +8,12 @@ import m_polukhin.presenter.Presenter;
 import java.util.*;
 
 public class ModelGenerator {
-    static List<Point> generateBoard(int y_max, int x_max) {
+    static List<Point> generateBoard(int rows, int columns) {
         List<Point> points = new ArrayList<>();
         Point cords = new Point(0,0);
         points.add(cords);
         for(int i = 0; i < 50; i++) {
-            var neighbours = GameModel.getPossibleNeighbors(y_max, x_max, cords);
+            var neighbours = GameModel.getPossibleNeighbors(rows, columns, cords);
             int randomNum = new Random().nextInt(neighbours.size());
             cords = neighbours.get(randomNum);
             if (!points.contains(cords)) points.add(cords);

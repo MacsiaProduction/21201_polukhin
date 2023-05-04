@@ -4,7 +4,7 @@ import m_polukhin.model.GameModel;
 
 public interface ModelListener {
     void init(int ownerId, GameModel model);
-    void askTurn(GameTurnState state);
+    void askTurn();
     void updateView();
     void setAttackInfo();
     void setReinforceInfo(int powerRemain);

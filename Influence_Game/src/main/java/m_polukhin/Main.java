@@ -8,8 +8,6 @@ public class Main {
     public final static int playerCounter = 2;
 
     public static void main(String[] args) {
-        var model = ModelGenerator.generateModel(NUM_ROWS, NUM_COLUMNS, playerCounter);
+        ModelGenerator.generateModel(NUM_ROWS, NUM_COLUMNS, playerCounter);
     }
 }
-
-// todo player is only model abstraction(don't use it anywhere else)

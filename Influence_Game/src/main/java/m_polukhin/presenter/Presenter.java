@@ -24,7 +24,7 @@ public abstract class Presenter implements ViewListener, ModelListener {
 
     @Override
     public void endTurnButtonClicked() {
-        model.nextTurn(ownerId);
+        model.nextState(ownerId);
     }
 
     @Override

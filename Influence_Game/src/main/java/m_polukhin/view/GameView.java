@@ -97,8 +97,8 @@ public class GameView {
             JOptionPane.showMessageDialog(null, "Game Over!");
     }
 
-    public void askTurn(GameTurnState state) {
-        JOptionPane.showMessageDialog(null, "It's your turn to "+ state.name());
+    public void askTurn() {
+        JOptionPane.showMessageDialog(null, "It's your turn");
     }
 
     private JButton getButton(String text, Font font, Color foreground, Color background, Color boarder) {

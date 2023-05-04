@@ -14,9 +14,9 @@ public class AIPresenter extends Presenter {
     }
 
     @Override
-    public void askTurn(GameTurnState state) {
+    public void askTurn() {
         try {
-            ai.generateTurn(state);
+            ai.generateTurn();
         } catch (MoveException e) {
             throw new IllegalStateException(e+"\nWrong turn made by ai");
         }

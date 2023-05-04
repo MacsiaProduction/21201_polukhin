@@ -13,8 +13,8 @@ public class PlayerPresenter extends Presenter {
     }
 
     @Override
-    public void askTurn(GameTurnState state) {
-        view.askTurn(state);
+    public void askTurn() {
+        view.askTurn();
     }
 
     public void updateView() {
