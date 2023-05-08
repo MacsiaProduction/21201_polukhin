@@ -17,9 +17,9 @@ public class GameModel {
         return columns;
     }
 
-    private Player currentPlayer;
-
     private final List<Player> playerList;
+
+    private Player currentPlayer;
 
     private final Field field;
 
@@ -36,19 +36,8 @@ public class GameModel {
         return Field.getPossibleNeighbors(rows, columns, cords);
     }
 
-    public List<HexCellInfo> getNeighbors(Point cords) {
-        return field.getNeighbors(cords);
-    }
-
     public boolean isCellPresent(Point cords) {
         return field.isCellPresent(cords);
-    }
-
-    public List<HexCellInfo> getPlayerCellList(int playerId) {
-        for(var player: playerList) {
-            if (player.getId() == playerId) return player.getPlayerCellList();
-        }
-        throw new IllegalArgumentException("incorrect playerId");
     }
 
     public HexCellInfo getCellInfo(Point cords) {
@@ -57,24 +46,27 @@ public class GameModel {
         return field.getCell(cords).getInfo();
     }
 
-    public void initModel(List<Point> existingCells, List<Point> startingCells, List<ModelListener> presenters) {
-        if (startingCells.size() != presenters.size()) throw new IllegalArgumentException();
+    public void initModel(List<Point> existingCells, List<Point> startingCells, ModelListener presenter) {
         existingCells.forEach(field::initCell);
-        startingCells.forEach(cords -> {
-            Player player = new Player(field);
-            field.getCell(cords).setOwner(player);
-            player.addCell(field.getCell(cords));
-            field.getCell(cords).setPower(2);
-            playerList.add(player);
-        });
-        for(int i = 0; i < presenters.size(); i++) {
-            presenters.get(i).init(playerList.get(i).getId(), this);
-            playerList.get(i).setListener(presenters.get(i));
+        var host = new Player(field);
+        playerList.add(initPlayer(host, startingCells.get(0)));
+        for(int i = 1; i < startingCells.size(); i++) {
+            Player player = new BasicAI(field);
+            playerList.add(initPlayer(player, startingCells.get(i)));
         }
-        currentPlayer = playerList.get(0);
-        currentPlayer.getListener().setAttackInfo();
-        currentPlayer.getListener().updateView();
+        host.setListener(presenter);
+        host.getListener().setAttackInfo();
+        host.getListener().updateView();
+        currentPlayer = host;
     }
+
+    private Player initPlayer(Player player, Point startingCell) {
+        field.getCell(startingCell).setOwner(player);
+        player.addCell(field.getCell(startingCell));
+        field.getCell(startingCell).setPower(2);
+        return player;
+    }
+
 
     //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextState(int playerId) {
@@ -87,8 +79,13 @@ public class GameModel {
 
     public void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
-        currentPlayer.getListener().updateView();
-        currentPlayer.getListener().askTurn();
+        if (currentPlayer instanceof AI) {
+            ((AI) currentPlayer).move();
+            nextPlayerTurn();
+        } else {
+            currentPlayer.getListener().updateView();
+            currentPlayer.getListener().askTurn();
+        }
     }
 
     //todo digital signatures for purposes of playerId field in the multiplayer
@@ -106,22 +103,19 @@ public class GameModel {
             return;
         }
         currentPlayer.move(selected.getPosition(), cords);
-        currentPlayer.getListener().updateView();
+        if (!(currentPlayer instanceof AI))
+            currentPlayer.getListener().updateView();
         selected = null;
     }
 
     private void TurnCheck() {
-        playerList.removeIf (p-> {
-            if (p.getNumberOfCells() == 0)
-                p.getListener().gameOver();
-            return p.getNumberOfCells() == 0;
-        });
+        playerList.removeIf (p-> p.getNumberOfCells() == 0);
         if (playerList.size() <= 1) {
             gameOver();
         }
     }
 
     private void gameOver() {
-        playerList.forEach(player -> player.getListener().gameOver());
+        playerList.get(0).getListener().gameOver();
     }
 }

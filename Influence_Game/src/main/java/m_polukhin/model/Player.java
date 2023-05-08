@@ -1,41 +1,37 @@
 package m_polukhin.model;
 
-import m_polukhin.utils.*;
+import m_polukhin.utils.HexCellInfo;
+import m_polukhin.utils.ModelListener;
+import m_polukhin.utils.MoveException;
+import m_polukhin.utils.Point;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class Player {
+public class Player {
     GameTurnState turnState = GameTurnState.ATTACK;
+
+    protected int reinforcePoints;
+
     private static int playerCount = 1;
 
     private final int number;
-
-    private int reinforcePoints;
 
     public int getId() {
         return number;
     }
 
-    private ModelListener listener;
-
-    private final Field field;
     private final List<HexCell> hexCells;
+
+    public final Field field;
+
+    private ModelListener listener;
 
     public Player(Field field) {
         this.field = field;
         this.number = playerCount++;
         hexCells = new ArrayList<>();
-    }
-
-    public ModelListener getListener() {
-        return listener;
-    }
-
-    public void setListener(ModelListener listener) {
-        if (this.listener != null) throw new UnsupportedOperationException("already inited");
-        this.listener = listener;
     }
 
     public void addCell(HexCell cell) {
@@ -54,6 +50,33 @@ class Player {
         List<HexCellInfo> cellList = new ArrayList<>();
         hexCells.forEach(cell -> cellList.add(cell.getInfo()));
         return cellList;
+    }
+
+    public ModelListener getListener() {
+        return listener;
+    }
+
+    public void setListener(ModelListener listener) {
+        if (this.listener != null) throw new UnsupportedOperationException("already inited");
+        this.listener = listener;
+    }
+
+    /**
+     * Changes the turn state and updates the listener with the appropriate information.
+     *
+     * @return true if the turn is not done, false otherwise
+     */
+    public boolean nextState() {
+        if (turnState == GameTurnState.ATTACK) {
+            turnState = GameTurnState.REINFORCE;
+            reinforcePoints = getNumberOfCells();
+            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
+            return true;
+        } else {
+            turnState = GameTurnState.ATTACK;
+            if(!(this instanceof AI)) getListener().setAttackInfo();
+            return false;
+        }
     }
 
     private void attack(HexCell cell1, HexCell cell2) throws MoveException {
@@ -97,25 +120,7 @@ class Player {
         } else {
             assert cords1 == cords2;
             reinforce(field.getCell(cords1));
-            getListener().setReinforceInfo(reinforcePoints);
-        }
-    }
-
-    /**
-     * Changes the turn state and updates the listener with the appropriate information.
-     *
-     * @return true if the turn is not done, false otherwise
-     */
-    public boolean nextState() {
-        if (turnState == GameTurnState.ATTACK) {
-            turnState = GameTurnState.REINFORCE;
-            reinforcePoints = getNumberOfCells();
-            getListener().setReinforceInfo(reinforcePoints);
-            return true;
-        } else {
-            turnState = GameTurnState.ATTACK;
-            getListener().setAttackInfo();
-            return false;
+            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
         }
     }
 }

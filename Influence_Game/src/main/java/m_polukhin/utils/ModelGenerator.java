@@ -1,9 +1,7 @@
 package m_polukhin.utils;
 
 import m_polukhin.model.*;
-import m_polukhin.presenter.AIPresenter;
 import m_polukhin.presenter.PlayerPresenter;
-import m_polukhin.presenter.Presenter;
 
 import java.util.*;
 
@@ -35,21 +33,12 @@ public class ModelGenerator {
         return list;
     }
 
-    static List<ModelListener> generatePlayers(int size, Presenter host) {
-        List<ModelListener> presenters = new ArrayList<>();
-        presenters.add(host);
-        for(int i = 1;  i< size; i++) {
-            presenters.add(new AIPresenter());
-        }
-        return presenters;
-    }
     public static GameModel generateModel(int rows, int columns, int playerCounter) {
         var model = new GameModel(rows, columns);
         var presenter = new PlayerPresenter(model);
         var cells = ModelGenerator.generateBoard(rows, columns);
         var starts = ModelGenerator.generateStarts(cells, playerCounter);
-        var players = ModelGenerator.generatePlayers(playerCounter, presenter);
-        model.initModel(cells, starts, players);
+        model.initModel(cells, starts, presenter);
         return model;
     }
 }
