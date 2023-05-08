@@ -95,14 +95,18 @@ class Player {
         if (turnState == GameTurnState.ATTACK) {
             attack(field.getCell(cords1), field.getCell(cords2));
         } else {
-            assert cords1 == cords2 : cords1;
+            assert cords1 == cords2;
             reinforce(field.getCell(cords1));
             getListener().setReinforceInfo(reinforcePoints);
         }
     }
 
+    /**
+     * Changes the turn state and updates the listener with the appropriate information.
+     *
+     * @return true if the turn is not done, false otherwise
+     */
     public boolean nextState() {
-        // returns false if turn is done
         if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = getNumberOfCells();
