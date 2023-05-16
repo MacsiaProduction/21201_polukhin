@@ -19,6 +19,8 @@ public class GameModel {
 
     private final List<Player> playerList;
 
+    private Player host;
+
     private Player currentPlayer;
 
     private final Field field;
@@ -48,7 +50,7 @@ public class GameModel {
 
     public void initModel(List<Point> existingCells, List<Point> startingCells, ModelListener presenter) {
         existingCells.forEach(field::initCell);
-        var host = new Player(field);
+        host = new Player(field);
         playerList.add(initPlayer(host, startingCells.get(0)));
         for(int i = 1; i < startingCells.size(); i++) {
             Player player = new BasicAI(field);
@@ -116,6 +118,6 @@ public class GameModel {
     }
 
     private void gameOver() {
-        playerList.get(0).getListener().gameOver();
+        host.getListener().gameOver();
     }
 }
