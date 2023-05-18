@@ -19,7 +19,7 @@ public record DuTreeElement(Type type, String path, Long size, List<DuTreeElemen
         return buildTree(root, fs.getPath(""), options);
     }
 
-    private static DuFileType buildTree(DuTreeElement treeElement, Path parentPath, JduOptions options) throws ClassLoadException, PathFactoryException, FileMissingException, IOException {
+    private static DuFileType buildTree(DuTreeElement treeElement, Path parentPath, JduOptions options) {
         Path currentPath = parentPath.resolve(treeElement.path);
         if (treeElement.type == Type.FILE) {
             var file = new FileType(currentPath, options);
