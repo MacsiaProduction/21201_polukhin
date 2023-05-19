@@ -122,6 +122,4 @@ public class TestMedium extends DuTest {
                                                                             DuTreeElement.dir("foo2",0)))))))))), options(root));
         TestCase.assertEquals(expected, actual);
     }
-
-
 }
