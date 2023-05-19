@@ -19,7 +19,7 @@ public class TreeFactory {
         for (Class<? extends MetaType<? extends DuFileType>> clazz : classList) {
             try {
                 this.metaTypes.add(clazz.getConstructor().newInstance());
-            } catch (Exception e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new PathFactoryException("Exception while instantiation of metaTypes");
             }
         }

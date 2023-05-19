@@ -1,10 +1,8 @@
 package ru.nsu.fit.m_polukhin;
 
-import ru.nsu.fit.m_polukhin.comparators.*;
+import ru.nsu.fit.m_polukhin.comparators.DefaultComparator;
 import ru.nsu.fit.m_polukhin.exceptions.*;
-import ru.nsu.fit.m_polukhin.modules.*;
-
-import java.util.List;
+import ru.nsu.fit.m_polukhin.modules.DuFileType;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,8 +12,7 @@ public class Main {
                 Parser.printHelp();
                 return;
             }
-            List<Class<? extends MetaType<? extends DuFileType>>> classes;
-            classes = ClassLoader.loadFactoryClasses(Main.class.getResourceAsStream("/factory.config"));
+            var classes = ClassLoader.loadFactoryClasses(Main.class.getResourceAsStream("/factory.config"));
             TreeFactory treeFactory = new TreeFactory(classes);
             DuFileType root = treeFactory.buildTree(jduOptions.rootPath(), jduOptions);
             Printer printer = new Printer(new DefaultComparator(), jduOptions);
