@@ -25,7 +25,7 @@ public class TreeFactory {
         }
     }
 
-    private DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryException {
+    DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryException {
         var metaType = getMetaOf(path);
         if (metaType == null) {
             throw new PathFactoryException("Path" + path + "can't be recognized as any type");
@@ -52,7 +52,7 @@ public class TreeFactory {
         return initialDir;
     }
 
-    private List<DuFileType> initNextLayer(List<DuFileType> layer, JduOptions options) throws FileMissingException, PathFactoryException {
+    List<DuFileType> initNextLayer(List<DuFileType> layer, JduOptions options) throws FileMissingException, PathFactoryException {
         List<DuFileType> nextLayer = new ArrayList<>();
         for (var element: layer) {
             if(element instanceof DuCompoundFileType) {
@@ -71,7 +71,7 @@ public class TreeFactory {
         return nextLayer;
     }
 
-    private void calculateLayer(List<DuFileType> layer) throws FileMissingException {
+    void calculateLayer(List<DuFileType> layer) throws FileMissingException {
         for(var element : layer) {
             var meta = getMetaOf(element.path());
             assert meta != null;
@@ -79,7 +79,7 @@ public class TreeFactory {
         }
     }
 
-    private MetaType<? extends DuFileType> getMetaOf(Path path) {
+    MetaType<? extends DuFileType> getMetaOf(Path path) {
         for (var metaType : metaTypes) {
             if (metaType.isCompatible(path)) {
                 return metaType;

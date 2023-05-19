@@ -9,7 +9,6 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         try {
-            // CR: tests
             JduOptions jduOptions = Parser.getOptions(args);
             if (jduOptions == null) {
                 Parser.printHelp();

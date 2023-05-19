@@ -4,13 +4,14 @@ import ru.nsu.fit.m_polukhin.JduOptions;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 public abstract class DuCompoundFileType extends DuFileType{
-    private List<DuFileType> children;
+    private List<DuFileType> children = new ArrayList<>();
     public DuCompoundFileType(Path path, JduOptions jduOptions) {
         super(path, jduOptions);
     }

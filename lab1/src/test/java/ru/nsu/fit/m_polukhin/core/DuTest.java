@@ -1,12 +1,19 @@
-package ru.nsu.fit.m_polukhin;
+package ru.nsu.fit.m_polukhin.core;
 
 import org.junit.Rule;
+import ru.nsu.fit.m_polukhin.ClassLoader;
+import ru.nsu.fit.m_polukhin.JduOptions;
+import ru.nsu.fit.m_polukhin.Main;
+import ru.nsu.fit.m_polukhin.TreeFactory;
 import ru.nsu.fit.m_polukhin.exceptions.ClassLoadException;
 import ru.nsu.fit.m_polukhin.exceptions.PathFactoryException;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import ru.nsu.fit.m_polukhin.modules.MetaType;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -27,6 +34,15 @@ public abstract class DuTest {
         List<Class<? extends MetaType<? extends DuFileType>>> classes;
         classes = ClassLoader.loadFactoryClasses(Main.class.getResourceAsStream("/factory.config"));
         return new TreeFactory(classes);
+    }
+
+    // returns size of the created size
+    public int createFile(Path dir, String filename, String content) throws IOException {
+        Path barPath = dir.resolve(filename);
+        Files.createFile(barPath);
+        var bytes1 = content.getBytes(StandardCharsets.UTF_8);
+        Files.write(barPath, bytes1);
+        return bytes1.length;
     }
 
 }

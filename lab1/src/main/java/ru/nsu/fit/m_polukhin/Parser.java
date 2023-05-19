@@ -69,13 +69,13 @@ public class Parser {
         formatter.printHelp("java Parser [options] <directory>", Parser.DU_OPTIONS);
     }
 
-    private static int parseUnsignedInt(String arg) throws DuParseException {
+    static int parseUnsignedInt(String arg) throws DuParseException {
         int val = Integer.parseInt(arg);
         if(val <= 0) throw new DuParseException("invalid argument value");
         return val;
     }
 
-    private static Path parsePath(String arg) throws DuParseException {
+    static Path parsePath(String arg) throws DuParseException {
         Path path = Path.of(arg);
         if(Files.notExists(path)) {
             throw new DuParseException("Invalid path provided, file: " + path + " don't exist");

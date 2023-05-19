@@ -1,7 +1,8 @@
-package ru.nsu.fit.m_polukhin;
+package ru.nsu.fit.m_polukhin.core;
 
 
 import com.google.common.jimfs.Jimfs;
+import org.jetbrains.annotations.NotNull;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -17,7 +18,7 @@ class FileSystemRule implements TestRule {
     }
 
     @Override
-    public Statement apply(final Statement base, Description description) {
+    public Statement apply(@NotNull final Statement base,@NotNull Description description) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {

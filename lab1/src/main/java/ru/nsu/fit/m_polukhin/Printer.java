@@ -24,7 +24,7 @@ public class Printer {
         String prefix = duFileType.getPrefix();
         String size = Converter.convert(duFileType.getCalculatedSize());
         System.out.println(" ".repeat(curDepth)+prefix+size);
-        if (duFileType instanceof DuCompoundFileType compoundType) {
+        if (duFileType instanceof DuCompoundFileType compoundType && curDepth != options.depth()) {
             Stream<DuFileType> children = compoundType.getChildrenAsTypes();
             children.sorted(comparator).limit(options.limit()).forEachOrdered(child -> doPrint(child, curDepth + 1));
         }

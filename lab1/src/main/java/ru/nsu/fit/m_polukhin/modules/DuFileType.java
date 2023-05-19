@@ -10,7 +10,7 @@ import java.util.Objects;
  * it should be able to print itself and calculate it's size.
  */
 public abstract class DuFileType{
-    private Long size;
+    private Long size = 0L;
     private final Path path;
     private final JduOptions jduOptions;
 
