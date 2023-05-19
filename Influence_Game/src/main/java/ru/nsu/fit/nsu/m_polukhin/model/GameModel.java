@@ -1,9 +1,7 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
-import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
-import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
-import ru.nsu.fit.nsu.m_polukhin.utils.Point;
+import ru.nsu.fit.nsu.m_polukhin.presenter.StabPresenter;
+import ru.nsu.fit.nsu.m_polukhin.utils.*;
 
 import java.util.*;
 
@@ -58,6 +56,7 @@ public class GameModel {
         for(int i = 1; i < startingCells.size(); i++) {
             Player player = new BasicAI(field);
             playerList.add(initPlayer(player, startingCells.get(i)));
+            player.setListener(new StabPresenter());
         }
         host.setListener(presenter);
         host.getListener().setAttackInfo();
@@ -108,8 +107,7 @@ public class GameModel {
             return;
         }
         currentPlayer.move(selected.getPosition(), cords);
-        if (!(currentPlayer instanceof AI))
-            currentPlayer.getListener().updateView();
+        currentPlayer.getListener().updateView();
         selected = null;
     }
 
