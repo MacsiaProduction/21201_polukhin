@@ -12,7 +12,7 @@ import java.util.Random;
 class Player {
     GameTurnState turnState = GameTurnState.ATTACK;
 
-    protected int reinforcePoints;
+    private int reinforcePoints;
 
     private static int playerCount = 1;
 
@@ -70,11 +70,11 @@ class Player {
         if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = getNumberOfCells();
-            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
+            getListener().setReinforceInfo(reinforcePoints);
             return true;
         } else {
             turnState = GameTurnState.ATTACK;
-            if(!(this instanceof AI)) getListener().setAttackInfo();
+            getListener().setAttackInfo();
             return false;
         }
     }
@@ -120,7 +120,7 @@ class Player {
         } else {
             assert cords1 == cords2;
             reinforce(field.getCell(cords1));
-            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
+            getListener().setReinforceInfo(reinforcePoints);
         }
     }
 }
