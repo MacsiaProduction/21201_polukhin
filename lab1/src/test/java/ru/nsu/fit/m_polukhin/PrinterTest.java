@@ -36,10 +36,10 @@ public class PrinterTest extends DuTest {
         Files.createDirectory(root);
         Path fooPath2 = fs.getPath("foo1", "foo2");
         Files.createDirectory(fooPath2);
-        int size1 = createFile(fooPath2, "file1", "asfasdfsdf");
-        int size2 = createFile(fooPath2, "file2", "asfaetfasfesrd");
-        int size3 = createFile(fooPath2, "file3", "asfgsdfgdfaetfasfesrd");
-        int size4 = createFile(fooPath2, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
+        createFile(fooPath2, "file1", "asfasdfsdf");
+        createFile(fooPath2, "file2", "asfaetfasfesrd");
+        createFile(fooPath2, "file3", "asfgsdfgdfaetfasfesrd");
+        createFile(fooPath2, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
         printer(root).print(actual);
