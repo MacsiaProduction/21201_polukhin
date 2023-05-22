@@ -1,6 +1,5 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 
 import java.util.List;
@@ -24,7 +23,7 @@ class BasicAI extends AI{
         }
         nextState();
         for (var cell : cellList) {
-            move(cell.position(), cell.position());
+            move(cell.getPosition(), cell.getPosition());
         }
         nextState();
     }
