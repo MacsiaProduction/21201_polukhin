@@ -6,7 +6,6 @@ import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class Field {
     private final HexCell[][] board;

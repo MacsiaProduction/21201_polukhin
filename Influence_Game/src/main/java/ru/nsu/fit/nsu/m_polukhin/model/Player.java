@@ -1,12 +1,9 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 class Player {

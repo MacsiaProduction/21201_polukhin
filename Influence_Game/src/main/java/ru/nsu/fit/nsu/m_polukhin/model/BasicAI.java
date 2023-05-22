@@ -11,13 +11,13 @@ class BasicAI extends AI{
     }
     @Override
     public void generateTurn() throws MoveException {
-        List<HexCellInfo> cellList = field.getPlayerCells(getId());
+        List<HexCell> cellList = field.getPlayerCells(getId());
         for (var attacker : cellList) {
-            if (attacker.power() < 2) continue;
-            var neighbours = field.getNeighbors(attacker.position());
+            if (attacker.getPower() < 2) continue;
+            var neighbours = field.getNeighbors(attacker.getPosition());
             for (var victim : neighbours) {
-                if (victim.ownerId() != attacker.ownerId()) {
-                    move(attacker.position(), victim.position());
+                if (victim.ownerId() != attacker.getOwner().getId()) {
+                    move(attacker.getPosition(), victim.position());
                     break;
                 }
             }
