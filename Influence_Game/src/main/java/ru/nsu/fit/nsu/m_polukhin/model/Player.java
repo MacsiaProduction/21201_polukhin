@@ -47,11 +47,11 @@ class Player {
         if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = field.getNumberOfCells(getId());
-            getListener().setReinforceInfo(reinforcePoints);
+            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
             return true;
         } else {
             turnState = GameTurnState.ATTACK;
-            getListener().setAttackInfo();
+            if(!(this instanceof AI)) getListener().setAttackInfo();
             return false;
         }
     }
@@ -78,7 +78,6 @@ class Player {
                 return;
             }
         }
-
     }
 
     private void reinforce(HexCell cell) throws MoveException {
@@ -95,7 +94,7 @@ class Player {
         } else {
             assert cords1 == cords2;
             reinforce(field.getCell(cords1));
-            getListener().setReinforceInfo(reinforcePoints);
+            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
         }
     }
 }

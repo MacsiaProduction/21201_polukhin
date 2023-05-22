@@ -1,6 +1,5 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.presenter.StabPresenter;
 import ru.nsu.fit.nsu.m_polukhin.utils.*;
 
 import java.util.*;
@@ -56,7 +55,6 @@ public class GameModel {
         for(int i = 1; i < startingCells.size(); i++) {
             Player player = new BasicAI(field);
             playerList.add(initPlayer(player, startingCells.get(i)));
-            player.setListener(new StabPresenter());
         }
         host.setListener(presenter);
         host.getListener().setAttackInfo();
@@ -73,14 +71,14 @@ public class GameModel {
     //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextState(int playerId) {
         assert playerId == currentPlayer.getId() : currentPlayer;
-        TurnCheck();
         selected = null;
         if(!currentPlayer.nextState())
             nextPlayerTurn();
     }
 
-    public void nextPlayerTurn() {
+    private void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
+        TurnCheck();
         if (currentPlayer instanceof AI) {
             ((AI) currentPlayer).move();
             nextPlayerTurn();
@@ -105,7 +103,7 @@ public class GameModel {
             return;
         }
         currentPlayer.move(selected.getPosition(), cords);
-        currentPlayer.getListener().updateView();
+        if(!(currentPlayer instanceof  AI)) currentPlayer.getListener().updateView();
         selected = null;
     }
 

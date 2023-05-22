@@ -68,6 +68,6 @@ class Field {
     }
 
     public List<HexCell> getPlayerCells(int playerId) {
-        return Arrays.stream(board).flatMap(Arrays::stream).filter(hexCell -> hexCell.getOwner().getId() == playerId).toList();
+        return Arrays.stream(board).flatMap(Arrays::stream).filter(hexCell -> hexCell!=null && hexCell.getInfo().ownerId() == playerId).toList();
     }
 }
