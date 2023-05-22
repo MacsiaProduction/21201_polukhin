@@ -11,7 +11,7 @@ class BasicAI extends AI{
     }
     @Override
     public void generateTurn() throws MoveException {
-        List<HexCellInfo> cellList = getPlayerCellList();
+        List<HexCellInfo> cellList = field.getPlayerCells(getId());
         for (var attacker : cellList) {
             if (attacker.power() < 2) continue;
             var neighbours = field.getNeighbors(attacker.position());

@@ -66,11 +66,9 @@ public class GameModel {
 
     private Player initPlayer(Player player, Point startingCell) {
         field.getCell(startingCell).setOwner(player);
-        player.addCell(field.getCell(startingCell));
         field.getCell(startingCell).setPower(2);
         return player;
     }
-
 
     //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextState(int playerId) {
@@ -112,7 +110,7 @@ public class GameModel {
     }
 
     private void TurnCheck() {
-        playerList.removeIf (p-> p.getNumberOfCells() == 0);
+        playerList.removeIf (p-> field.getNumberOfCells(p.getId()) == 0);
         if (playerList.size() <= 1) {
             gameOver();
         }

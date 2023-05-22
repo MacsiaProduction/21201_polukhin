@@ -12,7 +12,7 @@ import java.util.Random;
 class Player {
     GameTurnState turnState = GameTurnState.ATTACK;
 
-    private int reinforcePoints;
+    private long reinforcePoints;
 
     private static int playerCount = 1;
 
@@ -22,8 +22,6 @@ class Player {
         return number;
     }
 
-    private final List<HexCell> hexCells;
-
     public final Field field;
 
     private ModelListener listener;
@@ -31,25 +29,6 @@ class Player {
     public Player(Field field) {
         this.field = field;
         this.number = playerCount++;
-        hexCells = new ArrayList<>();
-    }
-
-    public void addCell(HexCell cell) {
-        hexCells.add(cell);
-    }
-
-    public void deleteCell(HexCell cell) {
-        hexCells.remove(cell);
-    }
-
-    public int getNumberOfCells() {
-        return hexCells.size();
-    }
-
-    public List<HexCellInfo> getPlayerCellList() {
-        List<HexCellInfo> cellList = new ArrayList<>();
-        hexCells.forEach(cell -> cellList.add(cell.getInfo()));
-        return cellList;
     }
 
     public ModelListener getListener() {
@@ -70,7 +49,7 @@ class Player {
     public boolean nextState() {
         if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
-            reinforcePoints = getNumberOfCells();
+            reinforcePoints = field.getNumberOfCells(getId());
             getListener().setReinforceInfo(reinforcePoints);
             return true;
         } else {
@@ -96,9 +75,7 @@ class Player {
             int attackPower = new Random().nextInt(3) + 1;
             cell2.setPower(cell2.getPower() - attackPower);
             if (cell2.getPower() <= 0) {
-                if (cell2.getOwner()!=null) cell2.getOwner().deleteCell(cell2);
                 cell2.setOwner(cell1.getOwner());
-                cell1.getOwner().addCell(cell2);
                 cell2.setPower(cell1.getPower());
                 cell1.setPower(1);
                 return;

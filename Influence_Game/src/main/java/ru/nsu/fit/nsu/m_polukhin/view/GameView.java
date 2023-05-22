@@ -82,7 +82,7 @@ public class GameView {
         infoTable.setText("State:  Attack\n");
     }
 
-    public void setReinforceInfo(int powerRemain) {
+    public void setReinforceInfo(long powerRemain) {
         infoTable.setText("State:  Reinforce\n" + "Points Remain: "+powerRemain);
     }
 

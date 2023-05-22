@@ -6,6 +6,7 @@ import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Field {
     private final HexCell[][] board;
@@ -61,5 +62,13 @@ class Field {
 
     public boolean isCellPresent(Point cords) {
         return areValidCords(rows, columns, cords) && getCell(cords)!=null;
+    }
+
+    public long getNumberOfCells(int playerId) {
+        return getPlayerCells(playerId).size();
+    }
+
+    public List<HexCell> getPlayerCells(int playerId) {
+        return Arrays.stream(board).flatMap(Arrays::stream).filter(hexCell -> hexCell.getOwner().getId() == playerId).toList();
     }
 }

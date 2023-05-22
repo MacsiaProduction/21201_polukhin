@@ -24,7 +24,7 @@ public class PlayerPresenter extends Presenter {
         view.setAttackInfo();
     }
 
-    public void setReinforceInfo(int powerRemain) {
+    public void setReinforceInfo(long powerRemain) {
         view.setReinforceInfo(powerRemain);
     }
 

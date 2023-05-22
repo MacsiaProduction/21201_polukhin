@@ -8,7 +8,7 @@ public class StabPresenter extends Presenter{
     @Override
     public void setAttackInfo() {}
     @Override
-    public void setReinforceInfo(int powerRemain) {}
+    public void setReinforceInfo(long powerRemain) {}
     @Override
     public void gameOver() {}
 }
