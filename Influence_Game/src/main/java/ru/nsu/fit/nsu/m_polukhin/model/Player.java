@@ -1,5 +1,6 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
+import ru.nsu.fit.nsu.m_polukhin.presenter.StabPresenter;
 import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
@@ -53,11 +54,12 @@ class Player {
     }
 
     public ModelListener getListener() {
+        if (this.listener == null) throw new UnsupportedOperationException("listener haven't been inited");
         return listener;
     }
 
     public void setListener(ModelListener listener) {
-        if (this.listener != null) throw new UnsupportedOperationException("already inited");
+        if (this.listener != null) throw new UnsupportedOperationException("listener have been already inited");
         this.listener = listener;
     }
 
