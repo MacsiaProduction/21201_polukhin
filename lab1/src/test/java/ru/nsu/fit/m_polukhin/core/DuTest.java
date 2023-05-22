@@ -2,9 +2,8 @@ package ru.nsu.fit.m_polukhin.core;
 
 import org.junit.Rule;
 import ru.nsu.fit.m_polukhin.ClassLoader;
-import ru.nsu.fit.m_polukhin.JduOptions;
-import ru.nsu.fit.m_polukhin.Main;
-import ru.nsu.fit.m_polukhin.TreeFactory;
+import ru.nsu.fit.m_polukhin.*;
+import ru.nsu.fit.m_polukhin.comparators.DefaultComparator;
 import ru.nsu.fit.m_polukhin.exceptions.ClassLoadException;
 import ru.nsu.fit.m_polukhin.exceptions.PathFactoryException;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
@@ -26,6 +25,9 @@ public abstract class DuTest {
         return fileSystemRule.getFileSystem();
     }
 
+    protected static Printer printer(Path root) {
+        return new Printer(new DefaultComparator(), options(root));
+    }
     protected static JduOptions options(Path root) {
         return new JduOptions(root, 10, true, 10);
     }
