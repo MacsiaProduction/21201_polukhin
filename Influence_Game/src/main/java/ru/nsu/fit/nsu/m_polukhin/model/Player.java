@@ -1,6 +1,5 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.presenter.StabPresenter;
 import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
