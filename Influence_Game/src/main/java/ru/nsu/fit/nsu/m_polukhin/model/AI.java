@@ -11,7 +11,7 @@ abstract class AI extends Player{
     public abstract void generateTurn() throws MoveException;
 
     /**
-     * generates all turn by once.
+     * must generate all turn by once.
      * nextState will be called exactly two times.
      */
     public void move() {
