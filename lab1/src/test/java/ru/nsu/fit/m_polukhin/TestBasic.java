@@ -15,6 +15,8 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static ru.nsu.fit.m_polukhin.core.DuTreeElement.*;
+
 public class TestBasic extends DuTest {
     @Test
     public void testOneEmptyFileInDirectory() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
@@ -25,7 +27,7 @@ public class TestBasic extends DuTest {
         Files.createFile(barPath);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo", 0, DuTreeElement.file("bar.txt",0)), options(root));
+        DuFileType expected = tree(fs, dir("foo", 0, file("bar.txt",0)), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -38,7 +40,7 @@ public class TestBasic extends DuTest {
         var size = bytes.length;
         Files.write(root, bytes);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.file("foo",size), options(root));
+        DuFileType expected = tree(fs, file("foo",size), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -51,10 +53,10 @@ public class TestBasic extends DuTest {
         Files.createFile(barPath);
         Files.createSymbolicLink(root.resolve("link"), barPath);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo", 8*1024,
-                DuTreeElement.file("bar.txt",0),
-                DuTreeElement.symlink("link", 8*1024,
-                        DuTreeElement.file("bar.txt",0))), options(root));
+        DuFileType expected = tree(fs, dir("foo", 8*1024,
+                file("bar.txt",0),
+                symlink("link", 8*1024,
+                        file("bar.txt",0))), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -69,12 +71,12 @@ public class TestBasic extends DuTest {
         Files.createFile(barPath);
         Files.createSymbolicLink(root.resolve("link"), dir);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo", 8*1024,
-                DuTreeElement.dir("foo1", 0,
-                        DuTreeElement.file("bar.txt",0)),
-                DuTreeElement.symlink("link", 8*1024,
-                        DuTreeElement.dir("foo1", 0,
-                            DuTreeElement.file("bar.txt",0)))), options(root));
+        DuFileType expected = tree(fs, dir("foo", 8*1024,
+                dir("foo1", 0,
+                        file("bar.txt",0)),
+                symlink("link", 8*1024,
+                        dir("foo1", 0,
+                            file("bar.txt",0)))), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -90,7 +92,7 @@ public class TestBasic extends DuTest {
         Files.write(barPath, bytes);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo", size, DuTreeElement.file("bar.txt",size)), options(root));
+        DuFileType expected = tree(fs, dir("foo", size, file("bar.txt",size)), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -105,15 +107,42 @@ public class TestBasic extends DuTest {
         int size4 = createFile(root, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo", size1+size2+size3+size4,
-                DuTreeElement.file("file1",size1),
-                DuTreeElement.file("file2",size2),
-                DuTreeElement.file("file3",size3),
-                DuTreeElement.file("file4",size4)
+        DuFileType expected = tree(fs, dir("foo", size1+size2+size3+size4,
+                file("file1",size1),
+                file("file2",size2),
+                file("file3",size3),
+                file("file4",size4)
         ), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
+    /*
+    CR:
+    tests should contain all simple combinations of hierarchies and corner cases.
+    so, for factory I would've expected at least:
+    - file as root
+    - empty dir as root
+    - symlink as root
+    - dir with one file as root
+    - dir with empty dir as root
+    - dir with symlink as root
+
+    tests for symlinks:
+
+    1)
+    foo
+      slink1 -> foo
+
+    2)
+
+    foo
+      slink1 -> bar
+    bar
+      slink2 -> foo
+
+    also maybe smth additional for negative size, wrong files and so on.
+    please check if your current tests fit this criteria
+     */
     @Test
     public void testTwoEmptyDirs() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
@@ -123,10 +152,21 @@ public class TestBasic extends DuTest {
         Files.createDirectory(fooPath2);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo1", 0, DuTreeElement.dir("foo2",0)), options(root));
+        DuFileType expected = tree(fs, dir("foo1", 0, dir("foo2",0)), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
+    /*
+    CR: please write comments on top of tests so it would be easier to understand what they check.
+    e.g. for this test:
+
+    foo1
+      foo2
+        file1
+        file2
+        file3
+        file4
+     */
     @Test
     public void testTwoDirsWithFiles() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
@@ -140,12 +180,12 @@ public class TestBasic extends DuTest {
         int size4 = createFile(fooPath2, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = DuTreeElement.tree(fs, DuTreeElement.dir("foo1", size1+size2+size3+size4,
-                DuTreeElement.dir("foo2",size1+size2+size3+size4,
-                DuTreeElement.file("file1",size1),
-                DuTreeElement.file("file2",size2),
-                DuTreeElement.file("file3",size3),
-                DuTreeElement.file("file4",size4)
+        DuFileType expected = tree(fs, dir("foo1", size1+size2+size3+size4,
+                dir("foo2",size1+size2+size3+size4,
+                file("file1",size1),
+                file("file2",size2),
+                file("file3",size3),
+                file("file4",size4)
                 )), options(root));
         TestCase.assertEquals(expected, actual);
     }

@@ -32,10 +32,14 @@ public class Parser {
         Path baseDirectory = Parser.baseDirectory;
         // Parse command line arguments
         CommandLineParser parser = new BasicParser();
+        CommandLine cmd;
         try {
-            CommandLine cmd = parser.parse(DU_OPTIONS, args);
+            cmd = parser.parse(DU_OPTIONS, args);
+        } catch (ParseException e) {
+            throw new DuParseException(e);
+        }
 
-            String[] remainingArgs = cmd.getArgs();
+        String[] remainingArgs = cmd.getArgs();
 
             if (remainingArgs.length > 1) {
                 throw new DuParseException("Invalid number of arguments");
@@ -58,9 +62,6 @@ public class Parser {
             if (cmd.hasOption("limit")) {
                 limit = parseUnsignedInt(cmd.getOptionValue("limit"));
             }
-        } catch (Exception e) {
-            throw new DuParseException("Can't parse input");
-        }
         return new JduOptions(baseDirectory,depth,followSymLinks,limit);
     }
 

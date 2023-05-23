@@ -31,6 +31,8 @@ public class TreeFactory {
             throw new PathFactoryException("Path" + path + "can't be recognized as any type");
         } else try {
             Class<? extends DuFileType> clazz = metaType.getFileType();
+            // CR: you do not need reflection here. just add
+            // CR: method createFileType(Path path) -> DuFileType into MetaType
             Constructor<? extends DuFileType> constructor = clazz.getConstructor(Path.class, JduOptions.class);
             return constructor.newInstance(path, jduOptions);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
@@ -41,6 +43,7 @@ public class TreeFactory {
 
     public DuFileType buildTree(Path root, JduOptions options) throws PathFactoryException, FileMissingException {
         List<List<DuFileType>> layers = new ArrayList<>();
+        // CR: can be not a dir
         var initialDir = create(root, options);
         layers.add(List.of(initialDir));
         for (int i = 1; i < options.depth() && layers.get(i-1).size() != 0; i++) {
@@ -58,6 +61,8 @@ public class TreeFactory {
             if(element instanceof DuCompoundFileType) {
                 var childrenAsPaths = ((DuCompoundFileType) element).getChildrenAsPaths();
                 List<DuFileType> childrenAsTypes = new ArrayList<>();
+                // CR: what's the reason to return stream then?
+                // CR: you can either change api (just return list) or handle paths in stream chain
                 Iterator<Path> iterator = childrenAsPaths.iterator();
                 while(iterator.hasNext()) {
                     Path path = iterator.next();

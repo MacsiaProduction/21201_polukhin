@@ -9,23 +9,24 @@ import java.util.Objects;
  * Base class for a Type you want to add for a fdu implementation,
  * it should be able to print itself and calculate it's size.
  */
-public abstract class DuFileType{
-    private Long size = 0L;
+public abstract class DuFileType {
+
     private final Path path;
     private final JduOptions jduOptions;
+    private Long size = 0L;
 
     public DuFileType(Path path, JduOptions jduOptions) {
         this.path = path;
         this.jduOptions = jduOptions;
     }
 
-    public void setCalculatedSize(long size) {
-        this.size = size;
+    public Long getCalculatedSize() {
+        if (size == null) throw new IllegalStateException("size wasn't initialized");
+        return size;
     }
 
-    public Long getCalculatedSize() {
-        if (size == null) throw new IllegalStateException("size wasn't inited");
-        return size;
+    public void setCalculatedSize(long size) {
+        this.size = size;
     }
 
     public abstract String getPrefix();
@@ -35,6 +36,8 @@ public abstract class DuFileType{
     }
 
     public JduOptions options() {
+        // CR: do not store jduOptions here, better add check inside tree factory
+        // CR: like if (!isFollowSymlinks && a instanceof SymlinkType) - skip child traversal
         return jduOptions;
     }
 

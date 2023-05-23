@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ClassLoaderTest {
 
     @Test
-    void testLoadFactoryClasses() throws ClassLoadException {
+    void loadClasses() throws ClassLoadException {
         String configString = "MetaModules=ru.nsu.fit.m_polukhin.modules.symlink.MetaSymlink," +
                 "ru.nsu.fit.m_polukhin.modules.file.MetaFile," +
                 "ru.nsu.fit.m_polukhin.modules.dir.MetaDir";
@@ -34,7 +34,7 @@ class ClassLoaderTest {
     }
 
     @Test
-    void testLoadFactoryClasses_InvalidConfig() {
+    void invalidConfig() {
         String configString = "MetaModules=invalidClassName";
         ByteArrayInputStream config = new ByteArrayInputStream(configString.getBytes());
 

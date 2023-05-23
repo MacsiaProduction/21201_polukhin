@@ -58,6 +58,8 @@ public class TreeFactoryTest extends DuTest {
         assertTrue(fileType instanceof DuCompoundFileType);
     }
 
+    // CR: make all the methods private, you only need one method -TreeFactory.create
+    // CR: and private methods are not tested, sine they are implementation detail
     @Test
     public void testGetMetaOf() throws PathFactoryException, IOException {
         Path root = createTestDir();

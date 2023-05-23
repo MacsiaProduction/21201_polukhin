@@ -6,6 +6,7 @@ import ru.nsu.fit.m_polukhin.core.DuTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterTest extends DuTest {
+    // CR: what about negative numbers, too big numbers and so on?
     @Test
     public void testConvert() {
         assertEquals("[1Gib]", Converter.convert(1073741824L));

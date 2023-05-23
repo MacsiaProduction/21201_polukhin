@@ -19,6 +19,7 @@ import java.nio.file.Path;
 
 public class PrinterTest extends DuTest {
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    // CR: fragile, pass PrintStream to printer ctor
     @Before
     public void setUpOut() {
         System.setOut(new PrintStream(output));
@@ -41,6 +42,8 @@ public class PrinterTest extends DuTest {
         createFile(fooPath2, "file3", "asfgsdfgdfaetfasfesrd");
         createFile(fooPath2, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
 
+        // CR: you do not need to work with actual files here, it's unit test for printer
+        // CR: this means that you can create fake files using DuFileType ctors and pass them to printer
         DuFileType actual = treeFactory().buildTree(root, options(root));
         printer(root).print(actual);
         String expectedString = """
@@ -54,6 +57,16 @@ public class PrinterTest extends DuTest {
         TestCase.assertEquals(expectedString, output.toString());
     }
 
+    /*
+     CR:
+     not enough tests. you need to check all possible combinations for the depth 1 and 2.
+     e.g:
+     - regular file is a root of tree
+     - symlink is a root of tree
+     - directory with no files is a root
+     - directory with 1 regular file is a root
+     ...
+    */
     @Test
     public void testPrintingOneSymlinkToDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
