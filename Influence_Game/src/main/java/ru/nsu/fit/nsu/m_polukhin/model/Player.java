@@ -6,6 +6,12 @@ import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
 import java.util.Random;
 
+/*
+
+nextState,
+move
+ */
+
 class Player {
     GameTurnState turnState = GameTurnState.ATTACK;
 
@@ -39,8 +45,6 @@ class Player {
     }
 
     /**
-     * Changes the turn state and updates the listener with the appropriate information.
-     *
      * @return true if the turn is not done, false otherwise
      */
     public boolean nextState() {
@@ -67,15 +71,17 @@ class Player {
             throw new MoveException("Only neighbor cells can attack");
         } else if (cell1.getOwner() == cell2.getOwner()) {
             throw new MoveException("Can not attack your own cells");
-        } else while(cell1.getPower() > 1) {
-            cell1.setPower(cell1.getPower() - 1);
-            int attackPower = new Random().nextInt(3) + 1;
-            cell2.setPower(cell2.getPower() - attackPower);
-            if (cell2.getPower() <= 0) {
-                cell2.setOwner(cell1.getOwner());
-                cell2.setPower(cell1.getPower());
-                cell1.setPower(1);
-                return;
+        } else {
+            while(cell1.getPower() > 1) {
+                cell1.setPower(cell1.getPower() - 1);
+                int attackPower = new Random().nextInt(3) + 1;
+                cell2.setPower(cell2.getPower() - attackPower);
+                if (cell2.getPower() <= 0) {
+                    cell2.setOwner(cell1.getOwner());
+                    cell2.setPower(cell1.getPower());
+                    cell1.setPower(1);
+                    return;
+                }
             }
         }
     }
@@ -88,6 +94,7 @@ class Player {
         reinforcePoints--;
     }
 
+    // CR: use reinforce / attack methods instead
     public void move(Point cords1, Point cords2) throws MoveException {
         if (turnState == GameTurnState.ATTACK) {
             attack(field.getCell(cords1), field.getCell(cords2));

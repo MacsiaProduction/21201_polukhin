@@ -45,6 +45,7 @@ class Field {
         return list;
     }
 
+    // CR: HexCellInfo -> HexCell
     public List<HexCellInfo> getNeighbors(Point cords) {
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : getPossibleNeighbors(rows, columns, cords)) {

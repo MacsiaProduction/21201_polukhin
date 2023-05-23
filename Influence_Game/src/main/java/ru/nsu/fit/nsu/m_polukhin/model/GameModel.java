@@ -1,29 +1,22 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.utils.*;
+import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
+import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
+import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameModel {
+
     private final int rows;
-
-    public int rows() {
-        return rows;
-    }
-
     private final int columns;
 
-    public int columns() {
-        return columns;
-    }
-
     private final List<Player> playerList;
+    private final Field field;
 
     private Player host;
-
     private Player currentPlayer;
-
-    private final Field field;
 
     private HexCell selected;
 
@@ -31,11 +24,15 @@ public class GameModel {
         this.rows = rows;
         this.columns = columns;
         this.playerList = new ArrayList<>();
-        this.field = new Field(rows,columns);
+        this.field = new Field(rows, columns);
     }
 
-    public static List<Point> getPossibleNeighbors(int rows, int columns, Point cords) {
-        return Field.getPossibleNeighbors(rows, columns, cords);
+    public int rows() {
+        return rows;
+    }
+
+    public int columns() {
+        return columns;
     }
 
     public boolean isCellPresent(Point cords) {
@@ -48,11 +45,11 @@ public class GameModel {
         return field.getCell(cords).getInfo();
     }
 
-    public void initModel(List<Point> existingCells, List<Point> startingCells, ModelListener presenter) {
+    public void initModel(List<Point> existingCells, List<Point> startingCells) {
         existingCells.forEach(field::initCell);
         host = new Player(field);
         playerList.add(initPlayer(host, startingCells.get(0)));
-        for(int i = 1; i < startingCells.size(); i++) {
+        for (int i = 1; i < startingCells.size(); i++) {
             Player player = new BasicAI(field);
             playerList.add(initPlayer(player, startingCells.get(i)));
         }
@@ -72,13 +69,13 @@ public class GameModel {
     public void nextState(int playerId) {
         assert playerId == currentPlayer.getId() : currentPlayer;
         selected = null;
-        if(!currentPlayer.nextState())
+        if (!currentPlayer.nextState())
             nextPlayerTurn();
     }
 
     private void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
-        TurnCheck();
+        turnCheck();
         if (currentPlayer instanceof AI) {
             ((AI) currentPlayer).move();
             nextPlayerTurn();
@@ -94,6 +91,7 @@ public class GameModel {
             selected = null;
             return;
         }
+        // CR: assert / boolean check, not both
         assert Field.areValidCords(rows, columns, cords) : cords;
         assert playerId == currentPlayer.getId() : currentPlayer;
 
@@ -103,12 +101,13 @@ public class GameModel {
             return;
         }
         currentPlayer.move(selected.getPosition(), cords);
-        if(!(currentPlayer instanceof  AI)) currentPlayer.getListener().updateView();
+        // CR: currentPlayer.getListener().updateView(); -> currentPlayer.updateView();, remove AI check
+        if (!(currentPlayer instanceof AI)) currentPlayer.getListener().updateView();
         selected = null;
     }
 
-    private void TurnCheck() {
-        playerList.removeIf (p-> field.getNumberOfCells(p.getId()) == 0);
+    private void turnCheck() {
+        playerList.removeIf(p -> field.getNumberOfCells(p.getId()) == 0);
         if (playerList.size() <= 1) {
             gameOver();
         }
@@ -116,5 +115,9 @@ public class GameModel {
 
     private void gameOver() {
         host.getListener().gameOver();
+    }
+
+    public static List<Point> getPossibleNeighbors(int rows, int columns, Point cords) {
+        return Field.getPossibleNeighbors(rows, columns, cords);
     }
 }

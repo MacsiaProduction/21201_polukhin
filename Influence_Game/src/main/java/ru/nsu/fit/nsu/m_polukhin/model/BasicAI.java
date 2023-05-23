@@ -4,6 +4,22 @@ import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 
 import java.util.List;
 
+
+/*
+
+
+Model:
+
+Coords coords = ai.generateTurn();
+ai.move(coords);
+if (nextState()) {
+    coords = ai.generateTurn();
+    ai.move(coords);
+    nextState();
+}
+
+ */
+
 class BasicAI extends AI{
     public BasicAI(Field field) {
         super(field);

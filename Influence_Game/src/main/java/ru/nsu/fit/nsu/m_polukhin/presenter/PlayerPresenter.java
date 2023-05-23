@@ -9,6 +9,7 @@ public class PlayerPresenter extends Presenter {
     public PlayerPresenter(GameModel model) {
         this.model = model;
         this.view = new GameView(this, model.rows(), model.columns());
+        model.setPresenter(this);
     }
 
     @Override

@@ -3,8 +3,10 @@ package ru.nsu.fit.nsu.m_polukhin.presenter;
 import ru.nsu.fit.nsu.m_polukhin.model.GameModel;
 import ru.nsu.fit.nsu.m_polukhin.utils.*;
 
+// CR: merge with player presenter
 public abstract class Presenter implements ViewListener, ModelListener {
     protected GameModel model;
+    // CR: set id
     protected int ownerId;
 
     @Override
