@@ -14,11 +14,6 @@ public class MetaSymlink implements MetaType<SymlinkType> {
     }
 
     @Override
-    public Class<SymlinkType> getFileType() {
-        return SymlinkType.class;
-    }
-
-    @Override
     public boolean isCompatible(Path path) {
         return Files.isSymbolicLink(path);
     }

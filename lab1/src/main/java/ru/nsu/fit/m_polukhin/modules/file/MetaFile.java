@@ -16,11 +16,6 @@ public class MetaFile implements MetaType<FileType> {
     }
 
     @Override
-    public Class<FileType> getFileType() {
-        return FileType.class;
-    }
-
-    @Override
     public boolean isCompatible(Path path) {
         return Files.isRegularFile(path);
     }

@@ -9,8 +9,6 @@ public interface MetaType<Type extends DuFileType> {
 
     Type createFileType(Path path, JduOptions options);
 
-    Class<Type> getFileType();
-
     boolean isCompatible(Path path);
 
     void calculateSize(DuFileType instance) throws FileMissingException;

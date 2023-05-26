@@ -14,11 +14,6 @@ public class MetaDir implements MetaType<DirType> {
     }
 
     @Override
-    public Class<DirType> getFileType() {
-        return DirType.class;
-    }
-
-    @Override
     public boolean isCompatible(Path path) {
         return Files.isDirectory(path);
     }
