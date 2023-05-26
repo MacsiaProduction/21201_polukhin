@@ -1,5 +1,6 @@
 package ru.nsu.fit.m_polukhin.modules.file;
 
+import ru.nsu.fit.m_polukhin.JduOptions;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import ru.nsu.fit.m_polukhin.modules.MetaType;
@@ -9,6 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class MetaFile implements MetaType<FileType> {
+    @Override
+    public FileType createFileType(Path path, JduOptions options) {
+        return new FileType(path,options);
+    }
+
     @Override
     public Class<FileType> getFileType() {
         return FileType.class;

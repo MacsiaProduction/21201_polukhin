@@ -6,10 +6,11 @@ import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import ru.nsu.fit.m_polukhin.modules.MetaType;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TreeFactory {
     private final List<MetaType<? extends DuFileType>> metaTypes;
@@ -25,37 +26,26 @@ public class TreeFactory {
         }
     }
 
-    DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryException {
+    private DuFileType create(Path path, JduOptions jduOptions) throws PathFactoryException {
         var metaType = getMetaOf(path);
-        if (metaType == null) {
-            throw new PathFactoryException("Path" + path + "can't be recognized as any type");
-        } else try {
-            Class<? extends DuFileType> clazz = metaType.getFileType();
-            // CR: you do not need reflection here. just add
-            // CR: method createFileType(Path path) -> DuFileType into MetaType
-            Constructor<? extends DuFileType> constructor = clazz.getConstructor(Path.class, JduOptions.class);
-            return constructor.newInstance(path, jduOptions);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                 InvocationTargetException e) {
-            throw new PathFactoryException("Error creating instance of class " + metaType);
-        }
+        if (metaType == null) throw new PathFactoryException("Path" + path + "can't be recognized as any type");
+        return metaType.createFileType(path, jduOptions);
     }
 
     public DuFileType buildTree(Path root, JduOptions options) throws PathFactoryException, FileMissingException {
         List<List<DuFileType>> layers = new ArrayList<>();
-        // CR: can be not a dir
-        var initialDir = create(root, options);
-        layers.add(List.of(initialDir));
+        var initialFile = create(root, options);
+        layers.add(List.of(initialFile));
         for (int i = 1; i < options.depth() && layers.get(i-1).size() != 0; i++) {
            layers.add(initNextLayer(layers.get(i-1), options));
         }
         for (int i = layers.size() - 1; i >= 0; i--) {
             calculateLayer(layers.get(i));
         }
-        return initialDir;
+        return initialFile;
     }
 
-    List<DuFileType> initNextLayer(List<DuFileType> layer, JduOptions options) throws FileMissingException, PathFactoryException {
+    private List<DuFileType> initNextLayer(List<DuFileType> layer, JduOptions options) throws FileMissingException, PathFactoryException {
         List<DuFileType> nextLayer = new ArrayList<>();
         for (var element: layer) {
             if(element instanceof DuCompoundFileType) {
@@ -76,7 +66,7 @@ public class TreeFactory {
         return nextLayer;
     }
 
-    void calculateLayer(List<DuFileType> layer) throws FileMissingException {
+    private void calculateLayer(List<DuFileType> layer) throws FileMissingException {
         for(var element : layer) {
             var meta = getMetaOf(element.path());
             assert meta != null;
@@ -84,7 +74,7 @@ public class TreeFactory {
         }
     }
 
-    MetaType<? extends DuFileType> getMetaOf(Path path) {
+    private MetaType<? extends DuFileType> getMetaOf(Path path) {
         for (var metaType : metaTypes) {
             if (metaType.isCompatible(path)) {
                 return metaType;
