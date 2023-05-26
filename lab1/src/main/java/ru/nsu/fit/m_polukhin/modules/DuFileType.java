@@ -36,8 +36,6 @@ public abstract class DuFileType {
     }
 
     public JduOptions options() {
-        // CR: do not store jduOptions here, better add check inside tree factory
-        // CR: like if (!isFollowSymlinks && a instanceof SymlinkType) - skip child traversal
         return jduOptions;
     }
 
