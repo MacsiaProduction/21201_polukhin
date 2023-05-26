@@ -7,7 +7,7 @@ import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
+import java.util.List;
 
 public final class DirType extends DuCompoundFileType {
     public DirType(Path dir, JduOptions jduOptions) {
@@ -15,9 +15,9 @@ public final class DirType extends DuCompoundFileType {
     }
 
     @Override
-    public Stream<Path> getChildrenAsPaths() throws FileMissingException {
+    public List<Path> getChildrenAsPaths() throws FileMissingException {
         try {
-            return Files.list(path());
+            return Files.list(path()).toList();
         } catch (IOException e) {
             throw new FileMissingException();
         }

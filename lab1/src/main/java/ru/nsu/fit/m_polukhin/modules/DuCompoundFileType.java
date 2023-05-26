@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 public abstract class DuCompoundFileType extends DuFileType{
     private List<DuFileType> children = new ArrayList<>();
@@ -20,11 +19,11 @@ public abstract class DuCompoundFileType extends DuFileType{
         this.children = children;
     }
 
-    public Stream<DuFileType> getChildrenAsTypes() {
-        return this.children.stream();
+    public List<DuFileType> getChildrenAsTypes() {
+        return this.children;
     }
 
-    abstract public Stream<Path> getChildrenAsPaths() throws FileMissingException;
+    abstract public List<Path> getChildrenAsPaths() throws FileMissingException;
 
     @Override
     public boolean equals(Object o) {

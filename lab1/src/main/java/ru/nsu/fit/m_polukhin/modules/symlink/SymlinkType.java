@@ -7,7 +7,7 @@ import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
+import java.util.List;
 
 public final class SymlinkType extends DuCompoundFileType {
     public SymlinkType(Path file, JduOptions jduOptions) {
@@ -15,15 +15,15 @@ public final class SymlinkType extends DuCompoundFileType {
     }
 
     @Override
-    public Stream<Path> getChildrenAsPaths() throws FileMissingException {
+    public List<Path> getChildrenAsPaths() throws FileMissingException {
         if (options().followSymLinks()) {
             try {
-                return Stream.of(Files.readSymbolicLink(path()));
+                return List.of(Files.readSymbolicLink(path()));
             } catch (IOException e) {
                 throw new FileMissingException();
             }
         }
-        return Stream.of();
+        return List.of();
     }
 
     @Override

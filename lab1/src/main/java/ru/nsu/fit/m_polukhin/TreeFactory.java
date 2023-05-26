@@ -9,7 +9,6 @@ import ru.nsu.fit.m_polukhin.modules.MetaType;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TreeFactory {
@@ -51,11 +50,7 @@ public class TreeFactory {
             if(element instanceof DuCompoundFileType) {
                 var childrenAsPaths = ((DuCompoundFileType) element).getChildrenAsPaths();
                 List<DuFileType> childrenAsTypes = new ArrayList<>();
-                // CR: what's the reason to return stream then?
-                // CR: you can either change api (just return list) or handle paths in stream chain
-                Iterator<Path> iterator = childrenAsPaths.iterator();
-                while(iterator.hasNext()) {
-                    Path path = iterator.next();
+                for (var path : childrenAsPaths) {
                     var duFile = create(path, options);
                     nextLayer.add(duFile);
                     childrenAsTypes.add(duFile);

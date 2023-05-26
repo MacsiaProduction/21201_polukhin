@@ -20,6 +20,6 @@ public class MetaDir implements MetaType<DirType> {
 
     @Override
     public void calculateSize(DuFileType instance) {
-        instance.setCalculatedSize(((DirType)instance).getChildrenAsTypes().mapToLong(DuFileType::getCalculatedSize).sum());
+        instance.setCalculatedSize(((DirType) instance).getChildrenAsTypes().stream().mapToLong(DuFileType::getCalculatedSize).sum());
     }
 }
