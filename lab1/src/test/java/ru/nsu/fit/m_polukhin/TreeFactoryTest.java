@@ -7,19 +7,14 @@ import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 import ru.nsu.fit.m_polukhin.exceptions.PathFactoryException;
 import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
-import ru.nsu.fit.m_polukhin.modules.MetaType;
-import ru.nsu.fit.m_polukhin.modules.dir.MetaDir;
-import ru.nsu.fit.m_polukhin.modules.file.MetaFile;
-import ru.nsu.fit.m_polukhin.modules.symlink.MetaSymlink;
 
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TreeFactoryTest extends DuTest {
 
@@ -42,33 +37,7 @@ public class TreeFactoryTest extends DuTest {
 
         assertNotNull(duFileType);
         assertTrue(duFileType instanceof DuCompoundFileType);
-        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsTypes().findAny().isPresent());
-        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsPaths().findAny().isPresent());
-    }
-
-    @Test
-    public void testCreate() throws PathFactoryException, IOException {
-        Path root = createTestDir();
-        List<Class<? extends MetaType<? extends DuFileType>>> classList =
-                Arrays.asList(MetaSymlink.class, MetaFile.class, MetaDir.class);
-        TreeFactory treeFactory = new TreeFactory(classList);
-        DuFileType fileType = treeFactory.create(root, options(root));
-
-        assertNotNull(fileType);
-        assertTrue(fileType instanceof DuCompoundFileType);
-    }
-
-    // CR: make all the methods private, you only need one method -TreeFactory.create
-    // CR: and private methods are not tested, sine they are implementation detail
-    @Test
-    public void testGetMetaOf() throws PathFactoryException, IOException {
-        Path root = createTestDir();
-        List<Class<? extends MetaType<? extends DuFileType>>> classList =
-                Arrays.asList(MetaSymlink.class, MetaFile.class, MetaDir.class);
-        TreeFactory treeFactory = new TreeFactory(classList);
-        MetaType<? extends DuFileType> metaType = treeFactory.getMetaOf(root);
-
-        assertNotNull(metaType);
-        assertEquals(MetaDir.class, metaType.getClass());
+        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsTypes().stream().findAny().isPresent());
+        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsPaths().stream().findAny().isPresent());
     }
 }

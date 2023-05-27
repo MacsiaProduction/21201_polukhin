@@ -6,12 +6,20 @@ import ru.nsu.fit.m_polukhin.core.DuTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConverterTest extends DuTest {
-    // CR: what about negative numbers, too big numbers and so on?
     @Test
     public void testConvert() {
         assertEquals("[1Gib]", Converter.convert(1073741824L));
         assertEquals("[1Mib]", Converter.convert(1048576L));
         assertEquals("[1Kib]", Converter.convert(1024L));
         assertEquals("[512B]", Converter.convert(512L));
+    }
+    @Test
+    public void testNegativeBytes() {
+        assertEquals("[Invalid]", Converter.convert(-1));
+    }
+
+    @Test
+    public void testReallyBigBytes() {
+        assertEquals("[8589934591Gib]", Converter.convert(Long.MAX_VALUE));
     }
 }

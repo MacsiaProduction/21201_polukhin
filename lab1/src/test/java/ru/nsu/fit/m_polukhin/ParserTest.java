@@ -3,6 +3,7 @@ package ru.nsu.fit.m_polukhin;
 import org.junit.jupiter.api.Test;
 import ru.nsu.fit.m_polukhin.exceptions.DuParseException;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -21,10 +22,9 @@ class ParserTest {
     }
 
     @Test
-    void testGetOptionsWithPath() throws DuParseException {
-        String[] args = {"C:\\", "-depth", "10", "-L", "-limit", "10"};
-        // CR: create temporary file instead Files.createTempFile()
-        Path path = Path.of("C:\\");
+    void testGetOptionsWithPath() throws DuParseException, IOException {
+        Path path = Files.createTempFile("temp", "tmp");
+        String[] args = {path.toString(), "-depth", "10", "-L", "-limit", "10"};
         JduOptions options = Parser.getOptions(args);
         assertNotNull(options);
         assertEquals(10, options.depth());

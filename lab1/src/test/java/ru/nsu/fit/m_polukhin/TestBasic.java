@@ -3,7 +3,6 @@ package ru.nsu.fit.m_polukhin;
 import junit.framework.TestCase;
 import org.junit.Test;
 import ru.nsu.fit.m_polukhin.core.DuTest;
-import ru.nsu.fit.m_polukhin.core.DuTreeElement;
 import ru.nsu.fit.m_polukhin.exceptions.ClassLoadException;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 import ru.nsu.fit.m_polukhin.exceptions.PathFactoryException;
@@ -17,89 +16,160 @@ import java.nio.file.Path;
 
 import static ru.nsu.fit.m_polukhin.core.DuTreeElement.*;
 
+/*
+    CR:
+    also maybe smth additional for negative size, wrong files and so on.
+    please check if your current tests fit this criteria
+*/
 public class TestBasic extends DuTest {
+    /**
+     * dir
+     */
     @Test
-    public void testOneEmptyFileInDirectory() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testEmptyDirectory() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
+        Path root = fs.getPath("dir");
         Files.createDirectory(root);
-        Path barPath = root.resolve("bar.txt");
-        Files.createFile(barPath);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo", 0, file("bar.txt",0)), options(root));
+        DuFileType expected = tree(fs, dir("dir", 0), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
+    /**
+     * dir
+     *     file
+     */
+    @Test
+    public void testEmptyFileInDirectory() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("dir");
+        Files.createDirectory(root);
+        Path filePath = root.resolve("file");
+        Files.createFile(filePath);
+
+        DuFileType actual = treeFactory().buildTree(root, options(root));
+        DuFileType expected = tree(fs, dir("dir", 0, file("file",0)), options(root));
+        TestCase.assertEquals(expected, actual);
+    }
+
+    /**
+     * dir
+     *     dir2
+     */
+    @Test
+    public void testEmptyDirInDirectory() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("dir");
+        Files.createDirectory(root);
+        Path dir2 = root.resolve("dir2");
+        Files.createDirectory(dir2);
+
+        DuFileType actual = treeFactory().buildTree(root, options(root));
+        DuFileType expected = tree(fs, dir("dir", 0, dir("dir2",0)), options(root));
+        TestCase.assertEquals(expected, actual);
+    }
+
+    /**
+     * file
+     */
     @Test
     public void testOneFile() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
+        Path root = fs.getPath("file");
         Files.createFile(root);
         var bytes = "testing".getBytes(StandardCharsets.UTF_8);
         var size = bytes.length;
         Files.write(root, bytes);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, file("foo",size), options(root));
+        DuFileType expected = tree(fs, file("file",size), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
+    /**
+     * file
+     * link -> file
+     */
     @Test
-    public void testOneSymlinkToFile() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToFile() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
-        Files.createDirectory(root);
-        Path barPath = root.resolve("bar.txt");
-        Files.createFile(barPath);
-        Files.createSymbolicLink(root.resolve("link"), barPath);
-        DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo", 8*1024,
-                file("bar.txt",0),
-                symlink("link", 8*1024,
-                        file("bar.txt",0))), options(root));
+        Path filePath = fs.getPath("file");
+        Files.createFile(filePath);
+        Path link = fs.getPath("link");
+        Files.createSymbolicLink(link, filePath);
+        DuFileType actual = treeFactory().buildTree(link, options(link));
+        DuFileType expected = tree(fs, symlink("link", 8*1024, file("file",0)), options(link));
         TestCase.assertEquals(expected, actual);
     }
 
+    /**
+     * dir
+     * link -> dir
+     */
     @Test
-    public void testOneSymlinkToDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToEmptyDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
-        Files.createDirectory(root);
-        Path dir = root.resolve("foo1");
+        Path dir = fs.getPath("dir");
         Files.createDirectory(dir);
-        Path barPath = dir.resolve("bar.txt");
-        Files.createFile(barPath);
-        Files.createSymbolicLink(root.resolve("link"), dir);
-        DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo", 8*1024,
-                dir("foo1", 0,
-                        file("bar.txt",0)),
-                symlink("link", 8*1024,
-                        dir("foo1", 0,
-                            file("bar.txt",0)))), options(root));
+        Path link = fs.getPath("link");
+        Files.createSymbolicLink(link, dir);
+        DuFileType actual = treeFactory().buildTree(link, options(link));
+        DuFileType expected = tree(fs, symlink("link", 8*1024, dir("dir",0)), options(link));
         TestCase.assertEquals(expected, actual);
     }
 
+    /**
+     * dir
+     *     link -> file
+     *     file
+     */
     @Test
-    public void testOneFileInDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
+        Path root = fs.getPath("dir");
         Files.createDirectory(root);
-        Path barPath = root.resolve("bar.txt");
-        Files.createFile(barPath);
-        var bytes = "testing".getBytes(StandardCharsets.UTF_8);
-        var size = bytes.length;
-        Files.write(barPath, bytes);
-
+        Path filePath = root.resolve("file");
+        Files.createFile(filePath);
+        Files.createSymbolicLink(root.resolve("link"), filePath);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo", size, file("bar.txt",size)), options(root));
+        DuFileType expected = tree(fs, dir("dir", 8*1024,
+                file("file",0),
+                symlink("link", 8*1024,
+                        file("file",0))), options(root));
         TestCase.assertEquals(expected, actual);
     }
 
+    /**
+     * file
+     * dir
+     *     link -> file
+     */
+    @Test
+    public void testSymlinkInDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("dir");
+        Files.createDirectory(root);
+        Path filePath = fs.getPath("file");
+        Files.createFile(filePath);
+        Files.createSymbolicLink(root.resolve("link"), filePath);
+        DuFileType actual = treeFactory().buildTree(root, options(root));
+        DuFileType expected = tree(fs, dir("dir", 8*1024,
+                symlink("link", 8*1024,
+                        file("file",0))), options(root));
+        TestCase.assertEquals(expected, actual);
+    }
+
+    /**
+     * dir
+     *     file1
+     *     file2
+     *     file3
+     *     file4
+     */
     @Test
     public void testSeveralFilesInDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
         FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo");
+        Path root = fs.getPath("dir");
         Files.createDirectory(root);
         int size1 = createFile(root, "file1", "asfasdfsdf");
         int size2 = createFile(root, "file2", "asfaetfasfesrd");
@@ -107,7 +177,7 @@ public class TestBasic extends DuTest {
         int size4 = createFile(root, "file4", "asfaetfasfsgdfgdfgsdgsesrd");
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo", size1+size2+size3+size4,
+        DuFileType expected = tree(fs, dir("dir", size1+size2+size3+size4,
                 file("file1",size1),
                 file("file2",size2),
                 file("file3",size3),
@@ -116,56 +186,13 @@ public class TestBasic extends DuTest {
         TestCase.assertEquals(expected, actual);
     }
 
-    /*
-    CR:
-    tests should contain all simple combinations of hierarchies and corner cases.
-    so, for factory I would've expected at least:
-    - file as root
-    - empty dir as root
-    - symlink as root
-    - dir with one file as root
-    - dir with empty dir as root
-    - dir with symlink as root
-
-    tests for symlinks:
-
-    1)
-    foo
-      slink1 -> foo
-
-    2)
-
-    foo
-      slink1 -> bar
-    bar
-      slink2 -> foo
-
-    also maybe smth additional for negative size, wrong files and so on.
-    please check if your current tests fit this criteria
-     */
-    @Test
-    public void testTwoEmptyDirs() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
-        FileSystem fs = fileSystem();
-        Path root = fs.getPath("foo1");
-        Files.createDirectory(root);
-        Path fooPath2 = fs.getPath("foo1", "foo2");
-        Files.createDirectory(fooPath2);
-
-        DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("foo1", 0, dir("foo2",0)), options(root));
-        TestCase.assertEquals(expected, actual);
-    }
-
-    /*
-    CR: please write comments on top of tests so it would be easier to understand what they check.
-    e.g. for this test:
-
-    foo1
-      foo2
-        file1
-        file2
-        file3
-        file4
+    /**
+     * foo1
+     *     foo2
+     *         file1
+     *         file2
+     *         file3
+     *         file4
      */
     @Test
     public void testTwoDirsWithFiles() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
@@ -187,6 +214,70 @@ public class TestBasic extends DuTest {
                 file("file3",size3),
                 file("file4",size4)
                 )), options(root));
+        TestCase.assertEquals(expected, actual);
+    }
+
+    /**
+     * dir
+     *     link -> dir
+     */
+    @Test
+    public void testSymlinkToDirWithIt() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("dir");
+        Files.createDirectory(root);
+        Files.createSymbolicLink(root.resolve("link"), root);
+        
+        DuFileType actual = treeFactory().buildTree(root, options(root));
+        DuFileType expected = tree(fs,
+                dir("dir",8*1024,
+                    symlink("link",8*1024,
+                            dir("dir",8*1024,
+                                    symlink("link",8*1024,
+                                            dir("dir",8*1024,
+                                                    symlink("link",8*1024,
+                                                            dir("dir",8*1024,
+                                                                    symlink("link",8*1024,
+                                                                            dir("dir",8*1024,
+                                                                                    symlink("link",8*1024,
+                                                                                            dir("dir",0))))))))))), options(root));
+        TestCase.assertEquals(expected, actual);
+    }
+
+    /**
+     * dir
+     *  dir
+     *   dir
+     *    dir
+     *     dir
+     *      dir
+     *       dir
+     *        dir
+     *         dir
+     *          dir
+     *           dir
+     *            file1
+     */
+    @Test
+    public void testEdgeCaseDepth() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("foo1");
+        Files.createDirectory(root);
+        Path fooPath2 = fs.getPath("foo1", "dir","dir","dir","dir","dir","dir","dir","dir","dir","foo2");
+        Files.createDirectories(fooPath2);
+        createFile(fooPath2, "file1", "1".repeat(10));
+        DuFileType actual = treeFactory().buildTree(root, options(root));
+        DuFileType expected = tree(fs, dir("foo1", 0,
+                dir("dir",0,
+                        dir("dir",0,
+                                dir("dir",0,
+                                        dir("dir",0,
+                                                dir("dir",0,
+                                                        dir("dir",0,
+                                                                dir("dir",0,
+                                                                        dir("dir",0,
+                                                                                dir("dir",0,
+                                                                                    dir("foo2",0))))))))))), options(root));
         TestCase.assertEquals(expected, actual);
     }
 }

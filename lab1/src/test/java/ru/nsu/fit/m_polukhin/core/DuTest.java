@@ -10,6 +10,7 @@ import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import ru.nsu.fit.m_polukhin.modules.MetaType;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
@@ -25,11 +26,11 @@ public abstract class DuTest {
         return fileSystemRule.getFileSystem();
     }
 
-    protected static Printer printer(Path root) {
-        return new Printer(new DefaultComparator(), options(root));
+    protected static Printer printer(PrintStream stream, Path root) {
+        return new Printer(stream, new DefaultComparator(), options(root));
     }
     protected static JduOptions options(Path root) {
-        return new JduOptions(root, 10, true, 10);
+        return new JduOptions(root, 11, true, 5);
     }
 
     protected static TreeFactory treeFactory() throws PathFactoryException, ClassLoadException {

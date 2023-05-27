@@ -12,15 +12,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public record DuTreeElement(Type type, String path, int size, List<DuTreeElement> children) {
 
     public static DuFileType tree(FileSystem fs, DuTreeElement root, JduOptions options) throws IOException {
-        return buildTree(root, fs.getPath(""), options);
+        return buildTree(fs, root, fs.getPath(""), options);
     }
 
-    private static DuFileType buildTree(DuTreeElement treeElement, Path parentPath, JduOptions options) throws IOException {
-        Path currentPath = parentPath.resolve(treeElement.path);
+    private static DuFileType buildTree(FileSystem fs, DuTreeElement treeElement, Path parentPath, JduOptions options) throws IOException {
+        Path currentPath;
+        currentPath = Objects.requireNonNullElseGet(parentPath, () -> fs.getPath("")).resolve(treeElement.path);
         if (treeElement.type == Type.FILE) {
             DuFileType file = new FileType(currentPath, options);
             file.setCalculatedSize(treeElement.size());
@@ -28,14 +30,15 @@ public record DuTreeElement(Type type, String path, int size, List<DuTreeElement
         }
         if (treeElement.type == Type.SYMLINK) {
             SymlinkType fileType = new SymlinkType(currentPath,options);
-            fileType.setChildren(List.of(buildTree(treeElement.children.get(0), Files.readSymbolicLink(currentPath).getParent(), options)));
+            Path resolved = Files.readSymbolicLink(currentPath);
+            fileType.setChildren(List.of(buildTree(fs, treeElement.children.get(0), resolved.getParent(), options)));
             fileType.setCalculatedSize(treeElement.size());
             return fileType;
         }
         if (treeElement.type == Type.DIR) {
             List<DuFileType> duChildren = new ArrayList<>();
             for (DuTreeElement c : treeElement.children) {
-                duChildren.add(buildTree(c, currentPath, options));
+                duChildren.add(buildTree(fs, c, currentPath, options));
             }
             DirType fileType = new DirType(currentPath, options);
             fileType.setChildren(duChildren);
