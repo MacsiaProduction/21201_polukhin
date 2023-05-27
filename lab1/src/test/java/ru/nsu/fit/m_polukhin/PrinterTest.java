@@ -3,9 +3,6 @@ package ru.nsu.fit.m_polukhin;
 import junit.framework.TestCase;
 import org.junit.Test;
 import ru.nsu.fit.m_polukhin.core.DuTest;
-import ru.nsu.fit.m_polukhin.exceptions.ClassLoadException;
-import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
-import ru.nsu.fit.m_polukhin.exceptions.PathFactoryException;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 
 import java.io.ByteArrayOutputStream;
@@ -105,7 +102,7 @@ public class PrinterTest extends DuTest {
      * link -> file
      */
     @Test
-    public void testSymlinkToFile() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToFile() throws IOException {
         FileSystem fs = fileSystem();
         Path filePath = fs.getPath("file");
         Files.createFile(filePath);
@@ -130,7 +127,7 @@ public class PrinterTest extends DuTest {
      * link -> dir
      */
     @Test
-    public void testSymlinkToEmptyDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToEmptyDir() throws IOException {
         FileSystem fs = fileSystem();
         Path dir = fs.getPath("dir");
         Files.createDirectory(dir);
@@ -156,7 +153,7 @@ public class PrinterTest extends DuTest {
      *     file
      */
     @Test
-    public void testSymlinkToDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkToDir() throws IOException {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
         Files.createDirectory(root);
@@ -188,7 +185,7 @@ public class PrinterTest extends DuTest {
      *     link -> file
      */
     @Test
-    public void testSymlinkInDir() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkInDir() throws IOException {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
         Files.createDirectory(root);
@@ -293,7 +290,7 @@ public class PrinterTest extends DuTest {
      *     link -> dir
      */
     @Test
-    public void testSymlinkToDirWithIt() throws IOException, ClassLoadException, PathFactoryException, FileMissingException {
+    public void testSymlinkToDirWithIt() throws IOException {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
         Files.createDirectory(root);
@@ -333,7 +330,7 @@ public class PrinterTest extends DuTest {
     }
 
     @Test
-    public void testSymlinkWithoutFollowingFlag() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+    public void testSymlinkWithoutFollowingFlag() throws IOException {
         FileSystem fs = fileSystem();
         Path filePath = fs.getPath("file");
         Files.createFile(filePath);
@@ -349,5 +346,6 @@ public class PrinterTest extends DuTest {
                 """;
 
         printer(printStream, link).print(actual);
+        TestCase.assertEquals(expected, outputStream.toString());
     }
 }
