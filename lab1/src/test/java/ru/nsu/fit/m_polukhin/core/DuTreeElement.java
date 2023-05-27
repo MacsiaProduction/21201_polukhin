@@ -31,7 +31,11 @@ public record DuTreeElement(Type type, String path, int size, List<DuTreeElement
         if (treeElement.type == Type.SYMLINK) {
             SymlinkType fileType = new SymlinkType(currentPath,options);
             Path resolved = Files.readSymbolicLink(currentPath);
-            fileType.setChildren(List.of(buildTree(fs, treeElement.children.get(0), resolved.getParent(), options)));
+            if (treeElement.children.size() == 0) {
+                fileType.setChildren(List.of());
+            } else {
+                fileType.setChildren(List.of(buildTree(fs, treeElement.children.get(0), resolved.getParent(), options)));
+            }
             fileType.setCalculatedSize(treeElement.size());
             return fileType;
         }
@@ -54,6 +58,10 @@ public record DuTreeElement(Type type, String path, int size, List<DuTreeElement
 
     public static DuTreeElement symlink(String name, int size, DuTreeElement child) {
         return new DuTreeElement(Type.SYMLINK, name, size, List.of(child));
+    }
+
+    public static DuTreeElement symlink(String name, int size) {
+        return new DuTreeElement(Type.SYMLINK, name, size, List.of());
     }
 
     public static DuTreeElement file(String name, int size) {

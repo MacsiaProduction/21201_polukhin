@@ -14,13 +14,9 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.nsu.fit.m_polukhin.core.DuTreeElement.*;
 
-/*
-    CR:
-    also maybe smth additional for negative size, wrong files and so on.
-    please check if your current tests fit this criteria
-*/
 public class TestBasic extends DuTest {
     /**
      * dir
@@ -280,4 +276,44 @@ public class TestBasic extends DuTest {
                                                                                     dir("foo2",0))))))))))), options(root));
         TestCase.assertEquals(expected, actual);
     }
+
+    /**
+     * file was removed
+     * link -> file
+     */
+    @Test
+    public void testBadSymlink() throws IOException{
+        FileSystem fs = fileSystem();
+        Path filePath = fs.getPath("file");
+        Files.createFile(filePath);
+        Path link = fs.getPath("link");
+        Files.createSymbolicLink(link, filePath);
+        Files.delete(filePath);
+        assertThrows(PathFactoryException.class, () -> treeFactory().buildTree(link, options(link)));
+    }
+
+    @Test
+    public void testWrongPath() {
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath("file");
+        assertThrows(PathFactoryException.class, () -> treeFactory().buildTree(root, options(root)));
+    }
+
+    /**
+     * file
+     * link -/> file
+     */
+    @Test
+    public void testSymlinkWithoutFollowingFlag() throws IOException, PathFactoryException, FileMissingException, ClassLoadException {
+        FileSystem fs = fileSystem();
+        Path filePath = fs.getPath("file");
+        Files.createFile(filePath);
+        Path link = fs.getPath("link");
+        Files.createSymbolicLink(link, filePath);
+        var options = new JduOptions(link, 5, false, 5);
+        DuFileType actual = treeFactory().buildTree(link, options);
+        DuFileType expected = tree(fs, symlink("link", 8*1024), options);
+        TestCase.assertEquals(expected, actual);
+    }
+
 }
