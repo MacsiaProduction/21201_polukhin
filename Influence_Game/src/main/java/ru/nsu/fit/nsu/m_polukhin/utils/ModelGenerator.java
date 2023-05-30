@@ -1,7 +1,6 @@
 package ru.nsu.fit.nsu.m_polukhin.utils;
 
 import ru.nsu.fit.nsu.m_polukhin.model.GameModel;
-import ru.nsu.fit.nsu.m_polukhin.presenter.PlayerPresenter;
 
 import java.util.*;
 

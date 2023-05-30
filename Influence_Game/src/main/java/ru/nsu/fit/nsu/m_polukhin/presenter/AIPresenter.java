@@ -9,7 +9,6 @@ public class AIPresenter implements ModelListener {
 
     private GameModel model;
     private int ownerId;
-    private Move generatedMove;
 
     @Override
     public void init(GameModel model, int ownerId) {

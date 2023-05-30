@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.Move;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
-import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
 import java.util.Random;
 
