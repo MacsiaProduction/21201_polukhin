@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//todo change state of cells only here
 class Field {
     private final HexCell[][] board;
     private final int rows;
