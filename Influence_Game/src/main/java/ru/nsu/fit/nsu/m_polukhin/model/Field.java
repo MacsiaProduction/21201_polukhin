@@ -7,6 +7,7 @@ import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //todo change state of cells only here
 class Field {
@@ -23,8 +24,29 @@ class Field {
         }
     }
 
-    public HexCell getCell(@NotNull Point cords) {
+    public HexCellInfo getCellInfo(@NotNull Point cords) {
+        return getCell(cords).getInfo();
+    }
+
+    private HexCell getCell(Point cords) {
         return board[cords.y()][cords.x()];
+    }
+
+    public void setPower(Point cords, int power) {
+        getCell(cords).setPower(power);
+    }
+
+    /**
+     * sets owner of a second cell to an owner of first cell
+     * @param cell1 cell, whose owner will be used
+     * @param cell2 cell, whose owner will be replaced
+     */
+    public void conquer(HexCellInfo cell1, HexCellInfo cell2) {
+        getCell(cell2.position()).setOwner(getCell(cell1.position()).getOwner());
+    }
+
+    public void setOwner(Point cords, Player owner) {
+        getCell(cords).setOwner(owner);
     }
 
     public void initCell(@NotNull Point cords) {
@@ -32,7 +54,7 @@ class Field {
     }
 
     public boolean areNeighbors(Point cords1, Point cords2) {
-        return getNeighbors(cords1).contains(getCell(cords2).getInfo());
+        return getNeighbors(cords1).contains(getCellInfo(cords2));
     }
 
     public static @NotNull List<Point> getPossibleNeighbors(int rows, int columns, @NotNull Point cords) {
@@ -51,7 +73,7 @@ class Field {
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : getPossibleNeighbors(rows, columns, cords)) {
             if (isCellPresent(point)) {
-                list.add(getCell(point).getInfo());
+                list.add(getCellInfo(point));
             }
         }
         return list;
@@ -69,7 +91,7 @@ class Field {
         return getPlayerCells(playerId).size();
     }
 
-    public List<HexCell> getPlayerCells(int playerId) {
-        return Arrays.stream(board).flatMap(Arrays::stream).filter(hexCell -> hexCell!=null && hexCell.getInfo().ownerId() == playerId).toList();
+    public List<HexCellInfo> getPlayerCells(int playerId) {
+        return Arrays.stream(board).flatMap(Arrays::stream).filter(hexCell -> hexCell!=null && hexCell.getInfo().ownerId() == playerId).map(HexCell::getInfo).collect(Collectors.toList());
     }
 }

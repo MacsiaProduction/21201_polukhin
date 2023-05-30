@@ -64,28 +64,28 @@ class Player {
     }
 
     private void attack(@NotNull Move move) throws MoveException {
-        var cell1 = field.getCell(move.start());
-        var cell2 = field.getCell(move.end());
+        var cell1 = field.getCellInfo(move.start());
+        var cell2 = field.getCellInfo(move.end());
 
-        if (cell1.getOwner() != this) {
+        if (cell1.ownerId() != getId()) {
             throw new MoveException("You can't attack with not your cell");
-        } else if (cell2.getOwner() == this) {
+        } else if (cell2.ownerId() == getId()) {
             throw new MoveException("You can't attack your own cell");
-        } else if (cell1.getPower() <= 1) {
+        } else if (cell1.power() <= 1) {
             throw new MoveException("Only cells with >=2 power can attack");
         } else if (!field.areNeighbors(move.start(), move.end())) {
             throw new MoveException("Only neighbor cells can attack");
-        } else if (cell1.getOwner() == cell2.getOwner()) {
+        } else if (cell1.ownerId() == cell2.ownerId()) {
             throw new MoveException("Can not attack your own cells");
         } else {
-            while(cell1.getPower() > 1) {
-                cell1.setPower(cell1.getPower() - 1);
+            while(field.getCellInfo(move.start()).power() > 1) {
+                field.setPower(cell1.position(), field.getCellInfo(move.start()).power() - 1);
                 int attackPower = new Random().nextInt(3) + 1;
-                cell2.setPower(cell2.getPower() - attackPower);
-                if (cell2.getPower() <= 0) {
-                    cell2.setOwner(cell1.getOwner());
-                    cell2.setPower(cell1.getPower());
-                    cell1.setPower(1);
+                field.setPower(cell2.position(), field.getCellInfo(move.end()).power() - attackPower);
+                if (field.getCellInfo(move.end()).power() <= 0) {
+                    field.conquer(cell1, cell2);
+                    field.setPower(cell2.position(), field.getCellInfo(move.start()).power());
+                    field.setPower(cell1.position(), 1);
                     return;
                 }
             }
@@ -94,11 +94,11 @@ class Player {
 
     private void reinforce(@NotNull Move move) throws MoveException {
         assert move.start() == move.end();
-        var cell = field.getCell(move.start());
-        if (cell.getOwner() != this)
+        var cell = field.getCellInfo(move.start());
+        if (cell.ownerId() != getId())
             throw new MoveException("You can only reinforce your cells");
         if (reinforcePoints == 0) return;
-        cell.setPower(cell.getPower() + 1);
+        field.setPower(cell.position(), cell.power()+1);
         reinforcePoints--;
     }
 

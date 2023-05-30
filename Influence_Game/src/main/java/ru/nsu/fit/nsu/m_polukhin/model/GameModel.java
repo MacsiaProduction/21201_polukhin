@@ -41,7 +41,7 @@ public class GameModel {
     public HexCellInfo getCellInfo(Point cords) {
         if (!isCellPresent(cords))
             throw new IllegalArgumentException("invalid cords");
-        return field.getCell(cords).getInfo();
+        return field.getCellInfo(cords);
     }
 
     public void setPresenters(@NotNull List<ModelListener> presenters) {
@@ -59,8 +59,8 @@ public class GameModel {
     }
 
     private Player initPlayer(Player player, Point startingCell) {
-        field.getCell(startingCell).setOwner(player);
-        field.getCell(startingCell).setPower(2);
+        field.setOwner(startingCell, player);
+        field.setPower(startingCell, 2);
         return player;
     }
 
@@ -116,22 +116,22 @@ public class GameModel {
      * @return Move if there is a turn to make null otherwise
      */
     public Move generateMove(int playerId) {
-        List<HexCell> cellList = field.getPlayerCells(playerId);
+        List<HexCellInfo> cellList = field.getPlayerCells(playerId);
         GameTurnState state = currentPlayer.getTurnState();
         if (state == GameTurnState.ATTACK) {
             for (var attacker : cellList) {
-                if (attacker.getPower() < 2) continue;
-                var neighbours = field.getNeighbors(attacker.getPosition());
+                if (attacker.power() < 2) continue;
+                var neighbours = field.getNeighbors(attacker.position());
                 for (var victim : neighbours) {
-                    if (victim.ownerId() != attacker.getInfo().ownerId()) {
-                        return new Move(attacker.getPosition(), victim.position());
+                    if (victim.ownerId() != attacker.ownerId()) {
+                        return new Move(attacker.position(), victim.position());
                     }
                 }
             }
         }
         else if (state == GameTurnState.REINFORCE && currentPlayer.getReinforcePoints() > 0) {
             var cell = cellList.get(new Random().nextInt(cellList.size()));
-            return new Move(cell.getPosition(), cell.getPosition());
+            return new Move(cell.position(), cell.position());
         }
         return null;
     }
