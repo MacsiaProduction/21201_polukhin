@@ -33,11 +33,8 @@ public class ModelGenerator {
     }
 
     public static GameModel generateModel(int rows, int columns, int nPlayers) {
-//        var model = new GameModel(rows, columns);
         var cells = generateBoard(rows, columns);
         var starts = generateStarts(cells, nPlayers);
-        var model = new GameModel(rows, columns, cells, starts);
-//        model.initModel(cells, starts, presenter);
-        return model;
+        return new GameModel(rows, columns, cells, starts);
     }
 }

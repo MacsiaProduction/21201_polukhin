@@ -8,6 +8,6 @@ public interface ViewListener {
 
     void endTurnButtonClicked();
 
-    void cellClicked(Point cords) throws MoveException;
+    void cellClicked(Move move) throws MoveException;
 }
 

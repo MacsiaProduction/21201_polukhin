@@ -1,5 +1,6 @@
 package ru.nsu.fit.nsu.m_polukhin.view;
 
+import ru.nsu.fit.nsu.m_polukhin.utils.Move;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 import ru.nsu.fit.nsu.m_polukhin.utils.ViewListener;
 
@@ -19,6 +20,7 @@ class GamePlane extends JPanel {
     final int rows;
     private final ViewListener presenter;
     private final List<HexShape> HexShapes = new ArrayList<>();
+    private HexShape previousHighlighted;
     private HexShape highlighted;
 
     public GamePlane(ViewListener presenter, int y, int x) {
@@ -40,14 +42,20 @@ class GamePlane extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 updateHighlighted(e);
                 try {
-                    if(highlighted==null) {
+                    if(highlighted == null) {
                         presenter.cellClicked(null);
                     } else {
-                        presenter.cellClicked(highlighted.info().position());
+                        if(previousHighlighted == null) {
+                            previousHighlighted = highlighted;
+                            return;
+                        }
+                        presenter.cellClicked(new Move(previousHighlighted.info().position(), highlighted.info().position()));
                     }
                 } catch (MoveException ex) {
                     System.out.println("wrong action"+ex);
                     //todo show tip
+                } finally {
+                    previousHighlighted = highlighted;
                 }
             }
         });

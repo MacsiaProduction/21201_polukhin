@@ -1,30 +1,29 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
-import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
-import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
-import ru.nsu.fit.nsu.m_polukhin.utils.Point;
+import org.jetbrains.annotations.NotNull;
+import ru.nsu.fit.nsu.m_polukhin.utils.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class GameModel {
-
     private final int rows;
     private final int columns;
-
     private final List<Player> playerList;
     private final Field field;
-
-    private Player host;
     private Player currentPlayer;
 
-    private HexCell selected;
-
-    public GameModel(int rows, int columns) {
+    public GameModel(int rows, int columns, @NotNull List<Point> existingCells, @NotNull List<Point> startingCells) {
         this.rows = rows;
         this.columns = columns;
         this.playerList = new ArrayList<>();
         this.field = new Field(rows, columns);
+        existingCells.forEach(field::initCell);
+        for (Point startingCell : startingCells) {
+            playerList.add(initPlayer(new Player(field), startingCell));
+        }
     }
 
     public int rows() {
@@ -45,18 +44,18 @@ public class GameModel {
         return field.getCell(cords).getInfo();
     }
 
-    public void initModel(List<Point> existingCells, List<Point> startingCells) {
-        existingCells.forEach(field::initCell);
-        host = new Player(field);
-        playerList.add(initPlayer(host, startingCells.get(0)));
-        for (int i = 1; i < startingCells.size(); i++) {
-            Player player = new BasicAI(field);
-            playerList.add(initPlayer(player, startingCells.get(i)));
+    public void setPresenters(@NotNull List<ModelListener> presenters) {
+        assert presenters.size() == playerList.size();
+
+        for (ModelListener presenter : presenters) {
+            var tmp = playerList.get(presenters.indexOf(presenter));
+            presenter.init(this, tmp.getId());
+            tmp.setListener(presenter);
+            tmp.getListener().setAttackInfo();
+            tmp.getListener().updateView();
         }
-        host.setListener(presenter);
-        host.getListener().setAttackInfo();
-        host.getListener().updateView();
-        currentPlayer = host;
+        currentPlayer = playerList.get(0);
+        currentPlayer.getListener().startOfTurn();
     }
 
     private Player initPlayer(Player player, Point startingCell) {
@@ -68,56 +67,72 @@ public class GameModel {
     //todo digital signatures for purposes of playerId field in the multiplayer
     public void nextState(int playerId) {
         assert playerId == currentPlayer.getId() : currentPlayer;
-        selected = null;
         if (!currentPlayer.nextState())
             nextPlayerTurn();
+        currentPlayer.getListener().askMove();
     }
 
     private void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
         turnCheck();
-        if (currentPlayer instanceof AI) {
-            ((AI) currentPlayer).move();
-            nextPlayerTurn();
-        } else {
-            currentPlayer.getListener().updateView();
-            currentPlayer.getListener().askTurn();
-        }
+        currentPlayer.getListener().updateView();
+        currentPlayer.getListener().startOfTurn();
     }
 
     //todo digital signatures for purposes of playerId field in the multiplayer
-    public void cellClicked(int playerId, Point cords) throws MoveException {
-        if (cords == null || !isCellPresent(cords)) {
-            selected = null;
-            return;
-        }
-        // CR: assert / boolean check, not both
-        assert Field.areValidCords(rows, columns, cords) : cords;
+    public void makeMove(int playerId, Move move) throws MoveException {
         assert playerId == currentPlayer.getId() : currentPlayer;
 
-        HexCell newSelected = field.getCell(cords);
-        if (selected == null) {
-            selected = newSelected;
-            return;
-        }
-        currentPlayer.move(selected.getPosition(), cords);
-        // CR: currentPlayer.getListener().updateView(); -> currentPlayer.updateView();, remove AI check
-        if (!(currentPlayer instanceof AI)) currentPlayer.getListener().updateView();
-        selected = null;
+        if (move == null || move.start()==null || move.end() == null || !isCellPresent(move.start()) || !isCellPresent(move.end())) return;
+
+        currentPlayer.move(move);
+        currentPlayer.getListener().updateView();
+        currentPlayer.getListener().askMove();
     }
 
     private void turnCheck() {
-        playerList.removeIf(p -> field.getNumberOfCells(p.getId()) == 0);
+        for (Iterator<Player> iterator = playerList.iterator(); iterator.hasNext(); ) {
+            Player player = iterator.next();
+            if (field.getNumberOfCells(player.getId()) == 0) {
+                player.getListener().gameOver();
+                iterator.remove();
+            }
+        }
         if (playerList.size() <= 1) {
             gameOver();
         }
     }
 
     private void gameOver() {
-        host.getListener().gameOver();
+        playerList.forEach(player -> player.getListener().gameOver());
     }
 
-    public static List<Point> getPossibleNeighbors(int rows, int columns, Point cords) {
+    public static @NotNull List<Point> getPossibleNeighbors(int rows, int columns, Point cords) {
         return Field.getPossibleNeighbors(rows, columns, cords);
+    }
+
+    /**
+     * @param playerId player whose turn is generating
+     * @return Move if there is a turn to make null otherwise
+     */
+    public Move generateMove(int playerId) {
+        List<HexCell> cellList = field.getPlayerCells(playerId);
+        GameTurnState state = currentPlayer.getTurnState();
+        if (state == GameTurnState.ATTACK) {
+            for (var attacker : cellList) {
+                if (attacker.getPower() < 2) continue;
+                var neighbours = field.getNeighbors(attacker.getPosition());
+                for (var victim : neighbours) {
+                    if (victim.ownerId() != attacker.getInfo().ownerId()) {
+                        return new Move(attacker.getPosition(), victim.position());
+                    }
+                }
+            }
+        }
+        else if (state == GameTurnState.REINFORCE && currentPlayer.getReinforcePoints() > 0) {
+            var cell = cellList.get(new Random().nextInt(cellList.size()));
+            return new Move(cell.getPosition(), cell.getPosition());
+        }
+        return null;
     }
 }

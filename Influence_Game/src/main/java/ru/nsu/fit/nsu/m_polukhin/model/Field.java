@@ -1,5 +1,6 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
+import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.nsu.m_polukhin.utils.HexCellInfo;
 import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//todo change state of cells only here
 class Field {
     private final HexCell[][] board;
     private final int rows;
@@ -21,11 +23,11 @@ class Field {
         }
     }
 
-    public HexCell getCell(Point cords) {
+    public HexCell getCell(@NotNull Point cords) {
         return board[cords.y()][cords.x()];
     }
 
-    public void initCell(Point cords) {
+    public void initCell(@NotNull Point cords) {
         board[cords.y()][cords.x()] = new HexCell(cords);
     }
 
@@ -33,7 +35,7 @@ class Field {
         return getNeighbors(cords1).contains(getCell(cords2).getInfo());
     }
 
-    public static List<Point> getPossibleNeighbors(int rows, int columns, Point cords) {
+    public static @NotNull List<Point> getPossibleNeighbors(int rows, int columns, @NotNull Point cords) {
         List<Point> list = new ArrayList<>();
         list.add(new Point(cords.y()+1, cords.x()));
         list.add(new Point(cords.y()-1, cords.x()));
@@ -45,7 +47,6 @@ class Field {
         return list;
     }
 
-    // CR: HexCellInfo -> HexCell
     public List<HexCellInfo> getNeighbors(Point cords) {
         List<HexCellInfo> list = new ArrayList<>();
         for (Point point : getPossibleNeighbors(rows, columns, cords)) {
@@ -56,11 +57,11 @@ class Field {
         return list;
     }
 
-    public static boolean areValidCords(int rows, int columns, Point cords) {
+    public static boolean areValidCords(int rows, int columns, @NotNull Point cords) {
         return cords.y() >= 0 && cords.y() < rows && cords.x() >= 0 && cords.x() < columns;
     }
 
-    public boolean isCellPresent(Point cords) {
+    public boolean isCellPresent(@NotNull Point cords) {
         return areValidCords(rows, columns, cords) && getCell(cords)!=null;
     }
 

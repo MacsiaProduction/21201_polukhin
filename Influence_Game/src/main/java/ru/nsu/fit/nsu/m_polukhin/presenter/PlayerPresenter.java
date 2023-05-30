@@ -1,23 +1,33 @@
 package ru.nsu.fit.nsu.m_polukhin.presenter;
 
 import ru.nsu.fit.nsu.m_polukhin.model.GameModel;
+import ru.nsu.fit.nsu.m_polukhin.utils.*;
 import ru.nsu.fit.nsu.m_polukhin.view.GameView;
 
-public class PlayerPresenter extends Presenter {
-    private final GameView view;
+public class PlayerPresenter implements ModelListener, ViewListener {
+    private GameView view;
+    private GameModel model;
+    private int ownerId;
 
-    public PlayerPresenter(GameModel model) {
+    @Override
+    public void init(GameModel model, int ownerId) {
         this.model = model;
+        this.ownerId = ownerId;
         this.view = new GameView(this, model.rows(), model.columns());
-        model.setPresenter(this);
     }
 
     @Override
-    public void askTurn() {
+    public void startOfTurn() {
         view.askTurn();
     }
 
+    @Override
     public void updateView() {
+        view.updateState();
+    }
+
+    @Override
+    public void askMove() {
         view.updateState();
     }
 
@@ -31,5 +41,25 @@ public class PlayerPresenter extends Presenter {
 
     public void gameOver() {
         view.gameOver();
+    }
+
+    @Override
+    public HexCellInfo getCellState(int y, int x) {
+        return model.getCellInfo(new Point(y,x));
+    }
+
+    @Override
+    public boolean isCellPresent(int y, int x) {
+        return model.isCellPresent(new Point(y,x));
+    }
+
+    @Override
+    public void endTurnButtonClicked() {
+        model.nextState(ownerId);
+    }
+
+    @Override
+    public void cellClicked(Move move) throws MoveException {
+        model.makeMove(ownerId, move);
     }
 }

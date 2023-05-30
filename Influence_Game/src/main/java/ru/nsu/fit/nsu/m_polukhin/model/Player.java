@@ -1,19 +1,15 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
+import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
+import ru.nsu.fit.nsu.m_polukhin.utils.Move;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 import ru.nsu.fit.nsu.m_polukhin.utils.Point;
 
 import java.util.Random;
 
-/*
-
-nextState,
-move
- */
-
 class Player {
-    GameTurnState turnState = GameTurnState.ATTACK;
+    private GameTurnState turnState = GameTurnState.ATTACK;
 
     private long reinforcePoints;
 
@@ -34,6 +30,14 @@ class Player {
         this.number = playerCount++;
     }
 
+    public GameTurnState getTurnState() {
+        return this.turnState;
+    }
+
+    public long getReinforcePoints() {
+        return reinforcePoints;
+    }
+
     public ModelListener getListener() {
         if (this.listener == null) throw new UnsupportedOperationException("listener haven't been inited");
         return listener;
@@ -51,23 +55,26 @@ class Player {
         if (turnState == GameTurnState.ATTACK) {
             turnState = GameTurnState.REINFORCE;
             reinforcePoints = field.getNumberOfCells(getId());
-            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
+            getListener().setReinforceInfo(reinforcePoints);
             return true;
         } else {
             turnState = GameTurnState.ATTACK;
-            if(!(this instanceof AI)) getListener().setAttackInfo();
+            getListener().setAttackInfo();
             return false;
         }
     }
 
-    private void attack(HexCell cell1, HexCell cell2) throws MoveException {
+    private void attack(@NotNull Move move) throws MoveException {
+        var cell1 = field.getCell(move.start());
+        var cell2 = field.getCell(move.end());
+
         if (cell1.getOwner() != this) {
             throw new MoveException("You can't attack with not your cell");
         } else if (cell2.getOwner() == this) {
             throw new MoveException("You can't attack your own cell");
         } else if (cell1.getPower() <= 1) {
             throw new MoveException("Only cells with >=2 power can attack");
-        } else if (!field.areNeighbors(cell1.getPosition(),cell2.getPosition())) {
+        } else if (!field.areNeighbors(move.start(), move.end())) {
             throw new MoveException("Only neighbor cells can attack");
         } else if (cell1.getOwner() == cell2.getOwner()) {
             throw new MoveException("Can not attack your own cells");
@@ -86,7 +93,9 @@ class Player {
         }
     }
 
-    private void reinforce(HexCell cell) throws MoveException {
+    private void reinforce(@NotNull Move move) throws MoveException {
+        assert move.start() == move.end();
+        var cell = field.getCell(move.start());
         if (cell.getOwner() != this)
             throw new MoveException("You can only reinforce your cells");
         if (reinforcePoints == 0) return;
@@ -94,14 +103,12 @@ class Player {
         reinforcePoints--;
     }
 
-    // CR: use reinforce / attack methods instead
-    public void move(Point cords1, Point cords2) throws MoveException {
+    public void move(Move move) throws MoveException {
         if (turnState == GameTurnState.ATTACK) {
-            attack(field.getCell(cords1), field.getCell(cords2));
+            attack(move);
         } else {
-            assert cords1 == cords2;
-            reinforce(field.getCell(cords1));
-            if(!(this instanceof AI)) getListener().setReinforceInfo(reinforcePoints);
+            reinforce(move);
+            getListener().setReinforceInfo(reinforcePoints);
         }
     }
 }

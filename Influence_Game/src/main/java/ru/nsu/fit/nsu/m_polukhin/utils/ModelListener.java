@@ -1,9 +1,12 @@
 package ru.nsu.fit.nsu.m_polukhin.utils;
 
+import ru.nsu.fit.nsu.m_polukhin.model.GameModel;
+
 public interface ModelListener {
-//    void init(int ownerId, GameModel model);
-    void askTurn();
+    void init(GameModel model, int ownerId);
+    void startOfTurn();
     void updateView();
+    void askMove();
     void setAttackInfo();
     void setReinforceInfo(long powerRemain);
     void gameOver();
