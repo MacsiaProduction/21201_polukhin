@@ -1,6 +1,7 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.Move;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
@@ -13,6 +14,11 @@ class Player {
     private long reinforcePoints;
 
     private static int playerCount = 1;
+
+    @TestOnly
+    static void resetCounter() {
+        playerCount = 1;
+    }
 
     private final int number;
 

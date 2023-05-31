@@ -39,8 +39,6 @@ public class GameModel {
     }
 
     public HexCellInfo getCellInfo(Point cords) {
-        if (!isCellPresent(cords))
-            throw new IllegalArgumentException("invalid cords");
         return field.getCellInfo(cords);
     }
 

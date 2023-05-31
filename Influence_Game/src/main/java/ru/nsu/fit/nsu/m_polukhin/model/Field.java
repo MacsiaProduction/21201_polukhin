@@ -28,6 +28,7 @@ class Field {
     }
 
     private HexCell getCell(Point cords) {
+        if (!areValidCords(rows,columns,cords)) throw new IllegalArgumentException("invalid cords");
         return board[cords.y()][cords.x()];
     }
 
@@ -45,10 +46,12 @@ class Field {
     }
 
     public void setOwner(Point cords, Player owner) {
+        if (!areValidCords(rows,columns,cords)) throw new IllegalArgumentException("invalid cords");
         getCell(cords).setOwner(owner);
     }
 
     public void initCell(@NotNull Point cords) {
+        if (!areValidCords(rows,columns,cords)) throw new IllegalArgumentException("invalid cords");
         board[cords.y()][cords.x()] = new HexCell(cords);
     }
 
