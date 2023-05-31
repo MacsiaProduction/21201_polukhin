@@ -6,14 +6,8 @@ import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 
 @TestOnly
 public class StabPresenter implements ModelListener {
-    private GameModel model;
-    private int ownerId;
-
     @Override
-    public void init(GameModel model, int ownerId) {
-        this.model = model;
-        this.ownerId = ownerId;
-    }
+    public void init(GameModel model, int ownerId) {}
 
     @Override
     public void askMove() {}
