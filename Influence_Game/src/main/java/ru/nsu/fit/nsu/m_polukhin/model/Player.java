@@ -103,7 +103,7 @@ class Player {
         var cell = field.getCellInfo(move.start());
         if (cell.ownerId() != getId())
             throw new MoveException("You can only reinforce your cells");
-        if (reinforcePoints == 0) return;
+        if (reinforcePoints == 0) throw new MoveException("You can only reinforce your cells <number of your cells> times");
         field.setPower(cell.position(), cell.power()+1);
         reinforcePoints--;
     }
