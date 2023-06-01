@@ -1,6 +1,7 @@
 package ru.nsu.fit.m_polukhin.modules.symlink;
 
 import ru.nsu.fit.m_polukhin.JduOptions;
+import ru.nsu.fit.m_polukhin.SymlinkOptions;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 
@@ -10,13 +11,13 @@ import java.nio.file.Path;
 import java.util.List;
 
 public final class SymlinkType extends DuCompoundFileType {
-    public SymlinkType(Path file, JduOptions jduOptions) {
-        super(file, jduOptions);
+    public SymlinkType(Path file) {
+        super(file);
     }
 
     @Override
-    public List<Path> getChildrenAsPaths() throws FileMissingException {
-        if (options().followSymLinks()) {
+    public List<Path> getChildrenAsPaths(SymlinkOptions symlinkOptions) throws FileMissingException {
+        if (symlinkOptions.followSymLinks()) {
             try {
                 return List.of(Files.readSymbolicLink(path()));
             } catch (IOException e) {

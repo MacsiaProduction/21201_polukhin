@@ -6,8 +6,8 @@ import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import java.nio.file.Path;
 
 public final class FileType extends DuFileType {
-    public FileType(Path file, JduOptions jduOptions) {
-        super(file, jduOptions);
+    public FileType(Path file) {
+        super(file);
     }
 
     @Override

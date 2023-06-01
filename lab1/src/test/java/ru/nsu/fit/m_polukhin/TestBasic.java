@@ -28,7 +28,7 @@ public class TestBasic extends DuTest {
         Files.createDirectory(root);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("dir", 0), options(root));
+        DuFileType expected = tree(fs, dir("dir", 0));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -45,7 +45,7 @@ public class TestBasic extends DuTest {
         Files.createFile(filePath);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("dir", 0, file("file",0)), options(root));
+        DuFileType expected = tree(fs, dir("dir", 0, file("file",0)));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -62,7 +62,7 @@ public class TestBasic extends DuTest {
         Files.createDirectory(dir2);
 
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, dir("dir", 0, dir("dir2",0)), options(root));
+        DuFileType expected = tree(fs, dir("dir", 0, dir("dir2",0)));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -78,7 +78,7 @@ public class TestBasic extends DuTest {
         var size = bytes.length;
         Files.write(root, bytes);
         DuFileType actual = treeFactory().buildTree(root, options(root));
-        DuFileType expected = tree(fs, file("file",size), options(root));
+        DuFileType expected = tree(fs, file("file",size));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -94,7 +94,7 @@ public class TestBasic extends DuTest {
         Path link = fs.getPath("link");
         Files.createSymbolicLink(link, filePath);
         DuFileType actual = treeFactory().buildTree(link, options(link));
-        DuFileType expected = tree(fs, symlink("link", 8*1024, file("file",0)), options(link));
+        DuFileType expected = tree(fs, symlink("link", 8*1024, file("file",0)));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -110,7 +110,7 @@ public class TestBasic extends DuTest {
         Path link = fs.getPath("link");
         Files.createSymbolicLink(link, dir);
         DuFileType actual = treeFactory().buildTree(link, options(link));
-        DuFileType expected = tree(fs, symlink("link", 8*1024, dir("dir",0)), options(link));
+        DuFileType expected = tree(fs, symlink("link", 8*1024, dir("dir",0)));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -131,7 +131,7 @@ public class TestBasic extends DuTest {
         DuFileType expected = tree(fs, dir("dir", 8*1024,
                 file("file",0),
                 symlink("link", 8*1024,
-                        file("file",0))), options(root));
+                        file("file",0))));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -151,7 +151,7 @@ public class TestBasic extends DuTest {
         DuFileType actual = treeFactory().buildTree(root, options(root));
         DuFileType expected = tree(fs, dir("dir", 8*1024,
                 symlink("link", 8*1024,
-                        file("file",0))), options(root));
+                        file("file",0))));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -178,7 +178,7 @@ public class TestBasic extends DuTest {
                 file("file2",size2),
                 file("file3",size3),
                 file("file4",size4)
-        ), options(root));
+        ));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -209,7 +209,7 @@ public class TestBasic extends DuTest {
                 file("file2",size2),
                 file("file3",size3),
                 file("file4",size4)
-                )), options(root));
+                )));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -236,7 +236,7 @@ public class TestBasic extends DuTest {
                                                                     symlink("link",8*1024,
                                                                             dir("dir",8*1024,
                                                                                     symlink("link",8*1024,
-                                                                                            dir("dir",0))))))))))), options(root));
+                                                                                            dir("dir",0))))))))))));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -273,7 +273,7 @@ public class TestBasic extends DuTest {
                                                                 dir("dir",0,
                                                                         dir("dir",0,
                                                                                 dir("dir",0,
-                                                                                    dir("foo2",0))))))))))), options(root));
+                                                                                    dir("foo2",0))))))))))));
         TestCase.assertEquals(expected, actual);
     }
 
@@ -312,7 +312,7 @@ public class TestBasic extends DuTest {
         Files.createSymbolicLink(link, filePath);
         var options = new JduOptions(link, 5, false, 5);
         DuFileType actual = treeFactory().buildTree(link, options);
-        DuFileType expected = tree(fs, symlink("link", 8*1024), options);
+        DuFileType expected = tree(fs, symlink("link", 8*1024));
         TestCase.assertEquals(expected, actual);
     }
 

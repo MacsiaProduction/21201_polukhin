@@ -1,6 +1,5 @@
 package ru.nsu.fit.m_polukhin.core;
 
-import ru.nsu.fit.m_polukhin.JduOptions;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 import ru.nsu.fit.m_polukhin.modules.dir.DirType;
 import ru.nsu.fit.m_polukhin.modules.file.FileType;
@@ -16,25 +15,25 @@ import java.util.Objects;
 
 public record DuTreeElement(Type type, String path, int size, List<DuTreeElement> children) {
 
-    public static DuFileType tree(FileSystem fs, DuTreeElement root, JduOptions options) throws IOException {
-        return buildTree(fs, root, fs.getPath(""), options);
+    public static DuFileType tree(FileSystem fs, DuTreeElement root) throws IOException {
+        return buildTree(fs, root, fs.getPath(""));
     }
 
-    private static DuFileType buildTree(FileSystem fs, DuTreeElement treeElement, Path parentPath, JduOptions options) throws IOException {
+    private static DuFileType buildTree(FileSystem fs, DuTreeElement treeElement, Path parentPath) throws IOException {
         Path currentPath;
         currentPath = Objects.requireNonNullElseGet(parentPath, () -> fs.getPath("")).resolve(treeElement.path);
         if (treeElement.type == Type.FILE) {
-            DuFileType file = new FileType(currentPath, options);
+            DuFileType file = new FileType(currentPath);
             file.setCalculatedSize(treeElement.size());
             return file;
         }
         if (treeElement.type == Type.SYMLINK) {
-            SymlinkType fileType = new SymlinkType(currentPath,options);
+            SymlinkType fileType = new SymlinkType(currentPath);
             Path resolved = Files.readSymbolicLink(currentPath);
             if (treeElement.children.size() == 0) {
                 fileType.setChildren(List.of());
             } else {
-                fileType.setChildren(List.of(buildTree(fs, treeElement.children.get(0), resolved.getParent(), options)));
+                fileType.setChildren(List.of(buildTree(fs, treeElement.children.get(0), resolved.getParent())));
             }
             fileType.setCalculatedSize(treeElement.size());
             return fileType;
@@ -42,9 +41,9 @@ public record DuTreeElement(Type type, String path, int size, List<DuTreeElement
         if (treeElement.type == Type.DIR) {
             List<DuFileType> duChildren = new ArrayList<>();
             for (DuTreeElement c : treeElement.children) {
-                duChildren.add(buildTree(fs, c, currentPath, options));
+                duChildren.add(buildTree(fs, c, currentPath));
             }
-            DirType fileType = new DirType(currentPath, options);
+            DirType fileType = new DirType(currentPath);
             fileType.setChildren(duChildren);
             fileType.setCalculatedSize(treeElement.size());
             return fileType;

@@ -11,8 +11,8 @@ import java.nio.file.Path;
 
 public class MetaFile implements MetaType<FileType> {
     @Override
-    public FileType createFileType(Path path, JduOptions options) {
-        return new FileType(path,options);
+    public FileType createFileType(Path path) {
+        return new FileType(path);
     }
 
     @Override

@@ -9,8 +9,8 @@ import java.nio.file.Path;
 
 public class MetaSymlink implements MetaType<SymlinkType> {
     @Override
-    public SymlinkType createFileType(Path path, JduOptions options) {
-        return new SymlinkType(path, options);
+    public SymlinkType createFileType(Path path) {
+        return new SymlinkType(path);
     }
 
     @Override

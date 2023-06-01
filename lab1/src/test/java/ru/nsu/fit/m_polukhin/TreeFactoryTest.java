@@ -38,6 +38,6 @@ public class TreeFactoryTest extends DuTest {
         assertNotNull(duFileType);
         assertTrue(duFileType instanceof DuCompoundFileType);
         assertTrue(((DuCompoundFileType) duFileType).getChildrenAsTypes().stream().findAny().isPresent());
-        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsPaths().stream().findAny().isPresent());
+        assertTrue(((DuCompoundFileType) duFileType).getChildrenAsPaths(() -> true).stream().findAny().isPresent());
     }
 }

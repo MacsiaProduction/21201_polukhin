@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 public interface MetaType<Type extends DuFileType> {
 
-    Type createFileType(Path path, JduOptions options);
+    Type createFileType(Path path);
 
     boolean isCompatible(Path path);
 

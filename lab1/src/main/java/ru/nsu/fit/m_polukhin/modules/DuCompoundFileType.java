@@ -1,6 +1,6 @@
 package ru.nsu.fit.m_polukhin.modules;
 
-import ru.nsu.fit.m_polukhin.JduOptions;
+import ru.nsu.fit.m_polukhin.SymlinkOptions;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 
 import java.nio.file.Path;
@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public abstract class DuCompoundFileType extends DuFileType{
     private List<DuFileType> children = new ArrayList<>();
-    public DuCompoundFileType(Path path, JduOptions jduOptions) {
-        super(path, jduOptions);
+    public DuCompoundFileType(Path path) {
+        super(path);
     }
 
     public void setChildren(List<DuFileType> children) {
@@ -23,7 +23,7 @@ public abstract class DuCompoundFileType extends DuFileType{
         return this.children;
     }
 
-    abstract public List<Path> getChildrenAsPaths() throws FileMissingException;
+    abstract public List<Path> getChildrenAsPaths(SymlinkOptions symlinkOptions) throws FileMissingException;
 
     @Override
     public boolean equals(Object o) {

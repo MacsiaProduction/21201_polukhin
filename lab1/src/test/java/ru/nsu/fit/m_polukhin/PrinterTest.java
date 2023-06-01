@@ -25,7 +25,7 @@ public class PrinterTest extends DuTest {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
 
-        DuFileType actual = tree(fs, dir("dir", 0), options(root));
+        DuFileType actual = tree(fs, dir("dir", 0));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -44,7 +44,7 @@ public class PrinterTest extends DuTest {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
 
-        DuFileType actual = tree(fs, dir("dir", 0, file("file",0)), options(root));
+        DuFileType actual = tree(fs, dir("dir", 0, file("file",0)));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -66,7 +66,7 @@ public class PrinterTest extends DuTest {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("dir");
 
-        DuFileType actual = tree(fs, dir("dir", 0, dir("dir2",0)), options(root));
+        DuFileType actual = tree(fs, dir("dir", 0, dir("dir2",0)));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -87,7 +87,7 @@ public class PrinterTest extends DuTest {
         FileSystem fs = fileSystem();
         Path root = fs.getPath("file");
 
-        DuFileType actual = tree(fs, file("file",100), options(root));
+        DuFileType actual = tree(fs, file("file",100));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -109,7 +109,7 @@ public class PrinterTest extends DuTest {
         Path link = fs.getPath("link");
         Files.createSymbolicLink(link, filePath);
 
-        DuFileType actual = tree(fs, symlink("link", 8*1024, file("file",0)), options(link));
+        DuFileType actual = tree(fs, symlink("link", 8*1024, file("file",0)));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, link).print(actual);
@@ -134,7 +134,7 @@ public class PrinterTest extends DuTest {
         Path link = fs.getPath("link");
         Files.createSymbolicLink(link, dir);
 
-        DuFileType actual = tree(fs, symlink("link", 8*1024, dir("dir",0)), options(link));
+        DuFileType actual = tree(fs, symlink("link", 8*1024, dir("dir",0)));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, link).print(actual);
@@ -164,7 +164,7 @@ public class PrinterTest extends DuTest {
         DuFileType actual = tree(fs, dir("dir", 8*1024,
                 file("file",0),
                 symlink("link", 8*1024,
-                        file("file",0))), options(root));
+                        file("file",0))));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -195,7 +195,7 @@ public class PrinterTest extends DuTest {
 
         DuFileType actual = tree(fs, dir("dir", 8*1024,
                 symlink("link", 8*1024,
-                        file("file",0))), options(root));
+                        file("file",0))));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -227,7 +227,7 @@ public class PrinterTest extends DuTest {
                 file("file2",size2),
                 file("file3",size3),
                 file("file4",size4)
-        ), options(root));
+        ));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -267,7 +267,7 @@ public class PrinterTest extends DuTest {
                         file("file4",size4),
                         file("file5",size5),
                         file("file6",size6)
-                )), options(root));
+                )));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -307,7 +307,7 @@ public class PrinterTest extends DuTest {
                                                                         symlink("link",8*1024,
                                                                                 dir("dir",8*1024,
                                                                                         symlink("link",8*1024,
-                                                                                                dir("dir",0))))))))))), options(root));
+                                                                                                dir("dir",0))))))))))));
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         printer(printStream, root).print(actual);
@@ -336,8 +336,7 @@ public class PrinterTest extends DuTest {
         Files.createFile(filePath);
         Path link = fs.getPath("link");
         Files.createSymbolicLink(link, filePath);
-        var options = new JduOptions(link, 5, false, 5);
-        DuFileType actual = tree(fs, symlink("link", 8*1024), options);
+        DuFileType actual = tree(fs, symlink("link", 8*1024));
 
         OutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
