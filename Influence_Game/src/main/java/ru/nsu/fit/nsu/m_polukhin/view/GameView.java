@@ -96,7 +96,7 @@ public class GameView {
             JOptionPane.showMessageDialog(null, "Game Over!");
     }
 
-    public void askTurn() {
+    public void askMove() {
         JOptionPane.showMessageDialog(null, "It's your turn");
     }
 

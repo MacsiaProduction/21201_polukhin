@@ -18,7 +18,7 @@ public class PlayerPresenter implements ModelListener, ViewListener {
 
     @Override
     public void startOfTurn() {
-        view.askTurn();
+        view.askMove();
     }
 
     @Override

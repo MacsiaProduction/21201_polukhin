@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.nsu.fit.nsu.m_polukhin.utils.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -54,6 +53,7 @@ public class GameModel {
         }
         currentPlayer = playerList.get(0);
         currentPlayer.getListener().startOfTurn();
+        currentPlayer.getListener().askMove();
     }
 
     private Player initPlayer(Player player, Point startingCell) {
@@ -72,7 +72,7 @@ public class GameModel {
 
     private void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
-        turnCheck();
+        if (!turnCheck()) return;
         currentPlayer.getListener().updateView();
         currentPlayer.getListener().startOfTurn();
     }
@@ -88,17 +88,21 @@ public class GameModel {
         currentPlayer.getListener().askMove();
     }
 
-    private void turnCheck() {
-        for (Iterator<Player> iterator = playerList.iterator(); iterator.hasNext(); ) {
-            Player player = iterator.next();
-            if (field.getNumberOfCells(player.getId()) == 0) {
-                player.getListener().gameOver();
-                iterator.remove();
+
+    /**
+     * @return true if this player is able to move, false otherwise
+     */
+    private boolean turnCheck() {
+        if (field.getNumberOfCells(currentPlayer.getId()) == 0) {
+            currentPlayer.getListener().gameOver();
+            playerList.remove(currentPlayer);
+            if (playerList.size() <= 1) {
+                gameOver();
             }
+            nextPlayerTurn();
+            return false;
         }
-        if (playerList.size() <= 1) {
-            gameOver();
-        }
+        return true;
     }
 
     private void gameOver() {
