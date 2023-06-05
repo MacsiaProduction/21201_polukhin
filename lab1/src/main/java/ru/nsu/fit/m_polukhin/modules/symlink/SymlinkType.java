@@ -1,6 +1,5 @@
 package ru.nsu.fit.m_polukhin.modules.symlink;
 
-import ru.nsu.fit.m_polukhin.JduOptions;
 import ru.nsu.fit.m_polukhin.SymlinkOptions;
 import ru.nsu.fit.m_polukhin.exceptions.FileMissingException;
 import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;

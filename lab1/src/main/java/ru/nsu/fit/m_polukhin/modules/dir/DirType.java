@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class DirType extends DuCompoundFileType {
     public DirType(Path dir) {
@@ -16,8 +17,8 @@ public final class DirType extends DuCompoundFileType {
 
     @Override
     public List<Path> getChildrenAsPaths(SymlinkOptions symlinkOptions) throws FileMissingException {
-        try {
-            return Files.list(path()).toList();
+        try (Stream<Path> paths = Files.list(path())){
+            return paths.toList();
         } catch (IOException e) {
             throw new FileMissingException();
         }

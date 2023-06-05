@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 /**
- * Base class for a Type you want to add for a fdu implementation,
+ * Base class for a Type you want to add for a jdu implementation,
  * it should be able to print itself and calculate it's size.
  */
 public abstract class DuFileType {
