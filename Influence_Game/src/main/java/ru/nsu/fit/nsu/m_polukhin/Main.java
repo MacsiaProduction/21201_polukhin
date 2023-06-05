@@ -13,12 +13,12 @@ import java.util.List;
 public class Main {
     public final static int NUM_ROWS = 10;
     public final static int NUM_COLUMNS = 10;
-    public final static int playerCounter = 2;
+    public final static int PLAYER_COUNTER = 2;
 
     public static void main(String[] args) {
-        GameModel gameModel = ModelGenerator.generateModel(NUM_ROWS, NUM_COLUMNS, playerCounter);
+        GameModel gameModel = ModelGenerator.generateModel(NUM_ROWS, NUM_COLUMNS, PLAYER_COUNTER);
         List<ModelListener> list = new ArrayList<>(List.of(new PlayerPresenter()));
-        list.addAll(Collections.nCopies(playerCounter-1, new AIPresenter()));
+        list.addAll(Collections.nCopies(PLAYER_COUNTER - 1, new AIPresenter()));
         gameModel.setPresenters(list);
     }
 }

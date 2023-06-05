@@ -205,7 +205,7 @@ class GamePlane extends JPanel {
     }
 
     Color getPlayerColor(int playerId) {
-        if (playerId == 0) return Color.CYAN;
+        if (playerId == -1) return Color.CYAN;
         float hue = (float) playerId / 10.0f;
         float saturation = 0.8f;
         float brightness = 0.8f;

@@ -18,12 +18,8 @@ public class PlayerPresenter implements ModelListener, ViewListener {
 
     @Override
     public void startOfTurn() {
-        view.askMove();
-    }
-
-    @Override
-    public void updateView() {
         view.updateState();
+        view.askMove();
     }
 
     @Override
@@ -33,6 +29,7 @@ public class PlayerPresenter implements ModelListener, ViewListener {
 
     public void setAttackInfo() {
         view.setAttackInfo();
+        view.updateState();
     }
 
     public void setReinforceInfo(long powerRemain) {

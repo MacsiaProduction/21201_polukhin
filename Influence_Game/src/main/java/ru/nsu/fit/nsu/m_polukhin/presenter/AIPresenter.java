@@ -34,9 +34,6 @@ public class AIPresenter implements ModelListener {
     public void startOfTurn() {}
 
     @Override
-    public void updateView() {}
-
-    @Override
     public void setAttackInfo() {}
 
     @Override

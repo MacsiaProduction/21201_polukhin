@@ -5,7 +5,6 @@ import ru.nsu.fit.nsu.m_polukhin.model.GameModel;
 public interface ModelListener {
     void init(GameModel model, int ownerId);
     void startOfTurn();
-    void updateView();
     void askMove();
     void setAttackInfo();
     void setReinforceInfo(long powerRemain);

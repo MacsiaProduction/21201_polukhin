@@ -10,18 +10,23 @@ import java.util.Random;
 public class GameModel {
     private final int rows;
     private final int columns;
+
     private final List<Player> playerList;
-    private final Field field;
     private Player currentPlayer;
+
+    private final Field field;
 
     public GameModel(int rows, int columns, @NotNull List<Point> existingCells, @NotNull List<Point> startingCells) {
         this.rows = rows;
         this.columns = columns;
         this.playerList = new ArrayList<>();
         this.field = new Field(rows, columns);
-        existingCells.forEach(field::initCell);
-        for (Point startingCell : startingCells) {
-            playerList.add(initPlayer(new Player(field), startingCell));
+        for (Point existingCell : existingCells) {
+            field.initCell(existingCell);
+        }
+        for (int i = 0; i < startingCells.size(); i++) {
+            Point startingCell = startingCells.get(i);
+            playerList.add(initPlayer(new Player(field, i), startingCell));
         }
     }
 
@@ -42,14 +47,12 @@ public class GameModel {
     }
 
     public void setPresenters(@NotNull List<ModelListener> presenters) {
-        assert presenters.size() == playerList.size();
-
+        assert !playerList.isEmpty() && presenters.size() == playerList.size();
         for (ModelListener presenter : presenters) {
-            var tmp = playerList.get(presenters.indexOf(presenter));
-            presenter.init(this, tmp.getId());
-            tmp.setListener(presenter);
-            tmp.getListener().setAttackInfo();
-            tmp.getListener().updateView();
+            var player = playerList.get(presenters.indexOf(presenter));
+            presenter.init(this, player.getId());
+            player.setListener(presenter);
+            presenter.setAttackInfo();
         }
         currentPlayer = playerList.get(0);
         currentPlayer.getListener().startOfTurn();
@@ -73,7 +76,6 @@ public class GameModel {
     private void nextPlayerTurn() {
         currentPlayer = playerList.get((playerList.indexOf(currentPlayer) + 1) % playerList.size());
         if (!turnCheck()) return;
-        currentPlayer.getListener().updateView();
         currentPlayer.getListener().startOfTurn();
     }
 
@@ -84,7 +86,6 @@ public class GameModel {
         if (move == null || move.start()==null || move.end() == null || !isCellPresent(move.start()) || !isCellPresent(move.end())) return;
 
         currentPlayer.move(move);
-        currentPlayer.getListener().updateView();
         currentPlayer.getListener().askMove();
     }
 

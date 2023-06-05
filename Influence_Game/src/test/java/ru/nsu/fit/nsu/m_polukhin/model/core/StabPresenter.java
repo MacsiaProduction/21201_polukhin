@@ -34,9 +34,6 @@ public class StabPresenter implements ModelListener {
     public void startOfTurn() {startOfTurnCounter++;}
 
     @Override
-    public void updateView() {}
-
-    @Override
     public void setAttackInfo() {}
 
     @Override

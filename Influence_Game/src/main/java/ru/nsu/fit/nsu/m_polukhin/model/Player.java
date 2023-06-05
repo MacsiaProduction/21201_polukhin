@@ -1,7 +1,6 @@
 package ru.nsu.fit.nsu.m_polukhin.model;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
 import ru.nsu.fit.nsu.m_polukhin.utils.ModelListener;
 import ru.nsu.fit.nsu.m_polukhin.utils.Move;
 import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
@@ -9,30 +8,21 @@ import ru.nsu.fit.nsu.m_polukhin.utils.MoveException;
 import java.util.Random;
 
 class Player {
-    private GameTurnState turnState = GameTurnState.ATTACK;
 
-    private long reinforcePoints;
-
-    private static int playerCount = 1;
-
-    @TestOnly
-    static void resetCounter() {
-        playerCount = 1;
-    }
-
+    public final Field field;
     private final int number;
+
+    private GameTurnState turnState = GameTurnState.ATTACK;
+    private long reinforcePoints;
+    private ModelListener listener;
+
+    public Player(Field field, int number) {
+        this.field = field;
+        this.number = number;
+    }
 
     public int getId() {
         return number;
-    }
-
-    public final Field field;
-
-    private ModelListener listener;
-
-    public Player(Field field) {
-        this.field = field;
-        this.number = playerCount++;
     }
 
     public GameTurnState getTurnState() {
@@ -44,12 +34,12 @@ class Player {
     }
 
     public ModelListener getListener() {
-        if (this.listener == null) throw new UnsupportedOperationException("listener haven't been inited");
+        if (this.listener == null) throw new UnsupportedOperationException("listener hasn't been initialized");
         return listener;
     }
 
     public void setListener(ModelListener listener) {
-        if (this.listener != null) throw new UnsupportedOperationException("listener have been already inited");
+        if (this.listener != null) throw new UnsupportedOperationException("listener has been already initialized");
         this.listener = listener;
     }
 
@@ -84,7 +74,7 @@ class Player {
         } else if (cell1.ownerId() == cell2.ownerId()) {
             throw new MoveException("Can not attack your own cells");
         } else {
-            while(field.getCellInfo(move.start()).power() > 1) {
+            while (field.getCellInfo(move.start()).power() > 1) {
                 field.setPower(cell1.position(), field.getCellInfo(move.start()).power() - 1);
                 int attackPower = new Random().nextInt(3) + 1;
                 field.setPower(cell2.position(), field.getCellInfo(move.end()).power() - attackPower);
@@ -103,8 +93,9 @@ class Player {
         var cell = field.getCellInfo(move.start());
         if (cell.ownerId() != getId())
             throw new MoveException("You can only reinforce your cells");
-        if (reinforcePoints == 0) throw new MoveException("You can only reinforce your cells <number of your cells> times");
-        field.setPower(cell.position(), cell.power()+1);
+        if (reinforcePoints == 0)
+            throw new MoveException("You can only reinforce your cells <number of your cells> times");
+        field.setPower(cell.position(), cell.power() + 1);
         reinforcePoints--;
     }
 

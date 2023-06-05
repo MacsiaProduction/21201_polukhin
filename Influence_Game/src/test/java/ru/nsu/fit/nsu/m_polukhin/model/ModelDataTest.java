@@ -38,8 +38,8 @@ public class ModelDataTest {
         Point cords2 = new Point(3, 3);
         Point cords3 = new Point(2, 2);
         var model = createTestModel(cords1, cords2);
-        HexCellInfo info1 = new HexCellInfo(0, 0, cords1);
-        HexCellInfo info2 = new HexCellInfo(0, 0, cords2);
+        HexCellInfo info1 = new HexCellInfo(0, -1, cords1);
+        HexCellInfo info2 = new HexCellInfo(0, -1, cords2);
         assertEquals(info1, model.getCellInfo(cords1));
         assertEquals(info2, model.getCellInfo(cords2));
         assertThrows(Exception.class, ()->model.getCellInfo(cords3));

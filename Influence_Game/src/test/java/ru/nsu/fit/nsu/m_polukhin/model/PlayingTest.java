@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayingTest {
     private GameModel createTestModel(List<Point> existing, Point... starts) {
-        Player.resetCounter();
         return new GameModel(4,4, existing, Arrays.stream(starts).toList());
     }
 
@@ -36,9 +35,9 @@ public class PlayingTest {
         assertTrue(model.isCellPresent(cords3));
         checkListener(presenter1,1,0,1);
         checkListener(presenter2,0,0,0);
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(0,0, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,2, cords3));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(0,-1, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,1, cords3));
     }
 
     @Test
@@ -48,13 +47,13 @@ public class PlayingTest {
         Point cords3 = new Point(0,2);
         var model = createTestModel(List.of(cords1,cords2,cords3), cords1, cords3);
         model.setPresenters(List.of(new StabPresenter(), new StabPresenter()));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords1, cords3)));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords2, cords1)));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords1, cords1)));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords3, cords1)));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords3, cords2)));
-        model.makeMove(1, new Move(cords1, cords2));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords2, cords3)));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords1, cords3)));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords2, cords1)));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords1, cords1)));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords3, cords1)));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords3, cords2)));
+        model.makeMove(0, new Move(cords1, cords2));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords2, cords3)));
     }
 
     @Test
@@ -67,12 +66,12 @@ public class PlayingTest {
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
         // current state validated in testInit
-        model.makeMove(1, new Move(cords1, cords2));
+        model.makeMove(0, new Move(cords1, cords2));
         checkListener(presenter1,1,0,2);
         checkListener(presenter2,0,0,0);
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(1,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,1, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,2, cords3));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(1,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,0, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,1, cords3));
     }
 
     @Test
@@ -84,17 +83,17 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
-        model.makeMove(1, new Move(cords1, cords2));
+        model.makeMove(0, new Move(cords1, cords2));
         // current state validated in testOkMove
-        model.nextState(1);
+        model.nextState(0);
         checkListener(presenter1,1,0,3);
         checkListener(presenter2,0,0,0);
         assertTrue(model.isCellPresent(cords1));
         assertTrue(model.isCellPresent(cords2));
         assertTrue(model.isCellPresent(cords3));
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(1,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,1, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,2, cords3));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(1,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,0, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,1, cords3));
     }
 
     @Test
@@ -106,21 +105,21 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
-        model.makeMove(1, new Move(cords1, cords2));
-        model.nextState(1);
+        model.makeMove(0, new Move(cords1, cords2));
+        model.nextState(0);
         // current state validated in testNextState
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords3, cords3)));
-        model.makeMove(1, new Move(cords1, cords1));
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,1, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,2, cords3));
-        model.makeMove(1, new Move(cords2, cords2));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords3, cords3)));
+        model.makeMove(0, new Move(cords1, cords1));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(1,0, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,1, cords3));
+        model.makeMove(0, new Move(cords2, cords2));
         checkListener(presenter1,1,0,5);
         checkListener(presenter2,0,0,0);
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(2,1, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,2, cords3));
-        assertThrows(MoveException.class, () -> model.makeMove(1, new Move(cords1, cords1)));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(2,0, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(2,1, cords3));
+        assertThrows(MoveException.class, () -> model.makeMove(0, new Move(cords1, cords1)));
     }
 
     @Test
@@ -132,8 +131,8 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
-        model.nextState(1);
-        model.nextState(1);
+        model.nextState(0);
+        model.nextState(0);
         checkListener(presenter1,1,0,2);
         checkListener(presenter2,1,0,1);
     }
@@ -147,15 +146,15 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
+        model.nextState(0);
+        model.nextState(0);
         model.nextState(1);
-        model.nextState(1);
-        model.nextState(2);
-        model.makeMove(2, new Move(cords3, cords3));
+        model.makeMove(1, new Move(cords3, cords3));
         checkListener(presenter1,1,0,2);
         checkListener(presenter2,1,0,3);
-        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,1, cords1));
-        assertEquals(model.getCellInfo(cords2), new HexCellInfo(0,0, cords2));
-        assertEquals(model.getCellInfo(cords3), new HexCellInfo(3,2, cords3));
+        assertEquals(model.getCellInfo(cords1), new HexCellInfo(2,0, cords1));
+        assertEquals(model.getCellInfo(cords2), new HexCellInfo(0,-1, cords2));
+        assertEquals(model.getCellInfo(cords3), new HexCellInfo(3,1, cords3));
     }
 
     @Test
@@ -167,11 +166,11 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
+        model.nextState(0);
+        model.nextState(0);
         model.nextState(1);
         model.nextState(1);
-        model.nextState(2);
-        model.nextState(2);
-        model.makeMove(1, new Move(cords1, cords2));
+        model.makeMove(0, new Move(cords1, cords2));
         checkListener(presenter1,2,0,4);
         checkListener(presenter2,1,0,2);
     }
@@ -186,16 +185,16 @@ public class PlayingTest {
         var presenter2 = new StabPresenter();
         var presenter3 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2, presenter3));
+        model.nextState(0);
+        model.makeMove(0, new Move(cords1, cords1));
+        model.nextState(0);
         model.nextState(1);
-        model.makeMove(1, new Move(cords1, cords1));
         model.nextState(1);
         model.nextState(2);
         model.nextState(2);
-        model.nextState(3);
-        model.nextState(3);
-        model.makeMove(1, new Move(cords1, cords2));
-        model.nextState(1);
-        model.nextState(1);
+        model.makeMove(0, new Move(cords1, cords2));
+        model.nextState(0);
+        model.nextState(0);
         checkListener(presenter1,3,0,7);
         checkListener(presenter2,1,1,2);
         checkListener(presenter3,1,0,2);
@@ -209,9 +208,9 @@ public class PlayingTest {
         var presenter1 = new StabPresenter();
         var presenter2 = new StabPresenter();
         model.setPresenters(List.of(presenter1, presenter2));
-        model.makeMove(1, new Move(cords1, cords2));
-        model.nextState(1);
-        model.nextState(1);
+        model.makeMove(0, new Move(cords1, cords2));
+        model.nextState(0);
+        model.nextState(0);
         assertEquals(presenter1.getGameOverCounter(), 1);
         assertEquals(presenter2.getGameOverCounter(), 1);
     }
