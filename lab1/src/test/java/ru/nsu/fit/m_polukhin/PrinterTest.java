@@ -3,6 +3,7 @@ package ru.nsu.fit.m_polukhin;
 import junit.framework.TestCase;
 import org.junit.Test;
 import ru.nsu.fit.m_polukhin.core.DuTest;
+import ru.nsu.fit.m_polukhin.modules.DuCompoundFileType;
 import ru.nsu.fit.m_polukhin.modules.DuFileType;
 
 import java.io.ByteArrayOutputStream;
@@ -12,6 +13,7 @@ import java.io.PrintStream;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static ru.nsu.fit.m_polukhin.core.DuTreeElement.*;
 
@@ -346,5 +348,79 @@ public class PrinterTest extends DuTest {
 
         printer(printStream, link).print(actual);
         TestCase.assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    public void testExtraModulesNewType() {
+        String name = "don't matter";
+        String prefix = "ƪ(˘⌣˘)ʃ could be any";
+        long size = 1024L;
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath(name);
+
+        DuFileType actual = new TestType(root, prefix);
+        actual.setCalculatedSize(size);
+        OutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(outputStream);
+        printer(printStream, root).print(actual);
+
+        String expected = prefix+"[1Kib]\r\n";
+
+        TestCase.assertEquals(expected, outputStream.toString());
+    }
+
+    @Test
+    public void testExtraModulesNewCompoundType() throws IOException {
+        String name = "( •̀ .̫ •́ )✧ don't matter";
+        String prefix = "anything strange .·´¯`(>▂<)´¯`·.";
+        long size = 1536;
+        FileSystem fs = fileSystem();
+        Path root = fs.getPath(name);
+
+        DuFileType tmp = tree(fs, dir("dir", 1536,
+                file("file1",1024),
+                file("file2",512)
+        ));
+        DuCompoundFileType actual = new TestCompoundType(root, prefix,((DuCompoundFileType)tmp).getChildrenAsTypes());
+        actual.setCalculatedSize(size);
+        OutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(outputStream);
+        printer(printStream, root).print(actual);
+
+        String expected = prefix + "[1Kib]\r\n" + " file2[512B]\r\n" + " file1[1Kib]\r\n";
+
+        TestCase.assertEquals(expected, outputStream.toString());
+    }
+}
+
+class TestCompoundType extends DuCompoundFileType {
+    private final String prefix;
+    public TestCompoundType(Path path, String prefix, List<DuFileType> children) {
+        super(path);
+        this.prefix = prefix;
+        setChildren(children);
+    }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
+    @Override
+    public List<Path> getChildrenAsPaths(SymlinkOptions symlinkOptions) {
+        return null;
+    }
+}
+
+class TestType extends DuFileType {
+    private final String prefix;
+    public TestType(Path path, String prefix) {
+        super(path);
+        this.prefix = prefix;
+    }
+
+    @Override
+    public String getPrefix() {
+        return prefix;
     }
 }
