@@ -89,7 +89,7 @@ class Player {
     }
 
     private void reinforce(@NotNull Move move) throws MoveException {
-        assert move.start() == move.end();
+        if (move.start() != move.end()) return;
         var cell = field.getCellInfo(move.start());
         if (cell.ownerId() != getId())
             throw new MoveException("You can only reinforce your cells");

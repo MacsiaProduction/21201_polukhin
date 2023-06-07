@@ -56,7 +56,7 @@ public class PlayerPresenter implements ModelListener, ViewListener {
     }
 
     @Override
-    public void cellClicked(Move move) throws MoveException {
+    public void makeMove(Move move) throws MoveException {
         model.makeMove(ownerId, move);
     }
 }

@@ -43,13 +43,13 @@ class GamePlane extends JPanel {
                 updateHighlighted(e);
                 try {
                     if(highlighted == null) {
-                        presenter.cellClicked(null);
+                        presenter.makeMove(null);
                     } else {
                         if(previousHighlighted == null) {
                             previousHighlighted = highlighted;
                             return;
                         }
-                        presenter.cellClicked(new Move(previousHighlighted.info().position(), highlighted.info().position()));
+                        presenter.makeMove(new Move(previousHighlighted.info().position(), highlighted.info().position()));
                     }
                 } catch (MoveException ex) {
                     System.out.println("wrong action"+ex);
@@ -192,7 +192,7 @@ class GamePlane extends JPanel {
 
         if (highlighted != null) {
             //todo: shape should glow translucently
-            g2d.setColor(new Color(148, 171, 103, 132)); // set the outline color with alpha
+            g2d.setColor(new Color(103, 171, 127, 58)); // set the outline color with alpha
             g2d.fill(highlighted.shape()); // fill the highlighted shape with the translucent color
             g2d.draw(highlighted.shape()); // draw the outline
         }
